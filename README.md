@@ -3,16 +3,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Suspension Eligibility</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         /* Custom styles to match the desired theme */
         body {
             font-family: 'Inter', sans-serif;
             background: #f0f2f6; /* Light gray/blue background */
-            margin: 0; /* FIX 1: Removes the default browser margin */
+            margin: 0; /* Removes the default browser margin */
             padding: 0; /* Ensures no default padding interferes */
             min-height: 100vh; /* Ensures background covers entire screen height */
         }
+
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
@@ -20,7 +24,8 @@
             background-color: #ffffff;
             border-radius: 0.75rem; /* Ensure rounded corners are consistent */
         }
-        /* FIX 2: Mobile adjustment: Remove margin and make card full width on small screens */
+
+        /* Mobile adjustment: edge-to-edge on small screens */
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
@@ -29,6 +34,7 @@
                 box-shadow: none; /* Reduces visual clutter on small screens */
             }
         }
+
         .section-header {
             color: #1a4d8c; /* Dark blue */
             border-bottom: 2px solid #e6f2ff;
@@ -36,7 +42,28 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-        
+
+        /* === Focus style fix === */
+        /* Remove default grey outlines on mouse click */
+        input:focus,
+        button:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        /* Keep a visible focus for keyboard navigation */
+        input:focus-visible,
+        button:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid #3b82f6; /* Tailwind blue-500 */
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
         /* ---------------------------------------------------------------------- */
         /* CUSTOM DATE INPUT STYLING TO MOVE ICON LEFT (SIMULATED) */
         /* ---------------------------------------------------------------------- */
