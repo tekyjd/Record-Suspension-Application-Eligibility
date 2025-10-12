@@ -1,44 +1,111 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Suspension Eligibility</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        /* Custom styles to match the desired theme */
+        /* ---------------------------------------------------------------------- */
+        /* GENERAL THEME STYLES */
+        /* ---------------------------------------------------------------------- */
         body {
             font-family: 'Inter', sans-serif;
             background: #f0f2f6; /* Light gray/blue background */
-            margin: 0; /* Removes the default browser margin */
-            padding: 0; /* Ensures no default padding interferes */
-            min-height: 100vh; /* Ensures background covers entire screen height */
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
+
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
-            margin: 2rem auto; /* Ensures it's centered and has vertical spacing on desktop */
+            margin: 2rem auto;
             background-color: #ffffff;
-            border-radius: 0.75rem; /* Ensure rounded corners are consistent */
+            border-radius: 0.75rem;
         }
-        /* Mobile adjustment: edge-to-edge on small screens */
+
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
-                margin: 0; /* Removes all margins on mobile for edge-to-edge effect */
-                border-radius: 0; /* Makes it flush */
-                box-shadow: none; /* Reduces visual clutter on small screens */
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
             }
         }
+
         .section-header {
-            color: #1a4d8c; /* Dark blue */
+            color: #1a4d8c;
             border-bottom: 2px solid #e6f2ff;
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-        /* === Focus style fix === */
-        /* Remove default grey outlines on mouse click */
+
+        /* ---------------------------------------------------------------------- */
+        /* DATE INPUT STYLING (ICON MOVED LEFT) */
+        /* ---------------------------------------------------------------------- */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            width: 100%;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        input[type="date"]::-moz-calendar-picker-indicator {
+            display: none;
+        }
+
+        input[type="date"] {
+            border: 1px solid #d1d5db;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            background-color: #f9fafb;
+            cursor: pointer;
+            position: relative;
+        }
+
+        select {
+            border: 1px solid #d1d5db;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            background-color: #f9fafb;
+            cursor: pointer;
+        }
+
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+            outline: none;
+        }
+
+        input[type="date"]:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            padding-left: 1rem;
+        }
+
+        .clickable-label {
+            cursor: pointer;
+        }
+
+        .date-input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        /* ---------------------------------------------------------------------- */
+        /* FIX: REMOVE DEFAULT GREY OUTLINES WHILE PRESERVING ACCESSIBILITY */
+        /* ---------------------------------------------------------------------- */
         input:focus,
         button:focus,
         select:focus,
@@ -46,94 +113,26 @@
             outline: none;
             box-shadow: none;
         }
-        /* Keep a visible focus for keyboard navigation */
+
         input:focus-visible,
         button:focus-visible,
         select:focus-visible,
         textarea:focus-visible {
-            outline: 2px solid #3b82f6; /* Tailwind blue-500 */
+            outline: 2px solid #1a4d8c; /* match site theme blue */
             outline-offset: 2px;
-        }
-    </style>
-</head>
-        /* ---------------------------------------------------------------------- */
-        /* CUSTOM DATE INPUT STYLING TO MOVE ICON LEFT (SIMULATED) */
-        /* ---------------------------------------------------------------------- */
-        
-        /* 1. Hide the browser's native calendar icon/picker indicator */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0; /* Make it invisible but still clickable */
-            width: 100%; /* Make the whole field the target */
-            position: absolute; /* Position it over the entire field */
-            cursor: pointer;
-        }
-        /* Fallback for other browsers (less effective but attempts to hide) */
-        input[type="date"]::-moz-calendar-picker-indicator {
-            display: none;
-        }
-
-        /* 2. Adjust input padding to make room for the custom icon on the left */
-        input[type="date"] {
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem 0.6rem 2.5rem; /* Increased left padding (2.5rem) */
-            border-radius: 0.5rem;
-            /* Note: Width is now controlled by the parent div (w-44) */
-            width: 100%; 
-            transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
-            background-color: #f9fafb;
-            cursor: pointer; 
-            position: relative; 
-        }
-        
-        /* 3. Ensure other inputs/selects are styled correctly */
-        select {
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem;
-            border-radius: 0.5rem;
-            width: 100%;
-            transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
-            background-color: #f9fafb;
-            cursor: pointer;
-        }
-        
-        input[type="date"]:focus, select:focus {
-            border-color: #4f46e5; 
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
-            outline: none;
-        }
-        /* Style for disabled date inputs */
-        input[type="date"]:disabled {
-            background-color: #e5e7eb; /* Lighter background for disabled field */
-            color: #9ca3af;
-            cursor: not-allowed;
-            padding-left: 1rem; /* Remove extra padding when disabled/icon is useless */
-        }
-        
-        /* Ensure the label is also clickable */
-        .clickable-label {
-            cursor: pointer;
-        }
-        /* Adjust layout for date row */
-        .date-input-group {
-            display: flex;
-            align-items: center;
         }
     </style>
 </head>
 <body>
 
-    <!-- Removed the redundant 'rounded-xl' class from the div as it's defined in the CSS block -->
+    <!-- Card container -->
     <div id="app" class="container-card p-6 md:p-10">
         <header class="text-center mb-6 flex items-center justify-center space-x-4">
-            
             <h1 class="text-2xl font-bold text-gray-800 my-4">Pardon Eligibility Checker</h1>
-            
-            <!-- TMU Law Logo: Increased height to h-16 -->
-            <img src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
-                 alt="TMU Law Logo" 
-                 class="h-16 w-auto" 
+            <img src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg"
+                 alt="TMU Law Logo"
+                 class="h-16 w-auto"
                  style="max-width: 300px;">
-            
         </header>
 
         <!-- Disclaimer Section -->
