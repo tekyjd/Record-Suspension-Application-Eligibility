@@ -3,10 +3,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Suspension Eligibility</title>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
         /* Custom styles to match the desired theme */
         body {
@@ -16,7 +14,6 @@
             padding: 0; /* Ensures no default padding interferes */
             min-height: 100vh; /* Ensures background covers entire screen height */
         }
-
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
@@ -24,7 +21,6 @@
             background-color: #ffffff;
             border-radius: 0.75rem; /* Ensure rounded corners are consistent */
         }
-
         /* Mobile adjustment: edge-to-edge on small screens */
         @media (max-width: 640px) {
             .container-card {
@@ -34,7 +30,6 @@
                 box-shadow: none; /* Reduces visual clutter on small screens */
             }
         }
-
         .section-header {
             color: #1a4d8c; /* Dark blue */
             border-bottom: 2px solid #e6f2ff;
@@ -42,7 +37,6 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-
         /* === Focus style fix === */
         /* Remove default grey outlines on mouse click */
         input:focus,
@@ -52,7 +46,6 @@
             outline: none;
             box-shadow: none;
         }
-
         /* Keep a visible focus for keyboard navigation */
         input:focus-visible,
         button:focus-visible,
@@ -63,7 +56,6 @@
         }
     </style>
 </head>
-
         /* ---------------------------------------------------------------------- */
         /* CUSTOM DATE INPUT STYLING TO MOVE ICON LEFT (SIMULATED) */
         /* ---------------------------------------------------------------------- */
