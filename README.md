@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Record Suspension Eligibility</title>
-
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
         /* ---------------------------------------------------------------------- */
         /* GENERAL THEME STYLES */
@@ -19,7 +17,6 @@
             padding: 0;
             min-height: 100vh;
         }
-
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
@@ -27,7 +24,6 @@
             background-color: #ffffff;
             border-radius: 0.75rem;
         }
-
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
@@ -36,7 +32,6 @@
                 box-shadow: none;
             }
         }
-
         .section-header {
             color: #1a4d8c;
             border-bottom: 2px solid #e6f2ff;
@@ -44,7 +39,6 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-
         /* ---------------------------------------------------------------------- */
         /* DATE INPUT STYLING (ICON MOVED LEFT) */
         /* ---------------------------------------------------------------------- */
@@ -54,11 +48,9 @@
             position: absolute;
             cursor: pointer;
         }
-
         input[type="date"]::-moz-calendar-picker-indicator {
             display: none;
         }
-
         input[type="date"] {
             border: 1px solid #d1d5db;
             padding: 0.6rem 1rem 0.6rem 2.5rem;
@@ -69,7 +61,6 @@
             cursor: pointer;
             position: relative;
         }
-
         select {
             border: 1px solid #d1d5db;
             padding: 0.6rem 1rem;
@@ -79,30 +70,25 @@
             background-color: #f9fafb;
             cursor: pointer;
         }
-
         input[type="date"]:focus,
         select:focus {
             border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
             outline: none;
         }
-
         input[type="date"]:disabled {
             background-color: #e5e7eb;
             color: #9ca3af;
             cursor: not-allowed;
             padding-left: 1rem;
         }
-
         .clickable-label {
             cursor: pointer;
         }
-
         .date-input-group {
             display: flex;
             align-items: center;
         }
-
         /* ---------------------------------------------------------------------- */
         /* FIX: REMOVE DEFAULT GREY OUTLINES WHILE PRESERVING ACCESSIBILITY */
         /* ---------------------------------------------------------------------- */
@@ -113,7 +99,6 @@
             outline: none;
             box-shadow: none;
         }
-
         input:focus-visible,
         button:focus-visible,
         select:focus-visible,
@@ -124,7 +109,6 @@
     </style>
 </head>
 <body>
-
     <!-- Card container -->
     <div id="app" class="container-card p-6 md:p-10">
         <header class="text-center mb-6 flex items-center justify-center space-x-4">
@@ -134,7 +118,6 @@
                  class="h-16 w-auto"
                  style="max-width: 300px;">
         </header>
-
         <!-- Disclaimer Section -->
         <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
@@ -144,11 +127,9 @@
                 <span class="text-sm text-gray-700 font-medium">I accept the disclaimer and wish to proceed</span>
             </label>
         </section>
-
         <!-- Input Form Section -->
         <section id="input-form" class="space-y-6" style="display: none;">
             <h2 class="text-xl section-header">Conviction Details</h2>
-
             <!-- Conviction Date -->
             <div class="space-y-2">
                 <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Date of conviction</label>
@@ -161,14 +142,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    
                     <label class="flex items-center space-x-2 text-sm">
                         <input type="checkbox" id="dont-know-conv-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
                         <span>I'm not sure</span>
                     </label>
                 </div>
             </div>
-
             <!-- Sentence Completion Date -->
             <div class="space-y-2">
                 <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence completion date</label>
@@ -181,7 +160,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    
                     <label class="flex items-center space-x-2 text-sm">
                         <input type="checkbox" id="dont-know-sent-comp-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
                         <span>I'm not sure</span>
@@ -189,8 +167,6 @@
                 </div>
                 <p class="text-xs text-blue-700 mt-1">Completion means all fines paid, probation ended, and custodial term served.</p>
             </div>
-
-
             <!-- Prosecution Type -->
             <div class="space-y-2">
                 <label for="prosecution-type" class="block text-sm font-medium text-gray-700">Prosecution type</label>
@@ -201,7 +177,6 @@
                     <option value="Summary">Summary</option>
                 </select>
             </div>
-
             <!-- Schedule 1 Offence (Updated Info Section) -->
             <div class="space-y-2">
                 <label for="schedule1-offence" class="block text-sm font-medium text-gray-700 flex justify-between items-center">
@@ -228,7 +203,6 @@
                     <p class="mt-2 font-bold"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 underline">See the full list here.</a></p>
                 </div>
             </div>
-
             <!-- History of Convictions Section -->
             <h3 class="text-lg font-semibold mt-8 pt-4 border-t border-gray-200 text-[#1a4d8c]">History of Convictions</h3>
 
