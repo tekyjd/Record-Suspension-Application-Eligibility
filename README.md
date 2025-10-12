@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +10,25 @@
         body {
             font-family: 'Inter', sans-serif;
             background: #f0f2f6; /* Light gray/blue background */
+            margin: 0; /* FIX 1: Removes the default browser margin */
+            padding: 0; /* Ensures no default padding interferes */
+            min-height: 100vh; /* Ensures background covers entire screen height */
         }
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
-            margin: 2rem auto;
+            margin: 2rem auto; /* Ensures it's centered and has vertical spacing on desktop */
             background-color: #ffffff;
+            border-radius: 0.75rem; /* Ensure rounded corners are consistent */
+        }
+        /* FIX 2: Mobile adjustment: Remove margin and make card full width on small screens */
+        @media (max-width: 640px) {
+            .container-card {
+                max-width: 100%;
+                margin: 0; /* Removes all margins on mobile for edge-to-edge effect */
+                border-radius: 0; /* Makes it flush */
+                box-shadow: none; /* Reduces visual clutter on small screens */
+            }
         }
         .section-header {
             color: #1a4d8c; /* Dark blue */
@@ -89,7 +104,8 @@
 </head>
 <body>
 
-    <div id="app" class="container-card p-6 md:p-10 rounded-xl">
+    <!-- Removed the redundant 'rounded-xl' class from the div as it's defined in the CSS block -->
+    <div id="app" class="container-card p-6 md:p-10">
         <header class="text-center mb-6 flex items-center justify-center space-x-4">
             
             <h1 class="text-2xl font-bold text-gray-800 my-4">Pardon Eligibility Checker</h1>
@@ -125,7 +141,7 @@
                         <input type="date" id="conviction-date" class="w-full">
                         <!-- Custom Icon (positioned on the left) -->
                         <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
                     
@@ -145,7 +161,7 @@
                         <input type="date" id="sentence-completion-date" class="w-full">
                         <!-- Custom Icon (positioned on the left) -->
                         <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                     </div>
                     
@@ -802,3 +818,4 @@
 
     </script>
 </body>
+</html>
