@@ -404,17 +404,17 @@
                          
                          ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a **'serious personal injury offence'** (within the meaning of 752 of the *Criminal Code*), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the *Criminal Code*), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your waiting period is **10 years**.</span>
+                                    <span>If you were convicted of a serious personal injury offence: Your waiting period is 10 years.</span>
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your waiting period is **5 years**.</span>
+                                    <span>If you were NOT of a serious personal injury offence: Your waiting period is 5 years.</span>
                                 </p>
                             </div>
                         `;
@@ -430,17 +430,17 @@
                         // Use requested exact wording and formatting
                         ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a **'serious personal injury offence'** (within the meaning of 752 of the *Criminal Code*), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the *Criminal Code*), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your eligibility date is **${date10yrStr}**.</span>
+                                    <span>If you were convicted of a serious personal injury offence: Your eligibility date is ${date10yrStr}.</span>
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your eligibility date is **${date5yrStr}**.</span>
+                                    <span>If you were NOT of a serious personal injury offence: Your eligibility date is ${date5yrStr}.</span>
                                 </p>
                             </div>
                         `;
@@ -634,7 +634,7 @@
             if (eligibleDate <= TODAY) {
                 return {
                     status: "eligible_now",
-                    message: `You are eligible to apply for a record suspension now. The waiting period was determined to be **${waitPeriodYears} years**.`,
+                    message: `You are eligible to apply for a record suspension now. The waiting period was determined to be ${waitPeriodYears} years.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: []
                 };
@@ -642,7 +642,7 @@
                 const dateString = formatEligibleDate(eligibleDate);
                 return {
                     status: "eligible_future",
-                    message: `You will be eligible on ${dateString}. The required waiting period is **${waitPeriodYears} years** from your sentence completion date.`,
+                    message: `You will be eligible on ${dateString}. The required waiting period is ${waitPeriodYears} years from your sentence completion date.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: []
                 };
