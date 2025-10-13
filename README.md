@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,7 +14,7 @@
             width: 100%;
             margin: 0;
             padding: 0;
-            background: #f0f2f6; /* your intended background */
+            background: #ffffff; /* your intended background */
         }
         body {
             font-family: 'Inter', sans-serif;
