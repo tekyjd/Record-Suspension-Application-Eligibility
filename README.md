@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,7 +39,7 @@
         }
         
         /* ---------------------------------------------------------------------- */
-        /* INPUT STYLING */
+        /* INPUT STYLING (Applies to date and select/dropdowns) */
         /* ---------------------------------------------------------------------- */
         
         input[type="date"], select {
@@ -59,18 +60,12 @@
             outline: none;
         }
         
-        /* Style for disabled date inputs */
-        input[type="date"]:disabled {
+        /* Style for disabled inputs */
+        input:disabled, select:disabled {
             background-color: #e5e7eb; 
             color: #9ca3af;
             cursor: not-allowed;
-        }
-        
-        /* Override to make native calendar icon visible and interactive */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 100;
-            display: block;
-            cursor: pointer;
+            opacity: 0.7;
         }
 
         /* Custom brown color for the Schedule 1 exception text */
@@ -83,15 +78,17 @@
 
     <div id="app" class="container-card p-6 md:p-10">
         
-        <!-- Header -->
-        <div class="flex items-center justify-between pb-4 mb-6">
-            <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 flex-shrink-0">
+        <!-- Header: Mobile Optimized Layout -->
+        <div class="flex flex-col sm:flex-row items-center sm:justify-between pb-4 mb-6 text-center sm:text-left">
+            <!-- Title (Larger on mobile and takes up the top space) -->
+            <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 flex-shrink-0 mb-3 sm:mb-0">
                 Pardon Eligibility Checker
             </h1>
+            <!-- Logo (Smaller on mobile, centered below title) -->
             <img 
                 src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
                 alt="Toronto Metropolitan University Law Logo" 
-                class="h-14 md:h-24 ml-4 object-contain"
+                class="h-10 sm:h-14 md:h-16 sm:ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
             >
         </div>
@@ -113,33 +110,32 @@
             <h2 class="text-xl section-header">Conviction Details</h2>
 
             
-            <!-- Conviction Date -->
+            <!-- Conviction Date (Date Input + Checkbox) -->
             <div class="space-y-2">
                 <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Conviction Date</label>
-                <!-- ADDED 'flex items-center' HERE to align date input and checkbox -->
                 <div class="date-input-group space-x-4 flex items-center">
-                    <div class="w-40">
+                    <!-- Standard width for dates and selects/dropdowns for alignment -->
+                    <div class="w-40 md:w-52 flex-shrink-0"> 
                         <input type="date" id="conviction-date" class="w-full">
                     </div>
-                    <label class="flex items-center space-x-2 text-sm">
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
                         <input type="checkbox" id="dont-know-conv-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
-                        <span>I'm not sure</span>
+                        <span class="font-medium">I'm not sure</span>
                     </label>
                 </div>
             </div>
 
             
-            <!-- Sentence Completion Date -->
+            <!-- Sentence Completion Date (Date Input + Checkbox) -->
             <div class="space-y-2">
                 <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence Completion Date</label>
-                 <!-- ADDED 'flex items-center' HERE to align date input and checkbox -->
                 <div class="date-input-group space-x-4 flex items-center">
-                    <div class="w-40">
+                    <div class="w-40 md:w-52 flex-shrink-0">
                         <input type="date" id="sentence-completion-date" class="w-full">
                     </div>
-                    <label class="flex items-center space-x-2 text-sm">
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
                         <input type="checkbox" id="dont-know-sent-comp-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
-                        <span>I'm not sure</span>
+                        <span class="font-medium">I'm not sure</span>
                     </label>
                 </div>
                 <p class="text-xs text-blue-700 mt-1">Completion means all fines paid, probation ended, and custodial term served.</p>
@@ -147,54 +143,79 @@
 
 
             
-            <!-- Prosecution Type -->
+            <!-- Prosecution Type (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
-                <label for="prosecution-type" class="block text-sm font-medium text-gray-700">Prosecution type</label>
-                <select id="prosecution-type" class="w-full">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="I'm not sure">I'm not sure</option>
-                    <option value="Indictment">Indictment</option>
-                    <option value="Summary">Summary</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700">Prosecution type</label>
+                <div class="select-input-group space-x-4 flex items-center">
+                    <div class="w-40 md:w-52 flex-shrink-0">
+                        <select id="prosecution-type" class="w-full">
+                            <option value="">Select an Option</option>
+                            <option value="Indictment">Indictment</option>
+                            <option value="Summary">Summary</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
+                        <input type="checkbox" id="dont-know-prosecution" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
+                        <span class="font-medium">I'm not sure</span>
+                    </label>
+                </div>
             </div>
 
             
-            <!-- Schedule 1 Offence -->
+            <!-- Schedule 1 Offence (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
-                <label for="schedule1-offence" class="block text-sm font-medium text-gray-700 flex justify-between items-center">
+                <label class="block text-sm font-medium text-gray-700 flex justify-between items-center">
                     <span>Is it a Schedule 1 offence?</span>
                     <span id="schedule1-info-toggle" class="text-blue-500 hover:text-blue-700 text-xs cursor-pointer underline">What are Schedule 1 Offences?</span>
                 </label>
-                <select id="schedule1-offence" class="w-full">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="I'm not sure">I'm not sure</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
+                <div class="select-input-group space-x-4 flex items-center">
+                    <div class="w-40 md:w-52 flex-shrink-0">
+                        <select id="schedule1-offence" class="w-full">
+                            <option value="">Select an Option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
+                        <input type="checkbox" id="dont-know-schedule1" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
+                        <span class="font-medium">I'm not sure</span>
+                    </label>
+                </div>
                 
                 <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
-                    <p class="font-bold mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    <p class="pt-3 mb-1 font-bold underline">Common Schedule 1 Offences</p>
+                    <!-- CHANGE 1: Removed font-bold -->
+                    <p class="mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
+                    
+                    <!-- CHANGE 2: Removed underline -->
+                    <p class="pt-3 mb-1 font-bold">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
                         <li>Invitation to sexual touching (s. 152)</li>
                         <li>Child pornography (s. 163.1)</li>
                         <li>Luring a child (s. 172.1)</li>
                     </ul>
-                    <p class="mt-2 font-bold"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900">See the full list here.</a></p>
+                    <!-- CHANGE 3: Removed font-bold from p tag and added underline to a tag -->
+                    <p class="mt-2"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 underline">See the full list here.</a></p>
                 </div>
             </div>
 
             
-            <!-- 3+ Convictions of 2+ Years Imprisonment -->
+            <!-- 3+ Convictions of 2+ Years Imprisonment (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
-                <label for="three-plus-two-year-imprisonment" class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
-                <select id="three-plus-two-year-imprisonment" class="w-full">
-                    <option value="" disabled selected>Select an option</option>
-                    <option value="I'm not sure">I'm not sure</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
+                <label class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
+                <div class="select-input-group space-x-4 flex items-center">
+                    <div class="w-40 md:w-52 flex-shrink-0">
+                        <select id="imprisonment-convictions" class="w-full">
+                            <option value="">Select an Option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
+                        <input type="checkbox" id="dont-know-imprisonment" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
+                        <span class="font-medium">I'm not sure</span>
+                    </label>
+                </div>
             </div>
 
             <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white font-bold py-3 rounded-xl transition duration-200 shadow-md mt-6">
@@ -264,6 +285,9 @@
         }
         
         const UNKNOWN_SENTINELS = ["I'm not sure", ""]; 
+        const UNCLARITY_MESSAGE = "The required information to determine your eligibility is missing. Please review the missing details below.";
+        const AMBIGUITY_POSTSCRIPT = " (Your estimated timeline is provided below.)";
+
 
         /**
          * Calculates eligibility based on conviction details following the Criminal Records Act (Canada) rules.
@@ -277,6 +301,7 @@
             let eligibleDate = null;
             let convictionDate = parseDate(convictionDateStr);
             let sentenceCompletionDate = parseDate(sentenceCompletionDateStr);
+            let ambiguityMessageSuffix = ''; // Initialized here for function scope
 
             // Hyperlink content for the Serious Personal Injury Offence (SPIO) definition
             const criminalCodeLink = '<a href="https://laws-lois.justice.gc.ca/eng/acts/C-46/section-752.html" target="_blank" class="text-blue-600 hover:text-blue-800 underline">752 of the <i>Criminal Code</i></a>';
@@ -306,8 +331,8 @@
                         </p>
                         <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
                         <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
-                            <li>was not in a position of trust or authority toward the victim;</li>
-                            <li>did not use, threaten to use or attempt to use violence, intimidation or coercion in relation to the victim; and</li>
+                            <li>was **not in a position of trust** or authority toward the victim;</li>
+                            <li>did **not use, threaten to use or attempt to use violence, intimidation or coercion** in relation to the victim; and</li>
                             <li>was less than five years older than the victim.</li>
                         </ul>
                         <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
@@ -340,7 +365,8 @@
 
                     return { 
                         status: "unclear",
-                        message: "The required information to determine your eligibility is missing. Please review the missing details below.", 
+                        // Standardized message applied
+                        message: UNCLARITY_MESSAGE, 
                         eligibleDate: null, 
                         missingAnswers: essentialUnknowns 
                     };
@@ -351,7 +377,7 @@
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                    
+
                     let postD3Range = "5–10 years"; // Default broad range if prosecution type is unknown
 
                     // Refine range based on known prosecution type (User Request)
@@ -366,7 +392,8 @@
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
                     return {
                         status: "eligible_unclear",
-                        message: "You appear to be eligible for a record suspension based on the conviction type and history. However, your exact eligibility date depends on the missing date and prosecution type details.",
+                        // Standardized message applied + contextual postscript
+                        message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
                         missingAnswers: essentialUnknowns,
                         timelineRange: postD3Range 
@@ -390,13 +417,13 @@
                 if (convictionDate >= D1 && convictionDate <= D2 && isAmbiguousProsecutionType && schedule1Offence === "No") {
                     
                     let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))"];
-                    let ambiguityMessage = '';
+                    ambiguityMessageSuffix = ''; 
                     
                     if (isCompletionDateUnknown) {
                          // Case 1: Completion Date is UNKNOWN
                          missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
                          
-                         ambiguityMessage = `
+                         ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
                                 The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
                             </p>
@@ -422,7 +449,7 @@
                         const date10yrStr = formatEligibleDate(date10yr);
 
                         // Use requested exact wording and formatting
-                        ambiguityMessage = `
+                        ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
                                 The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
                             </p>
@@ -442,7 +469,8 @@
                     
                     return {
                         status: "eligible_unclear", 
-                        message: ambiguityMessage,
+                        // Standardized message applied + specific legal ambiguity as message content
+                        message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
                         eligibleDate: null,
                         missingAnswers: missingInfo,
                         timelineRange: "5–10 years" // Applicable range for Transitional SPIO ambiguity (5 or 10 years)
@@ -515,7 +543,8 @@
                 if (essentialUnknowns.length > 0) {
                      return { 
                         status: "eligible_unclear", 
-                        message: "You may be eligible for a record suspension. However, your eligibility date will depend on the missing information.", 
+                        // Standardized message applied + contextual postscript
+                        message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
                         eligibleDate: null, 
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
                         timelineRange: range 
@@ -528,22 +557,24 @@
             // 3. Fallback if Conviction Date is UNKNOWN (Conviction Date is 'I'm not sure' or empty)
             else if (isConvictionDateUnknown) {
 
-                // A. Check for known ineligibility (Sch 1 is Yes)
+                // A. Check for known ineligibility (Sch 1 is Yes) - MODIFIED LOGIC
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
-                    // MESSAGE REFORMATTED FOR READABILITY (User Request)
-                    const schedule1Message = `
-                        <p class="mb-3">
-                            Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
-                        </p>
-                        <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
-                        <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
-                            <li>was not in a position of trust or authority toward the victim;</li>
-                            <li>did not use, threaten to use or attempt to use violence, intimidation or coercion in relation to the victim; and</li>
-                            <li>was less than five years older than the victim.</li>
-                        </ul>
-                        <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
-                    `;
-                    return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
+                    
+                    // --- APPLYING USER'S NEW RULE HERE: Sch 1 = Yes AND Conviction Date is Unknown -> UNCLEAR ---
+                    essentialUnknowns = [];
+                    essentialUnknowns.push("Conviction Date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
+                    if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
+                    if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
+                    
+                    return {
+                        status: "unclear",
+                        // Standardized message applied
+                        message: UNCLARITY_MESSAGE,
+                        eligibleDate: null,
+                        missingAnswers: Array.from(new Set(essentialUnknowns))
+                    };
+                    
                 }
 
                 // B. **MODIFIED** Check for conditional ineligibility (3+ Convictions)
@@ -556,7 +587,8 @@
                     
                     return {
                         status: "unclear",
-                        message: "The required information to determine your eligibility is missing. Please review the missing details below.",
+                        // Standardized message applied
+                        message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns))
                     };
@@ -585,7 +617,8 @@
 
                     return {
                         status: "eligible_unclear",
-                        message: "You appear to be eligible based on the conviction type and history, but your conviction date is needed to determine the applicable waiting period (3, 5, or 10 years).",
+                        // Standardized message applied + contextual postscript
+                        message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
                         timelineRange: range
@@ -601,7 +634,13 @@
                 if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
 
 
-                return { status: "unclear", message: "The required information to determine your eligibility is missing. Please review the missing details below.", eligibleDate: null, missingAnswers: Array.from(new Set(essentialUnknowns)) };
+                    return { 
+                    status: "unclear", 
+                    // Standardized message applied
+                    message: UNCLARITY_MESSAGE, 
+                    eligibleDate: null, 
+                    missingAnswers: Array.from(new Set(essentialUnknowns)) 
+                };
             }
 
 
@@ -629,7 +668,7 @@
                 waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5;
             } else {
                 // Fallback for unhandled date
-                return { status: "unclear", message: "Eligibility calculation failed: Unhandled date range.", eligibleDate: null, missingAnswers: [] };
+                return { status: "unclear", message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Conviction Date"] };
             }
 
             // 5. Final Status Determination
@@ -663,40 +702,88 @@
             resultHeader: document.getElementById('result-header'),
             resultMessage: document.getElementById('result-message'),
             missingInfoDetails: document.getElementById('missing-info-details'),
-            // Inputs
+            
+            // Dates
             convictionDate: document.getElementById('conviction-date'),
             dontKnowConvDate: document.getElementById('dont-know-conv-date'),
             sentenceCompletionDate: document.getElementById('sentence-completion-date'),
             dontKnowSentCompDate: document.getElementById('dont-know-sent-comp-date'),
+            
+            // Prosecution Type
             prosecutionType: document.getElementById('prosecution-type'),
+            dontKnowProsecution: document.getElementById('dont-know-prosecution'),
+            
+            // Schedule 1 Offence
             schedule1Offence: document.getElementById('schedule1-offence'),
-            threePlusTwoYearImprisonment: document.getElementById('three-plus-two-year-imprisonment'),
+            dontKnowSchedule1: document.getElementById('dont-know-schedule1'),
+            
+            // 3+ Convictions
+            imprisonmentConvictions: document.getElementById('imprisonment-convictions'),
+            dontKnowImprisonment: document.getElementById('dont-know-imprisonment'),
+            
+            // Info Toggle
             schedule1InfoToggle: document.getElementById('schedule1-info-toggle'),
             schedule1Info: document.getElementById('schedule1-info'),
         };
 
-        // Conditional display for "I'm not sure" date handling
+        /**
+         * Generic function to handle the 'I'm not sure' checkbox logic for select elements.
+         * Disables and resets the select element when the 'I'm not sure' checkbox is checked.
+         */
+        function handleUnknownSelect(checkboxElement, selectElement) {
+            if (checkboxElement.checked) {
+                selectElement.disabled = true;
+                selectElement.value = ''; // Clear selection
+            } else {
+                selectElement.disabled = false;
+            }
+        }
+
+        /**
+         * Generic function to get the value for a select/checkbox group.
+         * @param {HTMLElement} selectElement - The <select> element.
+         * @param {HTMLElement} notSureCheckboxElement - The 'I'm not sure' checkbox.
+         * @returns {string} - 'I'm not sure', the selected dropdown value, or empty string.
+         */
+        function getSelectCheckboxValue(selectElement, notSureCheckboxElement) {
+            if (notSureCheckboxElement.checked) return "I'm not sure";
+            return selectElement.value;
+        }
+
+
+        // Conditional display for "I'm not sure" handling across all inputs
         function updateConditionalInputs() {
             // Conviction Date
-            if (elements.dontKnowConvDate.checked) {
-                elements.convictionDate.disabled = true;
-                elements.convictionDate.value = ''; // Clear value when disabled for user-friendly
-            } else {
-                elements.convictionDate.disabled = false;
-            }
+            handleUnknownSelect(elements.dontKnowConvDate, elements.convictionDate);
 
             // Sentence Completion Date
-            if (elements.dontKnowSentCompDate.checked) {
-                elements.sentenceCompletionDate.disabled = true;
-                elements.sentenceCompletionDate.value = ''; // Clear value when disabled for user-friendly
-            } else {
-                elements.sentenceCompletionDate.disabled = false;
-            }
+            handleUnknownSelect(elements.dontKnowSentCompDate, elements.sentenceCompletionDate);
+            
+            // Prosecution Type
+            handleUnknownSelect(elements.dontKnowProsecution, elements.prosecutionType);
+            
+            // Schedule 1 Offence
+            handleUnknownSelect(elements.dontKnowSchedule1, elements.schedule1Offence);
+            
+            // 3+ Convictions
+            handleUnknownSelect(elements.dontKnowImprisonment, elements.imprisonmentConvictions);
         }
 
         // Event listener setup
         elements.dontKnowConvDate.addEventListener('change', updateConditionalInputs);
         elements.dontKnowSentCompDate.addEventListener('change', updateConditionalInputs);
+        elements.dontKnowProsecution.addEventListener('change', updateConditionalInputs);
+        elements.dontKnowSchedule1.addEventListener('change', updateConditionalInputs);
+        elements.dontKnowImprisonment.addEventListener('change', updateConditionalInputs);
+        
+        // Add change listeners to the select elements themselves to clear "I'm not sure" if user selects an option
+        elements.prosecutionType.addEventListener('change', () => { if (elements.prosecutionType.value) elements.dontKnowProsecution.checked = false; updateConditionalInputs(); });
+        elements.schedule1Offence.addEventListener('change', () => { if (elements.schedule1Offence.value) elements.dontKnowSchedule1.checked = false; updateConditionalInputs(); });
+        elements.imprisonmentConvictions.addEventListener('change', () => { if (elements.imprisonmentConvictions.value) elements.dontKnowImprisonment.checked = false; updateConditionalInputs(); });
+        elements.convictionDate.addEventListener('change', () => { if (elements.convictionDate.value) elements.dontKnowConvDate.checked = false; updateConditionalInputs(); });
+        elements.sentenceCompletionDate.addEventListener('change', () => { if (elements.sentenceCompletionDate.value) elements.dontKnowSentCompDate.checked = false; updateConditionalInputs(); });
+
+
         window.addEventListener('load', updateConditionalInputs); 
 
         // Toggle Schedule 1 Info
@@ -704,9 +791,7 @@
             elements.schedule1Info.classList.toggle('hidden');
             elements.schedule1InfoToggle.innerHTML = elements.schedule1Info.classList.contains('hidden') ? '<u>What are Schedule 1 Offences?</u>' : '[x] Close';
         });
-        // Initial setup for the toggle text
-        elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>';
-
+        elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>'; // Initial setup
 
         // Event listener for disclaimer
         elements.disclaimerCheckbox.addEventListener('change', () => {
@@ -720,23 +805,24 @@
         // Event listener for eligibility check
         elements.checkEligibilityBtn.addEventListener('click', () => {
             if (!elements.disclaimerCheckbox.checked) {
-                // Using a custom message box instead of alert()
-                displayResult({ status: 'unclear', message: 'Please accept the disclaimer to check eligibility.', eligibleDate: null, missingAnswers: [] });
+                displayResult({ status: 'unclear', message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Disclaimer Acceptance"] });
                 return;
             }
 
             // Get date strings, prioritizing 'I'm not sure' checkbox over the date picker value
-            const convictionDateInputStr = elements.dontKnowConvDate.checked ? "I'm not sure" : elements.convictionDate.value;
-            const sentenceCompletionDateInputStr = elements.dontKnowSentCompDate.checked ? "I'm not sure" : elements.sentenceCompletionDate.value;
+            const convictionDateInputStr = getSelectCheckboxValue(elements.convictionDate, elements.dontKnowConvDate);
+            const sentenceCompletionDateInputStr = getSelectCheckboxValue(elements.sentenceCompletionDate, elements.dontKnowSentCompDate);
             
-            // Get multiconviction value
-            const threePlusTwoYearImprisonmentVal = elements.threePlusTwoYearImprisonment.value;
+            // Get values from the new select/checkbox groups
+            const prosecutionTypeVal = getSelectCheckboxValue(elements.prosecutionType, elements.dontKnowProsecution);
+            const schedule1OffenceVal = getSelectCheckboxValue(elements.schedule1Offence, elements.dontKnowSchedule1);
+            const threePlusTwoYearImprisonmentVal = getSelectCheckboxValue(elements.imprisonmentConvictions, elements.dontKnowImprisonment);
             
             // Call calculateEligibility with the updated argument list
             const result = calculateEligibility(
                 convictionDateInputStr,
-                elements.prosecutionType.value,
-                elements.schedule1Offence.value,
+                prosecutionTypeVal,
+                schedule1OffenceVal,
                 sentenceCompletionDateInputStr,
                 threePlusTwoYearImprisonmentVal
             );
@@ -756,7 +842,7 @@
             let styleClasses = '';
             let missingListHTML = '';
             
-            // HTML for courthouse contact info (as requested)
+            // HTML for courthouse contact info 
             const courthouseContactHtml = `
                 <p class="mt-4 font-bold">You can obtain this information from the courthouse where you were convicted:</p>
                 <p class="mt-1 text-sm">
@@ -772,8 +858,9 @@
                     break;
 
                 case 'eligible_future':
-                    styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#9202;</span><h3 class="font-bold text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Uses the green clock icon
+                    styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#9202;</span><h3 class="font-bold text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'ineligible':
@@ -799,12 +886,13 @@
                     break;
 
                 case 'eligible_unclear':
-                    styleClasses = 'bg-indigo-100 border-l-8 border-indigo-600 text-indigo-800'; 
-                    // Blue Checkmark: &#10003;
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#10003;</span><h3 class="font-bold text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Status uses the checkmark icon (&#10004;) as requested, and is green.
+                    styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800'; 
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#10004;</span><h3 class="font-bold text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
-                        htmlContent += `<p class="mt-3 text-sm font-bold bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
+                        // Using a slightly darker green background for the timeline range
+                        htmlContent += `<p class="mt-3 text-sm font-bold bg-green-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
                     elements.missingInfoDetails.classList.remove('hidden');
@@ -816,8 +904,9 @@
 
                 case 'unclear':
                 default:
-                    styleClasses = 'bg-yellow-100 border-l-8 border-yellow-600 text-yellow-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-yellow-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Color is blue for UNCLARITY
+                    styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.missingAnswers.length > 0) {
                         elements.missingInfoDetails.classList.remove('hidden');
