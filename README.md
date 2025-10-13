@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -136,8 +135,8 @@
             <div class="space-y-2">
                 <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Date of conviction</label>
                 <div class="date-input-group space-x-4">
-                    <!-- Date Input Container: Changed flex-grow to w-44 to shorten the box -->
-                    <div class="relative w-44">
+                    <!-- Date Input Container: CHANGED w-44 to w-56 -->
+                    <div class="relative w-56">
                         <input type="date" id="conviction-date" class="w-full">
                         <!-- Custom Icon (positioned on the left) -->
                         <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -156,8 +155,8 @@
             <div class="space-y-2">
                 <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence completion date</label>
                 <div class="date-input-group space-x-4">
-                    <!-- Date Input Container: Changed flex-grow to w-44 to shorten the box -->
-                    <div class="relative w-44">
+                    <!-- Date Input Container: CHANGED w-44 to w-56 -->
+                    <div class="relative w-56">
                         <input type="date" id="sentence-completion-date" class="w-full">
                         <!-- Custom Icon (positioned on the left) -->
                         <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
