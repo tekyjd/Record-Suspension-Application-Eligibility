@@ -1,5 +1,13 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Suspension Eligibility</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         /* ------------------------------------------------------- */
         /* BASE PAGE STYLES — ensure no grey frame on GitHub Pages */
@@ -11,11 +19,13 @@
             padding: 0;
             background: #f0f2f6; /* your intended background */
         }
+
         body {
             font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
         }
+
         /* ------------------------------------------------------- */
         /* CARD STYLING (unchanged from your version)              */
         /* ------------------------------------------------------- */
@@ -26,6 +36,7 @@
             background-color: #ffffff;
             border-radius: 0.75rem;
         }
+
         /* Mobile adjustment */
         @media (max-width: 640px) {
             .container-card {
@@ -35,6 +46,7 @@
                 box-shadow: none;
             }
         }
+
         .section-header {
             color: #1a4d8c;
             border-bottom: 2px solid #e6f2ff;
@@ -42,6 +54,7 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
+
         /* ------------------------------------------------------- */
         /* DATE INPUT STYLING (your original version)              */
         /* ------------------------------------------------------- */
@@ -51,9 +64,11 @@
             position: absolute;
             cursor: pointer;
         }
+
         input[type="date"]::-moz-calendar-picker-indicator {
             display: none;
         }
+
         input[type="date"] {
             border: 1px solid #d1d5db;
             padding: 0.6rem 1rem 0.6rem 2.5rem;
@@ -64,6 +79,7 @@
             cursor: pointer;
             position: relative;
         }
+
         select {
             border: 1px solid #d1d5db;
             padding: 0.6rem 1rem;
@@ -73,27 +89,31 @@
             background-color: #f9fafb;
             cursor: pointer;
         }
+
         input[type="date"]:focus, select:focus {
             border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
             outline: none;
         }
+
         input[type="date"]:disabled {
             background-color: #e5e7eb;
             color: #9ca3af;
             cursor: not-allowed;
             padding-left: 1rem;
         }
+
         .clickable-label {
             cursor: pointer;
         }
+
         .date-input-group {
             display: flex;
             align-items: center;
         }
     </style>
 </head>
-    
+
 <body>
     <!-- Card container -->
     <div id="app" class="container-card p-6 md:p-10">
