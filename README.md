@@ -198,7 +198,7 @@
 
 <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
                     <p class="<b>font-bold</b> mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    <p class="<b>font-bold</b> pt-3 mb-1">Common Schedule 1 Offences</p>
+                    <p class="<b>font-bold</b> pt-3 mb-1"> <b>Common Schedule 1 Offences</b>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
                         <li>Invitation to sexual touching (s. 152)</li>
@@ -206,7 +206,7 @@
                         <li>Luring a child (s. 172.1)</li>
                         <li>Voyeurism involving a minor (s. 162)</li>
                     </ul>
-                    <p class="mt-2 <b>font-bold</b>"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 <u>underline</u>">See the full list here.</a></p>
+                    <p class="mt-2 <b>font-bold</b>"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 <u>underline</u>"><b>See the full list here.</b></a></p>
                 </div>
             </div>
 
