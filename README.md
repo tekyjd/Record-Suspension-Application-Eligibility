@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,25 +9,25 @@
         /* Custom styles to match the desired theme */
         body {
             font-family: 'Inter', sans-serif;
-            background: #ffffff; /* Light gray/blue background */
-            margin: 0; /* FIX 1: Removes the default browser margin */
-            padding: 0; /* Ensures no default padding interferes */
-            min-height: 100vh; /* Ensures background covers entire screen height */
+            background: #f0f2f6; /* Light gray/blue background */
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh; 
         }
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
-            margin: 2rem auto; /* Ensures it's centered and has vertical spacing on desktop */
+            margin: 2rem auto; 
             background-color: #ffffff;
-            border-radius: 3.25rem; /* Ensure rounded corners are consistent */
+            border-radius: 0.75rem; 
         }
-        /* FIX 2: Mobile adjustment: Remove margin and make card full width on small screens */
+        /* Mobile adjustment: Remove margin and make card full width on small screens */
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
-                margin: 0; /* Removes all margins on mobile for edge-to-edge effect */
-                border-radius: 0; /* Makes it flush */
-                box-shadow: none; /* Reduces visual clutter on small screens */
+                margin: 0; 
+                border-radius: 0; 
+                box-shadow: none; 
             }
         }
         .section-header {
@@ -38,33 +39,23 @@
         }
         
         /* ---------------------------------------------------------------------- */
-        /* CUSTOM DATE INPUT STYLING TO MOVE ICON LEFT (SIMULATED) */
+        /* DATE INPUT STYLING (Now using native right-side icon) */
         /* ---------------------------------------------------------------------- */
         
-        /* 1. Hide the browser's native calendar icon/picker indicator */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0; /* Make it invisible but still clickable */
-            width: 100%; /* Make the whole field the target */
-            position: absolute; /* Position it over the entire field */
-            cursor: pointer;
-        }
-        /* Fallback for other browsers (less effective but attempts to hide) */
-        input[type="date"]::-moz-calendar-picker-indicator {
-            display: none;
-        }
-
-        /* 2. Adjust input padding to make room for the custom icon on the left */
         input[type="date"] {
             border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem 0.6rem 2.0rem; /* Keep left padding for icon */
+            /* Reset padding to default symmetric padding */
+            padding: 0.6rem 1rem; 
             border-radius: 0.5rem;
-            width: 100%;
+            width: 100%; 
             transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
             background-color: #f9fafb;
-            cursor: pointer;
-            position: relative;
-            text-align: center; /* Center the text */
-    }
+            cursor: pointer; 
+            position: relative; 
+            /* Ensure the native calendar icon is visible (undoing previous opacity: 0) */
+            appearance: none; /* Helps ensure consistent styling */
+            -webkit-appearance: none;
+        }
         
         /* 3. Ensure other inputs/selects are styled correctly */
         select {
@@ -87,7 +78,7 @@
             background-color: #e5e7eb; /* Lighter background for disabled field */
             color: #9ca3af;
             cursor: not-allowed;
-            padding-left: 1rem; /* Remove extra padding when disabled/icon is useless */
+            /* No longer need to reset padding-left, as there is no custom left icon */
         }
         
         /* Ensure the label is also clickable */
@@ -99,26 +90,36 @@
             display: flex;
             align-items: center;
         }
+        
+        /* Override to make native calendar icon visible and interactive */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 100;
+            display: block;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Removed the redundant 'rounded-xl' class from the div as it's defined in the CSS block -->
     <div id="app" class="container-card p-6 md:p-10">
-        <header class="text-center mb-6 flex items-center justify-center space-x-4">
-            
-            <h1 class="text-2xl font-bold text-gray-800 my-4">Pardon Eligibility Checker</h1>
-            
-            <!-- TMU Law Logo: Increased height to h-16 -->
-            <img src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
-                 alt="TMU Law Logo" 
-                 class="h-16 w-auto" 
-                 style="max-width: 300px;">
-            
-        </header>
+        
+        
 
-        <!-- Disclaimer Section -->
-        <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+<div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 flex-shrink-0">
+                Pardon Eligibility Checker
+            </h1>
+            <img 
+                src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
+                alt="Toronto Metropolitan University Law Logo" 
+                class="h-10 md:h-16 ml-4 object-contain"
+                onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
+            >
+        </div>
+
+        
+
+<section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
             <p class="text-sm text-blue-600 mb-4">Eligibility results are for informational purposes only. They are provided in good faith, based solely on the information you enter. This tool does not constitute legal advice, and using it does not guarantee that a record suspension will be granted or denied by the Parole Board of Canada.</p>
             <label class="flex items-center space-x-2 cursor-pointer">
@@ -127,21 +128,20 @@
             </label>
         </section>
 
-        <!-- Input Form Section -->
-        <section id="input-form" class="space-y-6" style="display: none;">
+        
+
+<section id="input-form" class="space-y-6" style="display: none;">
             <h2 class="text-xl section-header">Conviction Details</h2>
 
-            <!-- Conviction Date -->
-            <div class="space-y-2">
-                <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Date of conviction</label>
+            
+
+<div class="space-y-2">
+                <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Conviction Date</label>
                 <div class="date-input-group space-x-4">
-                    <!-- Date Input Container: CHANGED w-44 to w-56 -->
-                    <div class="relative w-56">
+                    
+
+<div class="w-40">
                         <input type="date" id="conviction-date" class="w-full">
-                        <!-- Custom Icon (positioned on the left) -->
-                        <svg class="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
                     </div>
                     
                     <label class="flex items-center space-x-2 text-sm">
@@ -151,17 +151,15 @@
                 </div>
             </div>
 
-            <!-- Sentence Completion Date -->
-            <div class="space-y-2">
-                <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence completion date</label>
+            
+
+<div class="space-y-2">
+                <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence Completion Date</label>
                 <div class="date-input-group space-x-4">
-                    <!-- Date Input Container: CHANGED w-44 to w-56 -->
-                    <div class="relative w-56">
+                    
+
+<div class="w-40">
                         <input type="date" id="sentence-completion-date" class="w-full">
-                        <!-- Custom Icon (positioned on the left) -->
-                        <svg class="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
                     </div>
                     
                     <label class="flex items-center space-x-2 text-sm">
@@ -173,8 +171,9 @@
             </div>
 
 
-            <!-- Prosecution Type -->
-            <div class="space-y-2">
+            
+
+<div class="space-y-2">
                 <label for="prosecution-type" class="block text-sm font-medium text-gray-700">Prosecution type</label>
                 <select id="prosecution-type" class="w-full">
                     <option value="" disabled selected>Select an option</option>
@@ -184,8 +183,9 @@
                 </select>
             </div>
 
-            <!-- Schedule 1 Offence (Updated Info Section) -->
-            <div class="space-y-2">
+            
+
+<div class="space-y-2">
                 <label for="schedule1-offence" class="block text-sm font-medium text-gray-700 flex justify-between items-center">
                     <span>Is it a Schedule 1 offence?</span>
                     <span id="schedule1-info-toggle" class="text-blue-500 hover:text-blue-700 text-xs cursor-pointer underline">What are Schedule 1 Offences?</span>
@@ -196,10 +196,11 @@
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
                 </select>
-                <!-- UPDATED CONTENT FOR SCHEDULE 1 INFO -->
-                <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
-                    <p class="font-bold mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    <p class="font-bold pt-3 mb-1">Common Schedule 1 Offences</p>
+                
+
+<div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
+                    <p class="<b>font-bold</b> mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
+                    <p class="<b>font-bold</b> pt-3 mb-1">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
                         <li>Invitation to sexual touching (s. 152)</li>
@@ -207,16 +208,14 @@
                         <li>Luring a child (s. 172.1)</li>
                         <li>Voyeurism involving a minor (s. 162)</li>
                     </ul>
-                    <p class="mt-2 font-bold"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 underline">See the full list here.</a></p>
+                    <p class="mt-2 <b>font-bold</b>"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 <u>underline</u>">See the full list here.</a></p>
                 </div>
             </div>
 
-            <!-- History of Convictions Section -->
-            <h3 class="text-lg font-semibold mt-8 pt-4 border-t border-gray-200 text-[#1a4d8c]">History of Convictions</h3>
+            
 
-            <!-- Imprisonment Question -->
-            <div class="space-y-2">
-                <label for="three-plus-two-year-imprisonment" class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
+<div class="space-y-2">
+                <label for="three-plus-two-year-imprisonment" class="block text-sm <b>font-medium</b> text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
                 <select id="three-plus-two-year-imprisonment" class="w-full">
                     <option value="" disabled selected>Select an option</option>
                     <option value="I'm not sure">I'm not sure</option>
@@ -225,20 +224,23 @@
                 </select>
             </div>
 
-            <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white font-bold py-3 rounded-xl transition duration-200 shadow-md mt-6">
+            <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white <b>font-bold</b> py-3 rounded-xl transition duration-200 shadow-md mt-6">
                 Check Eligibility
             </button>
         </section>
 
-        <!-- Result Section -->
-        <section id="result-section" class="mt-8">
+        
+
+<section id="result-section" class="mt-8">
             <h2 class="text-xl section-header hidden" id="result-header">Your Eligibility Status</h2>
-            <div id="result-message" class="rounded-xl p-5 text-lg font-semibold">
-                <!-- Results will be displayed here -->
-            </div>
+            <div id="result-message" class="rounded-xl p-5 text-lg <b>font-semibold</b>">
+                
+
+</div>
             <div id="missing-info-details" class="mt-4 hidden p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded text-sm text-yellow-800">
-                <!-- Missing answers list will be displayed here -->
-            </div>
+                
+
+</div>
         </section>
 
     </div>
@@ -325,8 +327,8 @@
                 // A. Schedule 1 Check (Known 'Yes')
                 if (schedule1Offence === "Yes") {
                     const schedule1Message = `
-                        Based on the information you provided, you appear to have been convicted of a Schedule 1 offence.
-                        Generally, individuals convicted of a Schedule 1 offence are ineligible for a record suspension.
+                        Based on the information you provided, you appear to have been convicted of a <b>Schedule 1</b> offence.
+                        Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
                         However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
                         For more information, consult a legal professional or the Parole Board of Canada website.
                     `;
@@ -347,8 +349,8 @@
                 const missingIneligibilityFactor = isSchedule1Unknown || isTwoYearImprisonmentUnknown;
 
                 if (missingIneligibilityFactor) {
-                    if (isConvictionDateUnknown) essentialUnknowns.push("Date of conviction");
-                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
+                    if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
 
                     if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
@@ -367,8 +369,8 @@
                 
                 // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing)
                 if (isConvictionDateUnknown || isCompletionDateUnknown || isProsecutionTypeUnknown) {
-                    if (isConvictionDateUnknown) essentialUnknowns.push("Date of conviction");
-                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
+                    if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
@@ -398,23 +400,25 @@
                     let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))"];
                     let ambiguityMessage = '';
                     
+                    // Since Sch 1 is 'No' here, we don't need to flag it as missing, but we proceed to SPIO check.
+                    
                     if (isCompletionDateUnknown) {
                          // Case 1: Completion Date is UNKNOWN
-                         missingInfo.push("Sentence completion date (to calculate the start of the waiting period)");
+                         missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
                          
                          ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
-                                    <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your waiting period is 10 years.</span>
+                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span>If you were convicted of a serious personal injury offence: Your waiting period is <b>10 years</b>.</span>
                                 </p>
                                 <p class="flex items-start">
-                                    <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your waiting period is 5 years.</span>
+                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span>If you were NOT of a serious personal injury offence: Your waiting period is <b>5 years</b>.</span>
                                 </p>
                             </div>
                         `;
@@ -430,17 +434,17 @@
                         // Use requested exact wording and formatting
                         ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
-                                    <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your eligibility date is ${date10yrStr}.</span>
+                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span>If you were convicted of a serious personal injury offence: Your eligibility date is <b>${date10yrStr}</b>.</span>
                                 </p>
                                 <p class="flex items-start">
-                                    <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your eligibility date is ${date5yrStr}.</span>
+                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span>If you were NOT of a serious personal injury offence: Your eligibility date is <b>${date5yrStr}</b>.</span>
                                 </p>
                             </div>
                         `;
@@ -462,7 +466,7 @@
                 // Case: Conviction Date is before D1 (Pre-June 29, 2010)
                 if (convictionDate < D1) {
                     
-                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
 
                     if (isProsecutionTypeUnknown) {
                          essentialUnknowns.push("Prosecution type");
@@ -477,12 +481,15 @@
                 // Case: Conviction Date is between D1 and D3 (June 29, 2010 – March 12, 2012)
                 else if (convictionDate >= D1 && convictionDate < D3) {
                     
-                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
-                    
-                    // --- APPLY USER'S REQUESTED RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
+                    
+                    // NEW CHECK: Schedule 1 is now flagged as essential for D1-D3 if unknown
+                    if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
 
+                    // --- APPLY USER'S REQUESTED RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
+                    
                     // NEW SPECIFIC RULE: Summary + Schedule 1 = Yes (Fixed 5 years wait)
                     if (prosecutionType === "Summary" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "5 years";
@@ -493,13 +500,10 @@
                     } 
                     // Original Rule 2: Summary (Non-Sch1 or Sch1 Unknown) -> 3-5 years
                     else if (prosecutionType === "Summary" && !isProsecutionTypeUnknown) {
-                        // This case is for Summary where Sch1 is 'No' or 'I'm not sure'.
-                        if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                         range = "3–5 years";
                     }
                     // Original Rule 3: Unknown Prosecution & (Schedule 1 = No or Unknown) -> 3-10 years
                     else if (isProsecutionTypeUnknown && (schedule1Offence === "No" || isSchedule1Unknown)) {
-                        if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                         range = "3–10 years";
                     }
                     // Original Rule 4: Unknown Prosecution & (Schedule 1 = Yes) -> 5-10 years
@@ -528,8 +532,8 @@
                 // A. Check for known ineligibility (Sch 1 is Yes OR 3+ Convictions is Yes)
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
                     const schedule1Message = `
-                        Based on the information you provided, you appear to have been convicted of a Schedule 1 offence.
-                        Generally, individuals convicted of a Schedule 1 offence are ineligible for a record suspension.
+                        Based on the information you provided, you appear to have been convicted of a <b>Schedule 1</b> offence.
+                        Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
                         However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
                         For more information, consult a legal professional or the Parole Board of Canada website.
                     `;
@@ -547,8 +551,8 @@
 
                 // B. Check if we are missing information about absolute ineligibility 
                 essentialUnknowns = [];
-                if (isConvictionDateUnknown) essentialUnknowns.push("Date of conviction");
-                if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
+                if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
+                if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                 if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                 
                 if (isSchedule1Unknown || isTwoYearImprisonmentUnknown) {
@@ -571,10 +575,10 @@
                     let range = "3–10 years"; // Default to broadest range (Conviction Date is unknown, so 3-10 years is possible)
                     
                     // Collect remaining unknowns
-                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence completion date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     // Conviction Date is the main reason we are here, so add it
-                    essentialUnknowns.push("Date of conviction");
+                    essentialUnknowns.push("Conviction Date");
                     
                     // Customize range based on known non-date factors:
                     if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
@@ -612,6 +616,7 @@
                 
                 if (schedule1Offence === "Yes") {
                     // Indictment/Summary with Schedule 1 conviction (10 years if Indictment, 5 years if Summary)
+                    // Note: This 5-year Summary rule is specific to the transitional period with Sch 1.
                     waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5; 
                 } else if (prosecutionType === "Summary") { 
                     // Summary and Not Schedule 1 (3 years - using old rule)
@@ -634,7 +639,7 @@
             if (eligibleDate <= TODAY) {
                 return {
                     status: "eligible_now",
-                    message: `You are eligible to apply for a record suspension now. The waiting period was determined to be ${waitPeriodYears} years.`,
+                    message: `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${waitPeriodYears} years</b>.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: []
                 };
@@ -642,7 +647,7 @@
                 const dateString = formatEligibleDate(eligibleDate);
                 return {
                     status: "eligible_future",
-                    message: `You will be eligible on ${dateString}. The required waiting period is ${waitPeriodYears} years from your sentence completion date.`,
+                    message: `You will be eligible on ${dateString}. The required waiting period is <b>${waitPeriodYears} years</b> from your sentence completion date.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: []
                 };
@@ -746,14 +751,14 @@
         function displayResult(result) {
             elements.resultHeader.classList.remove('hidden');
             elements.missingInfoDetails.classList.add('hidden');
-            elements.resultMessage.className = 'rounded-xl p-5 text-lg font-semibold mt-4 shadow-lg transition-all duration-300';
+            elements.resultMessage.className = 'rounded-xl p-5 text-lg <b>font-semibold</b> mt-4 shadow-lg transition-all duration-300';
             let htmlContent = '';
             let styleClasses = '';
             let missingListHTML = '';
             
             // HTML for courthouse contact info (as requested)
             const courthouseContactHtml = `
-                <p class="mt-4 font-bold">You can obtain this information from the courthouse where you were convicted:</p>
+                <p class="mt-4 <b>font-bold</b>">You can obtain this information from the courthouse where you were convicted:</p>
                 <p class="mt-1 text-sm">
                     <a href="https://www.ontario.ca/locations/courts" target="_blank" class="text-blue-600 hover:underline">Ontario Courthouse Contact</a>
                 </p>
@@ -763,50 +768,50 @@
             switch (result.status) {
                 case 'eligible_now':
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">🎉</span><h3 class="font-bold text-xl">Eligible Now!</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">🎉</span><h3 class="<b>font-bold</b> text-xl"><b>Eligible Now!</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'eligible_future':
                     styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#9202;</span><h3 class="font-bold text-xl">Eligible in the Future</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#9202;</span><h3 class="<b>font-bold</b> text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'ineligible':
                     styleClasses = 'bg-red-100 border-l-8 border-red-600 text-red-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-red-600">&#10060;</span><h3 class="font-bold text-xl">Ineligible</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-red-600">&#10060;</span><h3 class="<b>font-bold</b> text-xl"><b>Ineligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'schedule1_exception':
                     styleClasses = 'bg-yellow-100 border-l-8 border-amber-600 text-amber-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-amber-600">⚠️</span><h3 class="font-bold text-xl">Schedule 1 Offence — Possible Exception</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-amber-600">⚠️</span><h3 class="<b>font-bold</b> text-xl"><b>Schedule 1 Offence — Possible Exception</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'eligible_unclear':
                     styleClasses = 'bg-indigo-100 border-l-8 border-indigo-600 text-indigo-800'; 
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#63;</span><h3 class="font-bold text-xl">Likely Eligible (Timeline Ambiguous)</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#63;</span><h3 class="<b>font-bold</b> text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
-                        htmlContent += `<p class="mt-3 text-sm font-bold bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
+                        htmlContent += `<p class="mt-3 text-sm <b>font-bold</b> bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
                     elements.missingInfoDetails.classList.remove('hidden');
                     missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                     
                     // Append contact information
-                    elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
+                    elements.missingInfoDetails.innerHTML = `<p class="<b>font-bold</b>">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
                     break;
 
                 case 'unclear':
                 default:
                     styleClasses = 'bg-yellow-100 border-l-8 border-yellow-600 text-yellow-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-yellow-600">&#63;</span><h3 class="font-bold text-xl">Eligibility Unclear</h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-yellow-600">&#63;</span><h3 class="<b>font-bold</b> text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.missingAnswers.length > 0) {
                         elements.missingInfoDetails.classList.remove('hidden');
                         missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                         
                         // Append contact information
-                        elements.missingInfoDetails.innerHTML = `<p class="font-bold">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
+                        elements.missingInfoDetails.innerHTML = `<p class="<b>font-bold</b>">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
                     }
                     break;
             }
