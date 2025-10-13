@@ -8,7 +8,7 @@
         /* Custom styles to match the desired theme */
         body {
             font-family: 'Inter', sans-serif;
-            background: #f0f2f6; /* Light gray/blue background */
+            background: #ffffff; /* Light gray/blue background */
             margin: 0; /* FIX 1: Removes the default browser margin */
             padding: 0; /* Ensures no default padding interferes */
             min-height: 100vh; /* Ensures background covers entire screen height */
