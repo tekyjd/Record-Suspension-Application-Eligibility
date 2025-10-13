@@ -197,23 +197,24 @@
                 
 
 <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
-                    <p class="<b>font-bold</b> mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    <p class="<b>font-bold</b> pt-3 mb-1"> <b>Common Schedule 1 Offences</b>
+                    <p class="font-bold mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
+                    <!-- Correction applied: Using 'font-bold' class and 'underline' class directly for the desired effect -->
+                    <p class="pt-3 mb-1 font-bold underline">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
                         <li>Invitation to sexual touching (s. 152)</li>
                         <li>Child pornography (s. 163.1)</li>
                         <li>Luring a child (s. 172.1)</li>
-                        <li>Voyeurism involving a minor (s. 162)</li>
                     </ul>
-                    <p class="mt-2 <b>font-bold</b>"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 <u>underline</u>"><b>See the full list here.</b></a></p>
+                    <!-- Correction applied: Using 'font-bold' class directly on the paragraph for the link -->
+                    <p class="mt-2 font-bold"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900">See the full list here.</a></p>
                 </div>
             </div>
 
             
 
 <div class="space-y-2">
-                <label for="three-plus-two-year-imprisonment" class="block text-sm <b>font-medium</b> text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
+                <label for="three-plus-two-year-imprisonment" class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
                 <select id="three-plus-two-year-imprisonment" class="w-full">
                     <option value="" disabled selected>Select an option</option>
                     <option value="I'm not sure">I'm not sure</option>
@@ -222,7 +223,7 @@
                 </select>
             </div>
 
-            <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white <b>font-bold</b> py-3 rounded-xl transition duration-200 shadow-md mt-6">
+            <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white font-bold py-3 rounded-xl transition duration-200 shadow-md mt-6">
                 Check Eligibility
             </button>
         </section>
@@ -231,7 +232,7 @@
 
 <section id="result-section" class="mt-8">
             <h2 class="text-xl section-header hidden" id="result-header">Your Eligibility Status</h2>
-            <div id="result-message" class="rounded-xl p-5 text-lg <b>font-semibold</b>">
+            <div id="result-message" class="rounded-xl p-5 text-lg font-semibold">
                 
 
 </div>
@@ -411,11 +412,11 @@
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
-                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
                                     <span>If you were convicted of a serious personal injury offence: Your waiting period is <b>10 years</b>.</span>
                                 </p>
                                 <p class="flex items-start">
-                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
                                     <span>If you were NOT convicted of a serious personal injury offence: Your waiting period is <b>5 years</b>.</span>
                                 </p>
                             </div>
@@ -437,11 +438,11 @@
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
-                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
                                     <span>If you were convicted of a serious personal injury offence: Your eligibility date is <b>${date10yrStr}</b>.</span>
                                 </p>
                                 <p class="flex items-start">
-                                    <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
                                     <span>If you were NOT convicted of a serious personal injury offence: Your eligibility date is <b>${date5yrStr}</b>.</span>
                                 </p>
                             </div>
@@ -753,14 +754,14 @@
         function displayResult(result) {
             elements.resultHeader.classList.remove('hidden');
             elements.missingInfoDetails.classList.add('hidden');
-            elements.resultMessage.className = 'rounded-xl p-5 text-lg <b>font-semibold</b> mt-4 shadow-lg transition-all duration-300';
+            elements.resultMessage.className = 'rounded-xl p-5 text-lg font-semibold mt-4 shadow-lg transition-all duration-300';
             let htmlContent = '';
             let styleClasses = '';
             let missingListHTML = '';
             
             // HTML for courthouse contact info (as requested)
             const courthouseContactHtml = `
-                <p class="mt-4 <b>font-bold</b>">You can obtain this information from the courthouse where you were convicted:</p>
+                <p class="mt-4 font-bold">You can obtain this information from the courthouse where you were convicted:</p>
                 <p class="mt-1 text-sm">
                     <a href="https://www.ontario.ca/locations/courts" target="_blank" class="text-blue-600 hover:underline">Ontario Courthouse Contact</a>
                 </p>
@@ -770,51 +771,51 @@
             switch (result.status) {
                 case 'eligible_now':
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">🎉</span><h3 class="<b>font-bold</b> text-xl"><b>Eligible Now!</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">🎉</span><h3 class="font-bold text-xl"><b>Eligible Now!</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'eligible_future':
                     styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#9202;</span><h3 class="<b>font-bold</b> text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#9202;</span><h3 class="font-bold text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'ineligible':
                     styleClasses = 'bg-red-100 border-l-8 border-red-600 text-red-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-red-600">&#10060;</span><h3 class="<b>font-bold</b> text-xl"><b>Ineligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-red-600">&#10060;</span><h3 class="font-bold text-xl"><b>Ineligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'schedule1_exception':
                     styleClasses = 'bg-yellow-100 border-l-8 border-amber-600 text-amber-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-amber-600">⚠️</span><h3 class="<b>font-bold</b> text-xl"><b>Schedule 1 Offence — Possible Exception</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-amber-600">⚠️</span><h3 class="font-bold text-xl"><b>Schedule 1 Offence — Possible Exception</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     break;
 
                 case 'eligible_unclear':
                     styleClasses = 'bg-indigo-100 border-l-8 border-indigo-600 text-indigo-800'; 
                     // Blue Checkmark: &#10003;
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#10003;</span><h3 class="<b>font-bold</b> text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#10003;</span><h3 class="font-bold text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
-                        htmlContent += `<p class="mt-3 text-sm <b>font-bold</b> bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
+                        htmlContent += `<p class="mt-3 text-sm font-bold bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
                     elements.missingInfoDetails.classList.remove('hidden');
                     missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                     
                     // Append contact information
-                    elements.missingInfoDetails.innerHTML = `<p class="<b>font-bold</b>">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
+                    elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
                     break;
 
                 case 'unclear':
                 default:
                     styleClasses = 'bg-yellow-100 border-l-8 border-yellow-600 text-yellow-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-yellow-600">&#63;</span><h3 class="<b>font-bold</b> text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-yellow-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.missingAnswers.length > 0) {
                         elements.missingInfoDetails.classList.remove('hidden');
                         missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                         
                         // Append contact information
-                        elements.missingInfoDetails.innerHTML = `<p class="<b>font-bold</b>">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
+                        elements.missingInfoDetails.innerHTML = `<p class="font-bold">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
                     }
                     break;
             }
