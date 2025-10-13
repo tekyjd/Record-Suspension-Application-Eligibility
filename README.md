@@ -327,7 +327,7 @@
                     const schedule1Message = `
                         Based on the information you provided, you appear to have been convicted of a Schedule 1 offence.
                         Generally, individuals convicted of a Schedule 1 offence are ineligible for a record suspension.
-                        However, under Section 4(3) of the <Criminal Records Act>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
+                        However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
                         For more information, consult a legal professional or the Parole Board of Canada website.
                     `;
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
@@ -404,7 +404,7 @@
                          
                          ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <Criminal Code>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
@@ -430,7 +430,7 @@
                         // Use requested exact wording and formatting
                         ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <Criminal Code>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a 'serious personal injury offence' (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
@@ -530,7 +530,7 @@
                     const schedule1Message = `
                         Based on the information you provided, you appear to have been convicted of a Schedule 1 offence.
                         Generally, individuals convicted of a Schedule 1 offence are ineligible for a record suspension.
-                        However, under Section 4(3) of the <Criminal Records Act>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
+                        However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
                         For more information, consult a legal professional or the Parole Board of Canada website.
                     `;
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
