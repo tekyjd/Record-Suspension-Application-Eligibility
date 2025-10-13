@@ -8,7 +8,7 @@
         /* Custom styles to match the desired theme */
         body {
             font-family: 'Inter', sans-serif;
-            background: #ffffff; /* Light gray/blue background */
+            background: #f0f2f6; /* Light gray/blue background */
             margin: 0; 
             padding: 0; 
             min-height: 100vh; 
@@ -47,7 +47,7 @@
             border-radius: 0.5rem;
             width: 100%; 
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            background-color: #ffffff;
+            background-color: #f9fafb;
             cursor: pointer; 
             appearance: none;
             -webkit-appearance: none;
@@ -282,7 +282,7 @@
             const criminalCodeLink = '<a href="https://laws-lois.justice.gc.ca/eng/acts/C-46/section-752.html" target="_blank" class="text-blue-600 hover:text-blue-800 underline">752 of the <i>Criminal Code</i></a>';
 
             // Hyperlink content for the Parole Board of Canada website (New Requirement)
-            const pbcWebsiteLink = '<a href="https://www.canada.ca/en/parole-board/services/record-suspensions/applying-for-a-record-suspension.html#step6" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Parole Board of Canada website</a>';
+            const pbcWebsiteLink = '<a href="https://www.canada.ca/en/parole-board/services/record-suspensions/applying-for-a-record-suspension.html#step6" target="_blank" class="text-blue-600 hover:text-blue-900 underline">Parole Board of Canada website</a>';
 
             // Helper to check for unknown values
             const isUnknown = (val) => UNKNOWN_SENTINELS.includes(val);
@@ -298,7 +298,7 @@
             // 1. Prioritized Check for Convictions on or after March 13, 2012 (D3)
             if (convictionDate && convictionDate >= D3) {
                 
-                // A. Schedule 1 Check (Known 'Yes') - EDITS 1 & 2 APPLIED HERE
+                // A. Schedule 1 Check (Known 'Yes')
                 if (schedule1Offence === "Yes") {
                     const schedule1Message = `
                         <p class="mb-3">
@@ -315,11 +315,11 @@
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
                 }
 
-                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE
+                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE (This check is correct here as Conviction Date >= D3)
                 if (threePlusTwoYearImprisonment === "Yes") {
                     return {
                         status: "ineligible",
-                        message: "You are not eligible for a record suspension. This is because you have three or more convictions that resulted in a sentence of imprisonment of two years or more each.",
+                        message: "You are not eligible for a record suspension. This is because you have three or more convictions that resulted in a sentence of imprisonment of two years or more each, and your conviction occurred on or after March 13, 2012.",
                         eligibleDate: null,
                         missingAnswers: []
                     };
@@ -369,7 +369,7 @@
                         message: "You appear to be eligible for a record suspension based on the conviction type and history. However, your exact eligibility date depends on the missing date and prosecution type details.",
                         eligibleDate: null,
                         missingAnswers: essentialUnknowns,
-                        timelineRange: postD3Range // <-- Using the refined range
+                        timelineRange: postD3Range 
                     };
                 }
                 
@@ -378,6 +378,8 @@
             
             // 2. Prioritized Check for Convictions before March 13, 2012 (Pre-D3)
             else if (convictionDate && convictionDate < D3) { 
+                
+                // ** CRITICAL: IGNORE the threePlusTwoYearImprisonment check for INELIGIBILITY here, as per the rule. **
                 
                 // --- SPECIAL AMBIGUITY CHECK (2010-2012 Transitional Period for Indictments/Unknown) ---
                 
@@ -389,8 +391,6 @@
                     
                     let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))"];
                     let ambiguityMessage = '';
-                    
-                    // Since Sch 1 is 'No' here, we don't need to flag it as missing, but we proceed to SPIO check.
                     
                     if (isCompletionDateUnknown) {
                          // Case 1: Completion Date is UNKNOWN
@@ -528,9 +528,9 @@
             // 3. Fallback if Conviction Date is UNKNOWN (Conviction Date is 'I'm not sure' or empty)
             else if (isConvictionDateUnknown) {
 
-                // A. Check for known ineligibility (Sch 1 is Yes OR 3+ Convictions is Yes)
+                // A. Check for known ineligibility (Sch 1 is Yes)
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
-                    // MESSAGE REFORMATTED FOR READABILITY (User Request) - EDITS 1 & 2 APPLIED HERE
+                    // MESSAGE REFORMATTED FOR READABILITY (User Request)
                     const schedule1Message = `
                         <p class="mb-3">
                             Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
@@ -546,34 +546,22 @@
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
                 }
 
+                // B. **MODIFIED** Check for conditional ineligibility (3+ Convictions)
                 if (threePlusTwoYearImprisonment === "Yes" && !isTwoYearImprisonmentUnknown) {
-                    return {
-                        status: "ineligible",
-                        message: "You are not eligible for a record suspension. This is because you have three or more convictions that resulted in a sentence of imprisonment of two years or more each.",
-                        eligibleDate: null,
-                        missingAnswers: []
-                    };
-                }
-
-                // B. Check if we are missing information about absolute ineligibility 
-                essentialUnknowns = [];
-                if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
-                if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                
-                if (isSchedule1Unknown || isTwoYearImprisonmentUnknown) {
-                    // Fallback to "unclear" if we can't rule out ineligibility
-                    if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
-                    if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-
+                    // If 3+ is YES, but Conviction Date is UNKNOWN, we must return UNCLEAR, not INELIGIBLE.
+                    essentialUnknowns = [];
+                    essentialUnknowns.push("Conviction Date");
+                    if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
+                    if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
+                    
                     return {
                         status: "unclear",
-                        // Using the requested general wording:
                         message: "The required information to determine your eligibility is missing. Please review the missing details below.",
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns))
                     };
                 }
+
 
                 // C. If we reach here: Conviction Date is Unknown, Sch 1='No', and 3+ Conv='No'. Likely Eligible but Timeline Unknown.
                 if (schedule1Offence === "No" && threePlusTwoYearImprisonment === "No") {
@@ -594,7 +582,6 @@
                         // If Summary is KNOWN, the min wait time is 3, max is 5 (pre-D1 vs post-D3)
                         range = "3–5 years";
                     }
-                    // Since Sch1 is 'No', we don't need to check the Sch1 condition here.
 
                     return {
                         status: "eligible_unclear",
@@ -605,8 +592,16 @@
                     };
                 }
                 
-                // Fallback (should be unreachable)
-                return { status: "unclear", message: "Eligibility calculation failed: Unhandled date range.", eligibleDate: null, missingAnswers: [] };
+                // D. Fallback (If other factors are missing, e.g., Sch1 or 3+ is 'I'm not sure')
+                essentialUnknowns = [];
+                if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
+                if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
+                if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
+                if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
+                if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
+
+
+                return { status: "unclear", message: "The required information to determine your eligibility is missing. Please review the missing details below.", eligibleDate: null, missingAnswers: Array.from(new Set(essentialUnknowns)) };
             }
 
 
