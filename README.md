@@ -56,15 +56,15 @@
         /* 2. Adjust input padding to make room for the custom icon on the left */
         input[type="date"] {
             border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem 0.6rem 2.5rem; /* Increased left padding (2.5rem) */
+            padding: 0.6rem 1rem 0.6rem 2.5rem; /* Keep left padding for icon */
             border-radius: 0.5rem;
-            /* Note: Width is now controlled by the parent div (w-44) */
-            width: 100%; 
+            width: 100%;
             transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
             background-color: #f9fafb;
-            cursor: pointer; 
-            position: relative; 
-        }
+            cursor: pointer;
+            position: relative;
+            text-align: center; /* Center the text */
+    }
         
         /* 3. Ensure other inputs/selects are styled correctly */
         select {
