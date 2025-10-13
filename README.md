@@ -102,16 +102,15 @@
 
     <div id="app" class="container-card p-6 md:p-10">
         
-        
-
-<div class="flex items-center justify-between pb-4 mb-6 border-b border-gray-100">
+        <!-- Header with increased logo size (h-14 md:h-24) and border removed -->
+<div class="flex items-center justify-between pb-4 mb-6">
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 flex-shrink-0">
                 Pardon Eligibility Checker
             </h1>
             <img 
                 src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
                 alt="Toronto Metropolitan University Law Logo" 
-                class="h-10 md:h-16 ml-4 object-contain"
+                class="h-14 md:h-24 ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
             >
         </div>
@@ -417,7 +416,7 @@
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your waiting period is <b>5 years</b>.</span>
+                                    <span>If you were NOT convicted of a serious personal injury offence: Your waiting period is <b>5 years</b>.</span>
                                 </p>
                             </div>
                         `;
@@ -443,7 +442,7 @@
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 <b>font-bold</b> leading-relaxed">-</span>
-                                    <span>If you were NOT of a serious personal injury offence: Your eligibility date is <b>${date5yrStr}</b>.</span>
+                                    <span>If you were NOT convicted of a serious personal injury offence: Your eligibility date is <b>${date5yrStr}</b>.</span>
                                 </p>
                             </div>
                         `;
@@ -489,11 +488,15 @@
 
                     // --- APPLY USER'S REQUESTED RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
                     
-                    // NEW SPECIFIC RULE: Summary + Schedule 1 = Yes (Fixed 5 years wait)
-                    if (prosecutionType === "Summary" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
+                    // *** NEW RULE (User Request): Indictment + Schedule 1 = 10 years wait ***
+                    if (prosecutionType === "Indictment" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
+                        range = "10 years"; // Fixed 10-year rule for this specific transitional case
+                    }
+                    // Original NEW SPECIFIC RULE: Summary + Schedule 1 = Yes (Fixed 5 years wait)
+                    else if (prosecutionType === "Summary" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "5 years";
                     }
-                    // Rule 1: Indictable -> 5-10 years (Non-SPIO vs SPIO ambiguity)
+                    // Rule 1: Indictable (Non-Sch1) -> 5-10 years (Non-SPIO vs SPIO ambiguity)
                     else if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
                         range = "5–10 years";
                     } 
@@ -787,7 +790,8 @@
 
                 case 'eligible_unclear':
                     styleClasses = 'bg-indigo-100 border-l-8 border-indigo-600 text-indigo-800'; 
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#63;</span><h3 class="<b>font-bold</b> text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Blue Checkmark: &#10003;
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-indigo-600">&#10003;</span><h3 class="<b>font-bold</b> text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
                         htmlContent += `<p class="mt-3 text-sm <b>font-bold</b> bg-indigo-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
