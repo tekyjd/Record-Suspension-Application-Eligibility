@@ -47,7 +47,7 @@
             border-radius: 0.5rem;
             width: 100%; 
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-            background-color: #f9fafb;
+            background-color: #ffffff;
             cursor: pointer; 
             appearance: none;
             -webkit-appearance: none;
