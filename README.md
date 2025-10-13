@@ -1,4 +1,4 @@
-@import "{{ site.theme }}"; header { display: none; }
+header { display: none}
 
 <html lang="en">
 <head>
