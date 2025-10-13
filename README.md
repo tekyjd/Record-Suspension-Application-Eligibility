@@ -1,3 +1,5 @@
+@import "{{ site.theme }}"; header { display: none; }
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
