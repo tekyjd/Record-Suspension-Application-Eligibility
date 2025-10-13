@@ -56,7 +56,7 @@
         /* 2. Adjust input padding to make room for the custom icon on the left */
         input[type="date"] {
             border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem 0.6rem 2.5rem; /* Keep left padding for icon */
+            padding: 0.6rem 1rem 0.6rem 0.75rem; /* Keep left padding for icon */
             border-radius: 0.5rem;
             width: 100%;
             transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
