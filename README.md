@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,16 +7,24 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* ---------------------------------------------------------------------- */
-        /* GENERAL THEME STYLES */
-        /* ---------------------------------------------------------------------- */
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f0f2f6; /* Light gray/blue background */
+        /* ------------------------------------------------------- */
+        /* BASE PAGE STYLES — ensure no grey frame on GitHub Pages */
+        /* ------------------------------------------------------- */
+        html, body {
+            height: 100%;
+            width: 100%;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            background: #f0f2f6; /* your intended background */
         }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        /* ------------------------------------------------------- */
+        /* CARD STYLING (unchanged from your version)              */
+        /* ------------------------------------------------------- */
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
@@ -23,6 +32,7 @@
             background-color: #ffffff;
             border-radius: 0.75rem;
         }
+        /* Mobile adjustment */
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
@@ -38,9 +48,9 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-        /* ---------------------------------------------------------------------- */
-        /* DATE INPUT STYLING (ICON MOVED LEFT) */
-        /* ---------------------------------------------------------------------- */
+        /* ------------------------------------------------------- */
+        /* DATE INPUT STYLING (your original version)              */
+        /* ------------------------------------------------------- */
         input[type="date"]::-webkit-calendar-picker-indicator {
             opacity: 0;
             width: 100%;
@@ -69,8 +79,7 @@
             background-color: #f9fafb;
             cursor: pointer;
         }
-        input[type="date"]:focus,
-        select:focus {
+        input[type="date"]:focus, select:focus {
             border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
             outline: none;
@@ -88,25 +97,9 @@
             display: flex;
             align-items: center;
         }
-        /* ---------------------------------------------------------------------- */
-        /* FIX: REMOVE DEFAULT GREY OUTLINES WHILE PRESERVING ACCESSIBILITY */
-        /* ---------------------------------------------------------------------- */
-        input:focus,
-        button:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            box-shadow: none;
-        }
-        input:focus-visible,
-        button:focus-visible,
-        select:focus-visible,
-        textarea:focus-visible {
-            outline: 2px solid #1a4d8c; /* match site theme blue */
-            outline-offset: 2px;
-        }
     </style>
 </head>
+    
 <body>
     <!-- Card container -->
     <div id="app" class="container-card p-6 md:p-10">
