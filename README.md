@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,33 +38,19 @@
         }
         
         /* ---------------------------------------------------------------------- */
-        /* DATE INPUT STYLING (Now using native right-side icon) */
+        /* INPUT STYLING */
         /* ---------------------------------------------------------------------- */
         
-        input[type="date"] {
+        input[type="date"], select {
             border: 1px solid #d1d5db;
-            /* Reset padding to default symmetric padding */
             padding: 0.6rem 1rem; 
             border-radius: 0.5rem;
             width: 100%; 
-            transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             background-color: #f9fafb;
             cursor: pointer; 
-            position: relative; 
-            /* Ensure the native calendar icon is visible (undoing previous opacity: 0) */
-            appearance: none; /* Helps ensure consistent styling */
+            appearance: none;
             -webkit-appearance: none;
-        }
-        
-        /* 3. Ensure other inputs/selects are styled correctly */
-        select {
-            border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem;
-            border-radius: 0.5rem;
-            width: 100%;
-            transition: border-color 0.15s ease-in-out, box-shadow: 0.15s ease-in-out;
-            background-color: #f9fafb;
-            cursor: pointer;
         }
         
         input[type="date"]:focus, select:focus {
@@ -73,22 +58,12 @@
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
             outline: none;
         }
+        
         /* Style for disabled date inputs */
         input[type="date"]:disabled {
-            background-color: #e5e7eb; /* Lighter background for disabled field */
+            background-color: #e5e7eb; 
             color: #9ca3af;
             cursor: not-allowed;
-            /* No longer need to reset padding-left, as there is no custom left icon */
-        }
-        
-        /* Ensure the label is also clickable */
-        .clickable-label {
-            cursor: pointer;
-        }
-        /* Adjust layout for date row */
-        .date-input-group {
-            display: flex;
-            align-items: center;
         }
         
         /* Override to make native calendar icon visible and interactive */
@@ -97,14 +72,19 @@
             display: block;
             cursor: pointer;
         }
+
+        /* Custom brown color for the Schedule 1 exception text */
+        .color-brown {
+            color: #6D4C41; 
+        }
     </style>
 </head>
 <body>
 
     <div id="app" class="container-card p-6 md:p-10">
         
-        <!-- Header with increased logo size (h-14 md:h-24) and border removed -->
-<div class="flex items-center justify-between pb-4 mb-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-4 mb-6">
             <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 flex-shrink-0">
                 Pardon Eligibility Checker
             </h1>
@@ -117,8 +97,8 @@
         </div>
 
         
-
-<section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+        <!-- Disclaimer -->
+        <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
             <p class="text-sm text-blue-600 mb-4">Eligibility results are for informational purposes only. They are provided in good faith, based solely on the information you enter. This tool does not constitute legal advice, and using it does not guarantee that a record suspension will be granted or denied by the Parole Board of Canada.</p>
             <label class="flex items-center space-x-2 cursor-pointer">
@@ -128,21 +108,19 @@
         </section>
 
         
-
-<section id="input-form" class="space-y-6" style="display: none;">
+        <!-- Input Form -->
+        <section id="input-form" class="space-y-6" style="display: none;">
             <h2 class="text-xl section-header">Conviction Details</h2>
 
             
-
-<div class="space-y-2">
+            <!-- Conviction Date -->
+            <div class="space-y-2">
                 <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Conviction Date</label>
-                <div class="date-input-group space-x-4">
-                    
-
-<div class="w-40">
+                <!-- ADDED 'flex items-center' HERE to align date input and checkbox -->
+                <div class="date-input-group space-x-4 flex items-center">
+                    <div class="w-40">
                         <input type="date" id="conviction-date" class="w-full">
                     </div>
-                    
                     <label class="flex items-center space-x-2 text-sm">
                         <input type="checkbox" id="dont-know-conv-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
                         <span>I'm not sure</span>
@@ -151,16 +129,14 @@
             </div>
 
             
-
-<div class="space-y-2">
+            <!-- Sentence Completion Date -->
+            <div class="space-y-2">
                 <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence Completion Date</label>
-                <div class="date-input-group space-x-4">
-                    
-
-<div class="w-40">
+                 <!-- ADDED 'flex items-center' HERE to align date input and checkbox -->
+                <div class="date-input-group space-x-4 flex items-center">
+                    <div class="w-40">
                         <input type="date" id="sentence-completion-date" class="w-full">
                     </div>
-                    
                     <label class="flex items-center space-x-2 text-sm">
                         <input type="checkbox" id="dont-know-sent-comp-date" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
                         <span>I'm not sure</span>
@@ -171,8 +147,8 @@
 
 
             
-
-<div class="space-y-2">
+            <!-- Prosecution Type -->
+            <div class="space-y-2">
                 <label for="prosecution-type" class="block text-sm font-medium text-gray-700">Prosecution type</label>
                 <select id="prosecution-type" class="w-full">
                     <option value="" disabled selected>Select an option</option>
@@ -183,8 +159,8 @@
             </div>
 
             
-
-<div class="space-y-2">
+            <!-- Schedule 1 Offence -->
+            <div class="space-y-2">
                 <label for="schedule1-offence" class="block text-sm font-medium text-gray-700 flex justify-between items-center">
                     <span>Is it a Schedule 1 offence?</span>
                     <span id="schedule1-info-toggle" class="text-blue-500 hover:text-blue-700 text-xs cursor-pointer underline">What are Schedule 1 Offences?</span>
@@ -196,10 +172,8 @@
                     <option value="No">No</option>
                 </select>
                 
-
-<div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
+                <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
                     <p class="font-bold mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    <!-- Correction applied: Using 'font-bold' class and 'underline' class directly for the desired effect -->
                     <p class="pt-3 mb-1 font-bold underline">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
@@ -207,14 +181,13 @@
                         <li>Child pornography (s. 163.1)</li>
                         <li>Luring a child (s. 172.1)</li>
                     </ul>
-                    <!-- Correction applied: Using 'font-bold' class directly on the paragraph for the link -->
                     <p class="mt-2 font-bold"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900">See the full list here.</a></p>
                 </div>
             </div>
 
             
-
-<div class="space-y-2">
+            <!-- 3+ Convictions of 2+ Years Imprisonment -->
+            <div class="space-y-2">
                 <label for="three-plus-two-year-imprisonment" class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
                 <select id="three-plus-two-year-imprisonment" class="w-full">
                     <option value="" disabled selected>Select an option</option>
@@ -230,17 +203,13 @@
         </section>
 
         
-
-<section id="result-section" class="mt-8">
+        <!-- Result Section -->
+        <section id="result-section" class="mt-8">
             <h2 class="text-xl section-header hidden" id="result-header">Your Eligibility Status</h2>
             <div id="result-message" class="rounded-xl p-5 text-lg font-semibold">
-                
-
-</div>
+            </div>
             <div id="missing-info-details" class="mt-4 hidden p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded text-sm text-yellow-800">
-                
-
-</div>
+            </div>
         </section>
 
     </div>
@@ -294,7 +263,6 @@
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
         }
         
-        // Updated to use the consistent phrase "I'm not sure"
         const UNKNOWN_SENTINELS = ["I'm not sure", ""]; 
 
         /**
@@ -310,6 +278,12 @@
             let convictionDate = parseDate(convictionDateStr);
             let sentenceCompletionDate = parseDate(sentenceCompletionDateStr);
 
+            // Hyperlink content for the Serious Personal Injury Offence (SPIO) definition
+            const criminalCodeLink = '<a href="https://laws-lois.justice.gc.ca/eng/acts/C-46/section-752.html" target="_blank" class="text-blue-600 hover:text-blue-800 underline">752 of the <i>Criminal Code</i></a>';
+
+            // Hyperlink content for the Parole Board of Canada website (New Requirement)
+            const pbcWebsiteLink = '<a href="https://www.canada.ca/en/parole-board/services/record-suspensions/applying-for-a-record-suspension.html#step6" target="_blank" class="text-blue-600 hover:text-blue-800 underline">Parole Board of Canada website</a>';
+
             // Helper to check for unknown values
             const isUnknown = (val) => UNKNOWN_SENTINELS.includes(val);
 
@@ -324,13 +298,19 @@
             // 1. Prioritized Check for Convictions on or after March 13, 2012 (D3)
             if (convictionDate && convictionDate >= D3) {
                 
-                // A. Schedule 1 Check (Known 'Yes')
+                // A. Schedule 1 Check (Known 'Yes') - EDITS 1 & 2 APPLIED HERE
                 if (schedule1Offence === "Yes") {
                     const schedule1Message = `
-                        Based on the information you provided, you appear to have been convicted of a <b>Schedule 1</b> offence.
-                        Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
-                        However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
-                        For more information, consult a legal professional or the Parole Board of Canada website.
+                        <p class="mb-3">
+                            Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
+                        </p>
+                        <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
+                        <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
+                            <li>was not in a position of trust or authority toward the victim;</li>
+                            <li>did not use, threaten to use or attempt to use violence, intimidation or coercion in relation to the victim; and</li>
+                            <li>was less than five years older than the victim.</li>
+                        </ul>
+                        <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
                     `;
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
                 }
@@ -360,26 +340,36 @@
 
                     return { 
                         status: "unclear",
-                        // Using the requested general wording:
                         message: "The required information to determine your eligibility is missing. Please review the missing details below.", 
                         eligibleDate: null, 
                         missingAnswers: essentialUnknowns 
                     };
                 }
                 
-                // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing)
+                // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing) - REFINED TIMELINE RANGE HERE
                 if (isConvictionDateUnknown || isCompletionDateUnknown || isProsecutionTypeUnknown) {
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     
+                    let postD3Range = "5–10 years"; // Default broad range if prosecution type is unknown
+
+                    // Refine range based on known prosecution type (User Request)
+                    if (!isProsecutionTypeUnknown) {
+                        if (prosecutionType === "Indictment") {
+                            postD3Range = "10 years"; // Fixed 10 years for Indictment post-D3
+                        } else if (prosecutionType === "Summary") {
+                            postD3Range = "5 years"; // Fixed 5 years for Summary post-D3
+                        }
+                    }
+
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
                     return {
                         status: "eligible_unclear",
                         message: "You appear to be eligible for a record suspension based on the conviction type and history. However, your exact eligibility date depends on the missing date and prosecution type details.",
                         eligibleDate: null,
                         missingAnswers: essentialUnknowns,
-                        timelineRange: "5–10 years" // Applicable range for Post-D3 rules (5 years for Summary, 10 years for Indictable)
+                        timelineRange: postD3Range // <-- Using the refined range
                     };
                 }
                 
@@ -408,7 +398,7 @@
                          
                          ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
@@ -434,7 +424,7 @@
                         // Use requested exact wording and formatting
                         ambiguityMessage = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of 752 of the <i>Criminal Code</i>), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
@@ -488,22 +478,27 @@
                     // NEW CHECK: Schedule 1 is now flagged as essential for D1-D3 if unknown
                     if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
 
-                    // --- APPLY USER'S REQUESTED RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
+                    // --- APPLY RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
                     
-                    // *** NEW RULE (User Request): Indictment + Schedule 1 = 10 years wait ***
-                    if (prosecutionType === "Indictment" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
-                        range = "10 years"; // Fixed 10-year rule for this specific transitional case
-                    }
-                    // Original NEW SPECIFIC RULE: Summary + Schedule 1 = Yes (Fixed 5 years wait)
+                    // IMPLEMENTING USER REQUEST: Summary + Sch 1 = No (Fixed 3 years) 
+                    if (prosecutionType === "Summary" && schedule1Offence === "No" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
+                        range = "3 years";
+                    } 
+                    // Rule: Summary + Sch 1 = Yes (Fixed 5 years)
                     else if (prosecutionType === "Summary" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "5 years";
                     }
-                    // Rule 1: Indictable (Non-Sch1) -> 5-10 years (Non-SPIO vs SPIO ambiguity)
+                    // Rule: Indictment + Sch 1 = Yes (Fixed 10 years)
+                    else if (prosecutionType === "Indictment" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
+                        range = "10 years";
+                    }
+                    // Ambiguous Scenarios (Involving SPIO or unknown Schedule 1 status)
+                    // Rule: Indictable (Non-Sch1 or Sch1 Unknown) -> 5-10 years (SPIO ambiguity)
                     else if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
                         range = "5–10 years";
                     } 
-                    // Original Rule 2: Summary (Non-Sch1 or Sch1 Unknown) -> 3-5 years
-                    else if (prosecutionType === "Summary" && !isProsecutionTypeUnknown) {
+                    // Rule: Summary + Sch 1 = Unknown -> 3-5 years
+                    else if (prosecutionType === "Summary" && isSchedule1Unknown && !isProsecutionTypeUnknown) {
                         range = "3–5 years";
                     }
                     // Original Rule 3: Unknown Prosecution & (Schedule 1 = No or Unknown) -> 3-10 years
@@ -535,11 +530,18 @@
 
                 // A. Check for known ineligibility (Sch 1 is Yes OR 3+ Convictions is Yes)
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
+                    // MESSAGE REFORMATTED FOR READABILITY (User Request) - EDITS 1 & 2 APPLIED HERE
                     const schedule1Message = `
-                        Based on the information you provided, you appear to have been convicted of a <b>Schedule 1</b> offence.
-                        Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
-                        However, under Section 4(3) of the <i>Criminal Records Act</i>, exceptions may apply (e.g., if you were not in a position of trust or if the age difference with the victim was small).
-                        For more information, consult a legal professional or the Parole Board of Canada website.
+                        <p class="mb-3">
+                            Generally, individuals convicted of a <b>Schedule 1</b> offence are ineligible for a record suspension.
+                        </p>
+                        <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
+                        <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
+                            <li>was not in a position of trust or authority toward the victim;</li>
+                            <li>did not use, threaten to use or attempt to use violence, intimidation or coercion in relation to the victim; and</li>
+                            <li>was less than five years older than the victim.</li>
+                        </ul>
+                        <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
                     `;
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
                 }
@@ -586,11 +588,10 @@
                     
                     // Customize range based on known non-date factors:
                     if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
-                        // If Indictment is KNOWN, the minimum waiting period is 5 years 
-                        // (Pre-D1 Indictment is 5, Post-D3 Indictment is 10)
+                        // If Indictment is KNOWN, the min wait time is 5, max is 10 (pre-D1 vs post-D3)
                         range = "5–10 years";
                     } else if (prosecutionType === "Summary" && !isProsecutionTypeUnknown) {
-                        // If Summary is KNOWN, the maximum waiting period is 5 years
+                        // If Summary is KNOWN, the min wait time is 3, max is 5 (pre-D1 vs post-D3)
                         range = "3–5 years";
                     }
                     // Since Sch1 is 'No', we don't need to check the Sch1 condition here.
@@ -605,7 +606,7 @@
                 }
                 
                 // Fallback (should be unreachable)
-                return { status: "unclear", message: "Eligibility is fully unclear. Calculation error.", eligibleDate: null, missingAnswers: [] };
+                return { status: "unclear", message: "Eligibility calculation failed: Unhandled date range.", eligibleDate: null, missingAnswers: [] };
             }
 
 
@@ -620,7 +621,6 @@
                 
                 if (schedule1Offence === "Yes") {
                     // Indictment/Summary with Schedule 1 conviction (10 years if Indictment, 5 years if Summary)
-                    // Note: This 5-year Summary rule is specific to the transitional period with Sch 1.
                     waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5; 
                 } else if (prosecutionType === "Summary") { 
                     // Summary and Not Schedule 1 (3 years - using old rule)
@@ -630,7 +630,7 @@
                     waitPeriodYears = 5;
                 }
             } else if (convictionDate >= D3) {
-                // On or after March 13, 2012 (Current Rules)
+                // On or after March 13, 2012 (Current Rules) - CONFIRMED LOGIC
                 waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5;
             } else {
                 // Fallback for unhandled date
@@ -750,11 +750,12 @@
         });
 
         /**
-         * Renders the result object to the UI.
+         * Renders the result object to the UI, applying custom styling for Schedule 1 exception.
          */
         function displayResult(result) {
             elements.resultHeader.classList.remove('hidden');
             elements.missingInfoDetails.classList.add('hidden');
+            // Reset base classes, adding shadow and transition back
             elements.resultMessage.className = 'rounded-xl p-5 text-lg font-semibold mt-4 shadow-lg transition-all duration-300';
             let htmlContent = '';
             let styleClasses = '';
@@ -786,8 +787,20 @@
                     break;
 
                 case 'schedule1_exception':
-                    styleClasses = 'bg-yellow-100 border-l-8 border-amber-600 text-amber-800';
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-amber-600">⚠️</span><h3 class="font-bold text-xl"><b>Schedule 1 Offence — Possible Exception</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Custom style applied: Background/Border kept yellow/amber, but text color removed for custom handling.
+                    styleClasses = 'bg-yellow-100 border-l-8 border-amber-600'; 
+                    
+                    // Heading color set to black (text-black)
+                    // Body message wrapped in color-brown custom class
+                    htmlContent = `
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl text-amber-600">⚠️</span>
+                            <h3 class="font-bold text-xl text-black"><b>Schedule 1 Offence — Possible Exception</b></h3>
+                        </div>
+                        <div class="color-brown mt-2">
+                            ${result.message}
+                        </div>
+                    `;
                     break;
 
                 case 'eligible_unclear':
