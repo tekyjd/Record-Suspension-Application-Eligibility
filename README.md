@@ -182,10 +182,8 @@
                 </div>
                 
                 <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
-                    <!-- CHANGE 1: Removed font-bold -->
                     <p class="mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
                     
-                    <!-- CHANGE 2: Removed underline -->
                     <p class="pt-3 mb-1 font-bold">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
@@ -193,7 +191,6 @@
                         <li>Child pornography (s. 163.1)</li>
                         <li>Luring a child (s. 172.1)</li>
                     </ul>
-                    <!-- CHANGE 3: Removed font-bold from p tag and added underline to a tag -->
                     <p class="mt-2"><a href="https://laws-lois.justice.gc.ca/eng/acts/c-47/page-4.html" target="_blank" class="text-blue-700 hover:text-blue-900 underline">See the full list here.</a></p>
                 </div>
             </div>
@@ -217,7 +214,8 @@
                 </div>
             </div>
 
-            <button id="check-eligibility-btn" class="w-full bg-[#1a4d8c] hover:bg-[#133a6b] text-white font-bold py-3 rounded-xl transition duration-200 shadow-md mt-6">
+            <!-- CHECK ELIGIBILITY BUTTON (Now same indigo color) -->
+            <button id="check-eligibility-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md mt-6">
                 Check Eligibility
             </button>
         </section>
@@ -228,7 +226,16 @@
             <h2 class="text-xl section-header hidden" id="result-header">Your Eligibility Status</h2>
             <div id="result-message" class="rounded-xl p-5 text-lg font-semibold">
             </div>
+            
+            <!-- Missing Info Details (Now placed before the email button) -->
             <div id="missing-info-details" class="mt-4 hidden p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded text-sm text-yellow-800">
+            </div>
+
+            <!-- Email Button Container (Now at the very bottom) -->
+            <div id="result-actions" class="mt-6 hidden">
+                <button id="email-result-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md">
+                    Email Results
+                </button>
             </div>
         </section>
 
@@ -241,6 +248,19 @@
         const D3 = new Date(Date.UTC(2012, 2, 13)); // March 13, 2012 (Start of current rules)
         const TODAY = new Date();
         TODAY.setHours(0, 0, 0, 0); // Normalize today to start of the local day
+
+        // ** Store the last calculated result for emailing **
+        let latestResult = null; 
+
+        /**
+         * Generates a short, random alphanumeric reference ID.
+         * @returns {string} - A random ID string (e.g., 'REF-A1B2C3D4').
+         */
+        function generateReferenceId() {
+            // Generate a random string using base 36 (0-9, a-z), taking a 8-character slice
+            const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
+            return `REF-${randomPart}`;
+        }
 
         /**
          * Parses a date string into a Date object, normalized to midnight UTC.
@@ -302,6 +322,9 @@
             let sentenceCompletionDate = parseDate(sentenceCompletionDateStr);
             let ambiguityMessageSuffix = ''; // Initialized here for function scope
 
+            // ** NEW: Generate Reference ID **
+            const newReferenceId = generateReferenceId();
+
             // Hyperlink content for the Serious Personal Injury Offence (SPIO) definition
             const criminalCodeLink = '<a href="https://laws-lois.justice.gc.ca/eng/acts/C-46/section-752.html" target="_blank" class="text-blue-600 hover:text-blue-800 underline">752 of the <i>Criminal Code</i></a>';
 
@@ -336,7 +359,7 @@
                         </ul>
                         <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
                     `;
-                    return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [] };
+                    return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [], referenceId: newReferenceId };
                 }
 
                 // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE (This check is correct here as Conviction Date >= D3)
@@ -345,7 +368,8 @@
                         status: "ineligible",
                         message: "You are not eligible for a record suspension. This is because you have three or more convictions that resulted in a sentence of imprisonment of two years or more each, and your conviction occurred on or after March 13, 2012.",
                         eligibleDate: null,
-                        missingAnswers: []
+                        missingAnswers: [],
+                        referenceId: newReferenceId 
                     };
                 }
                 
@@ -367,7 +391,8 @@
                         // Standardized message applied
                         message: UNCLARITY_MESSAGE, 
                         eligibleDate: null, 
-                        missingAnswers: essentialUnknowns 
+                        missingAnswers: essentialUnknowns,
+                        referenceId: newReferenceId 
                     };
                 }
                 
@@ -395,7 +420,8 @@
                         message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
                         missingAnswers: essentialUnknowns,
-                        timelineRange: postD3Range 
+                        timelineRange: postD3Range,
+                        referenceId: newReferenceId 
                     };
                 }
                 
@@ -472,7 +498,8 @@
                         message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
                         eligibleDate: null,
                         missingAnswers: missingInfo,
-                        timelineRange: "5–10 years" // Applicable range for Transitional SPIO ambiguity (5 or 10 years)
+                        timelineRange: "5–10 years", // Applicable range for Transitional SPIO ambiguity (5 or 10 years)
+                        referenceId: newReferenceId 
                     };
                 }
 
@@ -546,7 +573,8 @@
                         message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
                         eligibleDate: null, 
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
-                        timelineRange: range 
+                        timelineRange: range,
+                        referenceId: newReferenceId 
                     };
                 }
                 
@@ -571,7 +599,8 @@
                         // Standardized message applied
                         message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
-                        missingAnswers: Array.from(new Set(essentialUnknowns))
+                        missingAnswers: Array.from(new Set(essentialUnknowns)),
+                        referenceId: newReferenceId 
                     };
                     
                 }
@@ -589,7 +618,8 @@
                         // Standardized message applied
                         message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
-                        missingAnswers: Array.from(new Set(essentialUnknowns))
+                        missingAnswers: Array.from(new Set(essentialUnknowns)),
+                        referenceId: newReferenceId 
                     };
                 }
 
@@ -620,7 +650,8 @@
                         message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
-                        timelineRange: range
+                        timelineRange: range,
+                        referenceId: newReferenceId 
                     };
                 }
                 
@@ -638,7 +669,8 @@
                     // Standardized message applied
                     message: UNCLARITY_MESSAGE, 
                     eligibleDate: null, 
-                    missingAnswers: Array.from(new Set(essentialUnknowns)) 
+                    missingAnswers: Array.from(new Set(essentialUnknowns)),
+                    referenceId: newReferenceId 
                 };
             }
 
@@ -667,7 +699,7 @@
                 waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5;
             } else {
                 // Fallback for unhandled date
-                return { status: "unclear", message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Conviction Date"] };
+                return { status: "unclear", message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Conviction Date"], referenceId: newReferenceId };
             }
 
             // 5. Final Status Determination
@@ -678,7 +710,8 @@
                     status: "eligible_now",
                     message: `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${waitPeriodYears} years</b>.`,
                     eligibleDate: eligibleDate,
-                    missingAnswers: []
+                    missingAnswers: [],
+                    referenceId: newReferenceId 
                 };
             } else {
                 const dateString = formatEligibleDate(eligibleDate);
@@ -686,7 +719,8 @@
                     status: "eligible_future",
                     message: `You will be eligible on ${dateString}. The required waiting period is <b>${waitPeriodYears} years</b> from your sentence completion date.`,
                     eligibleDate: eligibleDate,
-                    missingAnswers: []
+                    missingAnswers: [],
+                    referenceId: newReferenceId 
                 };
             }
         }
@@ -702,6 +736,10 @@
             resultMessage: document.getElementById('result-message'),
             missingInfoDetails: document.getElementById('missing-info-details'),
             
+            // NEW: Email Action Elements
+            resultActions: document.getElementById('result-actions'),
+            emailResultBtn: document.getElementById('email-result-btn'),
+
             // Dates
             convictionDate: document.getElementById('conviction-date'),
             dontKnowConvDate: document.getElementById('dont-know-conv-date'),
@@ -795,16 +833,18 @@
         // Event listener for disclaimer
         elements.disclaimerCheckbox.addEventListener('change', () => {
             elements.inputForm.style.display = elements.disclaimerCheckbox.checked ? 'block' : 'none';
-            // Clear results on uncheck
+            // Clear results and hide actions on uncheck
             elements.resultHeader.classList.add('hidden');
             elements.resultMessage.innerHTML = '';
             elements.missingInfoDetails.classList.add('hidden');
+            elements.resultActions.classList.add('hidden');
         });
 
         // Event listener for eligibility check
         elements.checkEligibilityBtn.addEventListener('click', () => {
             if (!elements.disclaimerCheckbox.checked) {
-                displayResult({ status: 'unclear', message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Disclaimer Acceptance"] });
+                // Generates a reference ID even for error/unclear state
+                displayResult({ status: 'unclear', message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Disclaimer Acceptance"], referenceId: generateReferenceId() });
                 return;
             }
 
@@ -830,11 +870,17 @@
         });
 
         /**
-         * Renders the result object to the UI, applying custom styling for Schedule 1 exception.
+         * Renders the result object to the UI, applying custom styling for Schedule 1 exception,
+         * and sets the latest result for emailing.
          */
         function displayResult(result) {
+            // Set the latest result globally for the email function to access
+            latestResult = result;
+
             elements.resultHeader.classList.remove('hidden');
             elements.missingInfoDetails.classList.add('hidden');
+            elements.resultActions.classList.remove('hidden'); // SHOW THE EMAIL BUTTON CONTAINER
+            
             // Reset base classes, adding shadow and transition back
             elements.resultMessage.className = 'rounded-xl p-5 text-lg font-semibold mt-4 shadow-lg transition-all duration-300';
             let htmlContent = '';
@@ -848,31 +894,40 @@
                     <a href="https://www.ontario.ca/locations/courts" target="_blank" class="text-blue-600 hover:underline">Ontario Courthouse Contact</a>
                 </p>
             `;
+            
+            let refIdFooter = ''; // Footer element for the Reference ID
 
-
+            // Determine classes and content based on status
             switch (result.status) {
                 case 'eligible_now':
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">🎉</span><h3 class="font-bold text-xl"><b>Eligible Now!</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-green-300 text-right text-xs font-mono tracking-widest text-green-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
 
                 case 'eligible_future':
-                    // Uses the green clock icon
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#9202;</span><h3 class="font-bold text-xl"><b>Eligible in the Future</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-green-300 text-right text-xs font-mono tracking-widest text-green-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
 
                 case 'ineligible':
                     styleClasses = 'bg-red-100 border-l-8 border-red-600 text-red-800';
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-red-600">&#10060;</span><h3 class="font-bold text-xl"><b>Ineligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-red-300 text-right text-xs font-mono tracking-widest text-red-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
 
                 case 'schedule1_exception':
-                    // Custom style applied: Background/Border kept yellow/amber, but text color removed for custom handling.
                     styleClasses = 'bg-yellow-100 border-l-8 border-amber-600'; 
-                    
-                    // Heading color set to black (text-black)
-                    // Body message wrapped in color-brown custom class
                     htmlContent = `
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl text-amber-600">⚠️</span>
@@ -882,28 +937,33 @@
                             ${result.message}
                         </div>
                     `;
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-amber-300 text-right text-xs font-mono tracking-widest text-amber-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
 
                 case 'eligible_unclear':
-                    // Status uses the checkmark icon (&#10004;) as requested, and is green.
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800'; 
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#10004;</span><h3 class="font-bold text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
-                        // Using a slightly darker green background for the timeline range
                         htmlContent += `<p class="mt-3 text-sm font-bold bg-green-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
                     elements.missingInfoDetails.classList.remove('hidden');
                     missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                     
-                    // Append contact information
                     elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
+                    
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-green-300 text-right text-xs font-mono tracking-widest text-green-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
 
                 case 'unclear':
                 default:
-                    // Color is blue for UNCLARITY
                     styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
@@ -911,15 +971,132 @@
                         elements.missingInfoDetails.classList.remove('hidden');
                         missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
                         
-                        // Append contact information
                         elements.missingInfoDetails.innerHTML = `<p class="font-bold">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
                     }
+
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-blue-300 text-right text-xs font-mono tracking-widest text-blue-600">
+                        ${result.referenceId}
+                    </p>`;
                     break;
             }
 
             elements.resultMessage.classList.add(...styleClasses.split(' '));
-            elements.resultMessage.innerHTML = htmlContent;
+            elements.resultMessage.innerHTML = htmlContent + refIdFooter; // ** APPEND Reference ID at the bottom **
         }
+
+
+        /**
+         * Gathers the eligibility data and triggers a mailto: link to draft an email.
+         */
+        function emailResults() {
+            if (!latestResult) {
+                console.error("No results to email. Button should not be visible.");
+                return;
+            }
+            
+            // Determine the status text based on the result status for the subject
+            let statusTitle = "Eligibility Check Result";
+            let statusDisplay = "";
+
+            switch (latestResult.status) {
+                case 'eligible_now':
+                    statusTitle = "Eligible for Record Suspension (NOW)";
+                    statusDisplay = "Status: Eligible Now!";
+                    break;
+                case 'eligible_future':
+                    statusTitle = "Eligible for Record Suspension (Future Date)";
+                    statusDisplay = `Status: Eligible in the Future (${formatEligibleDate(latestResult.eligibleDate)})`;
+                    break;
+                case 'ineligible':
+                    statusTitle = "Ineligible for Record Suspension";
+                    statusDisplay = "Status: Ineligible";
+                    break;
+                case 'schedule1_exception':
+                    statusTitle = "Schedule 1 Offence - Possible Exception";
+                    statusDisplay = "Status: Schedule 1 Offence — Possible Exception";
+                    break;
+                case 'eligible_unclear':
+                    statusTitle = "Likely Eligible (Timeline Ambiguous)";
+                    statusDisplay = "Status: Likely Eligible (Timeline Ambiguous)";
+                    break;
+                case 'unclear':
+                default:
+                    statusTitle = "Eligibility Unclear";
+                    statusDisplay = "Status: Eligibility Unclear";
+                    break;
+            }
+            
+            // Get the final result message text content (stripping HTML)
+            const resultMessageDiv = document.getElementById('result-message');
+            // Clone and strip HTML for a clean text version
+            const rawContent = resultMessageDiv.cloneNode(true);
+            
+            // Remove the reference ID footer and HTML elements (like links, strong tags) for a clean text body
+            const footer = rawContent.querySelector('p:last-child');
+            if (footer) footer.remove();
+
+            // Replace HTML with line breaks and clean up spacing
+            let bodyMessage = rawContent.textContent.replace(/\n\s*\n/g, '\n\n').trim();
+            bodyMessage = bodyMessage.replace(/([.?!])\s*([A-Z])/g, '$1\n\n$2');
+
+            // --- START: NEW/UPDATED LOGIC TO INCLUDE MISSING INFORMATION ---
+            let missingInfoText = '';
+            const missingInfoDiv = document.getElementById('missing-info-details');
+            
+            // Check if the missing info panel is currently visible
+            if (missingInfoDiv && !missingInfoDiv.classList.contains('hidden')) {
+                
+                // Extract the list of missing items and format them with bullets
+                const listItems = Array.from(missingInfoDiv.querySelectorAll('li')).map(li => `  - ${li.textContent.trim()}`).join('\n');
+                
+                // Include the link/source information if present (to obtain the missing details)
+                let contactInfo = '';
+                if (missingInfoDiv.textContent.includes('courthouse')) {
+                     contactInfo = '\n\nSource for missing information: You can obtain this information from the courthouse where you were convicted.';
+                }
+                
+                missingInfoText = `
+
+--- Required Information for a Final Assessment ---
+To determine your exact status or eligibility date, please provide answers for:
+
+${listItems}${contactInfo}
+
+Please try to locate this information before proceeding with an application.
+`;
+            }
+            // --- END: NEW/UPDATED LOGIC ---
+
+            // Construct the final email body
+            let finalBody = `
+Dear Applicant,
+
+Thank you for using the Pardon Eligibility Checker. Here is a summary of your results:
+
+${statusDisplay}
+Reference ID: ${latestResult.referenceId}
+
+--- Detailed Message ---
+${bodyMessage}
+
+${missingInfoText}
+
+---
+Disclaimer: This tool does not constitute legal advice and is provided for informational purposes only.
+`;
+            
+            const subject = encodeURIComponent(`Pardon Eligibility: ${statusTitle}`);
+            const body = encodeURIComponent(finalBody.trim());
+            
+            // Trigger the mailto link to open the user's email client
+            const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+
+            window.location.href = mailtoLink;
+        }
+
+        // Add event listener for the new button
+        elements.emailResultBtn.addEventListener('click', emailResults);
 
     </script>
 </body>
