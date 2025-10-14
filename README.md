@@ -96,7 +96,7 @@
         <!-- Disclaimer -->
         <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
-            <p class="text-sm text-blue-600 mb-4">This tool does not provide legal advice. Eligibility results are for informational purposes only and do not guarantee eligibility status or whether the Parole Board of Canada will approve or deny your application. All information provided in this app is offered in good faith but may be inaccurate.</p>
+            <p class="text-sm text-blue-600 mb-4">This tool does not provide legal advice. Eligibility results are for informational purposes only and do not guarantee your eligibility status or whether the Parole Board of Canada will approve or deny your application. All information provided in this app is offered in good faith but may be inaccurate.</p>
             <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="disclaimer-accepted" class="form-checkbox h-5 w-5 text-blue-500 rounded-md">
                 <span class="text-sm text-gray-700 font-medium">I accept the disclaimer and wish to proceed</span>
