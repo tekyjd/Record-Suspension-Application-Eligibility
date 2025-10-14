@@ -96,7 +96,7 @@
         <!-- Disclaimer -->
         <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
-            <p class="text-sm text-blue-600 mb-4">Eligibility results are for informational purposes only. They are provided in good faith, based solely on the information you enter. This tool does not constitute legal advice, and using it does not guarantee that a record suspension will be granted or denied by the Parole Board of Canada.</p>
+            <p class="text-sm text-blue-600 mb-4">Eligibility results are for informational purposes only. They are provided in good faith, based solely on the information you enter. This tool does not constitute legal advice, and the results in no way guarantee eligibility or that a record suspension will be granted or denied by the Parole Board of Canada.</p>
             <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="checkbox" id="disclaimer-accepted" class="form-checkbox h-5 w-5 text-blue-500 rounded-md">
                 <span class="text-sm text-gray-700 font-medium">I accept the disclaimer and wish to proceed</span>
