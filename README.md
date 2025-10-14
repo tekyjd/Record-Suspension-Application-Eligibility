@@ -137,7 +137,7 @@
                         <span class="font-medium">I'm not sure</span>
                     </label>
                 </div>
-                <p class="text-xs text-blue-700 mt-1">Completion means all fines paid, probation ended, and custodial term served.</p>
+                <p class="text-xs text-blue-700 mt-1">A sentence is considered complete when all fines, if any, have been paid, any probation period has ended, and any custodial term has been served.</p>
             </div>
 
 
