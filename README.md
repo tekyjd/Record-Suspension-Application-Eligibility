@@ -195,9 +195,65 @@
                 </div>
             </div>
 
+            <!-- Serious Personal Injury Offence (SPIO) (Conditionally Visible) -->
+            <div id="spio-input-group" class="space-y-2 hidden">
+                <label class="block text-sm font-medium text-gray-700 flex justify-between items-center">
+                    <span>Is it a Serious Personal Injury Offence (SPIO)?</span>
+                    <!-- SPIO Info Toggle -->
+                    <span id="spio-info-toggle" class="text-blue-500 hover:text-blue-700 text-xs cursor-pointer underline">What is a Serious Personal Injury Offence?</span>
+                </label>
+                <div class="select-input-group space-x-4 flex items-center">
+                    <div class="w-40 md:w-52 flex-shrink-0">
+                        <select id="spio-offence" class="w-full">
+                            <option value="">Select an Option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
+                        <input type="checkbox" id="dont-know-spio" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
+                        <span class="font-medium">I'm not sure</span>
+                    </label>
+                </div>
+                <!-- SPIO Info Content -->
+                <div id="spio-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
+                    <p class="mb-2">A <b>Serious Personal Injury Offence</b> refers to:</p>
+                    <div class="ml-4 space-y-1">
+                        <p class="font-bold">(a) an indictable offence, other than high treason, treason, first degree murder or second degree murder, involving</p>
+                        <ul class="list-disc list-inside space-y-0.5 ml-4">
+                            <li>(i) the use or attempted use of violence against another person, or</li>
+                            <li>(ii) conduct endangering or likely to endanger the life or safety of another person or inflicting or likely to inflict severe psychological damage on another person,</li>
+                        </ul>
+                        <p class="mt-1">and for which the offender may be sentenced to imprisonment for ten years or more, or</p>
+                        <p class="font-bold mt-2">(b) an offence or attempt to commit an offence mentioned in section 271 (sexual assault), 272 (sexual assault with a weapon, threats to a third party or causing bodily harm) or 273 (aggravated sexual assault).</p>
+                    </div>
+                    <p class="mt-3">More on that here: <a href="https://laws-lois.justice.gc.ca/eng/acts/C-46/section-752.html" target="_blank" class="text-blue-700 hover:text-blue-900 underline">Criminal Code section 752.</a></p>
+                </div>
+            </div>
+
+            <!-- NEW: Prison Term of 2 Years or More (Conditionally Visible) -->
+            <div id="two-year-imprisonment-group" class="space-y-2 hidden">
+                <label class="block text-sm font-medium text-gray-700">
+                    Were sentenced to a prison term of 2 years or more?
+                </label>
+                <div class="select-input-group space-x-4 flex items-center">
+                    <div class="w-40 md:w-52 flex-shrink-0">
+                        <select id="prison-term-2yr" class="w-full">
+                            <option value="">Select an Option</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center space-x-2 text-sm flex-shrink-0">
+                        <input type="checkbox" id="dont-know-prison-term-2yr" class="form-checkbox h-4 w-4 text-indigo-600 rounded">
+                        <span class="font-medium">I'm not sure</span>
+                    </label>
+                </div>
+            </div>
             
             <!-- 3+ Convictions of 2+ Years Imprisonment (Select/Dropdown + Checkbox) -->
-            <div class="space-y-2">
+            <!-- This group is now conditionally displayed based on conviction date >= D3 -->
+            <div id="imprisonment-convictions-group" class="space-y-2 hidden">
                 <label class="block text-sm font-medium text-gray-700">Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?</label>
                 <div class="select-input-group space-x-4 flex items-center">
                     <div class="w-40 md:w-52 flex-shrink-0">
@@ -304,7 +360,7 @@
         }
         
         const UNKNOWN_SENTINELS = ["I'm not sure", ""]; 
-        const UNCLARITY_MESSAGE = "The required information to determine your eligibility is missing. Please review the missing details below.";
+        const UNCLARITY_MESSAGE = "The required information to determine your eligibility date is missing. Please review the missing details below.";
         const AMBIGUITY_POSTSCRIPT = " (Your estimated timeline is provided below.)";
 
 
@@ -314,7 +370,9 @@
         function calculateEligibility(
             convictionDateStr, prosecutionType, schedule1Offence,
             sentenceCompletionDateStr, 
-            threePlusTwoYearImprisonment 
+            threePlusTwoYearImprisonment, 
+            spioOffence,
+            imprisonmentTwoYearsOrMore // NEW ARGUMENT
         ) {
             let essentialUnknowns = [];
             let eligibleDate = null;
@@ -339,6 +397,11 @@
             const isCompletionDateUnknown = isUnknown(sentenceCompletionDateStr) || !sentenceCompletionDate;
             const isProsecutionTypeUnknown = isUnknown(prosecutionType);
             const isSchedule1Unknown = isUnknown(schedule1Offence);
+            const isSPIOUnknown = isUnknown(spioOffence); 
+            // NEW: Imprisonment 2 years unknown flag
+            const isImprisonmentTwoYearsUnknown = isUnknown(imprisonmentTwoYearsOrMore);
+            
+            // Note: If the 3+ convictions input is hidden, the value is forced to 'No' and is NOT considered 'Unknown' here.
             const isTwoYearImprisonmentUnknown = isUnknown(threePlusTwoYearImprisonment);
 
             
@@ -362,7 +425,7 @@
                     return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [], referenceId: newReferenceId };
                 }
 
-                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE (This check is correct here as Conviction Date >= D3)
+                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE 
                 if (threePlusTwoYearImprisonment === "Yes") {
                     return {
                         status: "ineligible",
@@ -396,7 +459,7 @@
                     };
                 }
                 
-                // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing) - REFINED TIMELINE RANGE HERE
+                // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing) - TIMELINE RANGE HERE
                 if (isConvictionDateUnknown || isCompletionDateUnknown || isProsecutionTypeUnknown) {
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
@@ -404,7 +467,7 @@
 
                     let postD3Range = "5–10 years"; // Default broad range if prosecution type is unknown
 
-                    // Refine range based on known prosecution type (User Request)
+                    // Refine range based on known prosecution type
                     if (!isProsecutionTypeUnknown) {
                         if (prosecutionType === "Indictment") {
                             postD3Range = "10 years"; // Fixed 10 years for Indictment post-D3
@@ -413,9 +476,37 @@
                         }
                     }
 
+                    // --- LOGIC: Resolve if fixed single year timeline and completion date is known (POST-D3) ---
+                    const singleYearMatch = postD3Range.match(/^(\d+) years$/); 
+
+                    if (singleYearMatch && !isCompletionDateUnknown) {
+                        const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
+                        
+                        // Calculate the final date.
+                        const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
+                        const dateString = formatEligibleDate(finalEligibleDate);
+                        
+                        // Resolution message:
+                        const resolutionMessage = finalEligibleDate <= TODAY 
+                            ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
+                            : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
+                        
+                        // Note is needed if conviction date is still unknown.
+                        let note = (isConvictionDateUnknown) ? " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)" : "";
+
+                        return {
+                            status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
+                            message: resolutionMessage + note,
+                            eligibleDate: finalEligibleDate,
+                            missingAnswers: [], // Resolved the date calculation
+                            referenceId: newReferenceId 
+                        };
+                    }
+                    // --- END LOGIC ---
+                    
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
                     return {
-                        status: "eligible_unclear",
+                        status: "eligible_unclear", // Retained for Post-D3 ambiguity
                         // Standardized message applied + contextual postscript
                         message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
@@ -431,36 +522,100 @@
             // 2. Prioritized Check for Convictions before March 13, 2012 (Pre-D3)
             else if (convictionDate && convictionDate < D3) { 
                 
-                // ** CRITICAL: IGNORE the threePlusTwoYearImprisonment check for INELIGIBILITY here, as per the rule. **
-                
-                // --- SPECIAL AMBIGUITY CHECK (2010-2012 Transitional Period for Indictments/Unknown) ---
-                
-                // Check if prosecution type is Indictment OR Unknown (I'm not sure or empty string)
-                const isAmbiguousProsecutionType = prosecutionType === "Indictment" || isProsecutionTypeUnknown;
-
-                // Rule: Conviction Date between D1 and D2 AND (Indictment OR Unknown) AND Not Schedule 1
-                if (convictionDate >= D1 && convictionDate <= D2 && isAmbiguousProsecutionType && schedule1Offence === "No") {
+                // --- SPECIAL AMBIGUITY CHECK (2010-2012 Transitional Period for Indictments with UNKNOWN Schedule 1) ---
+                if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && isSchedule1Unknown) {
                     
-                    let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))"];
+                    // NOTE: If Sch 1 is unknown, we need SPIO status, and now 2yr imprisonment status to determine the 5-10 year split.
+                    let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were sentenced to a prison term of 2 years or more?"];
+                    ambiguityMessageSuffix = ''; 
+                    
+                    if (isCompletionDateUnknown) {
+                         missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
+                         
+                         // Custom 3-point message for unknown SPIO and unknown Schedule 1
+                         ambiguityMessageSuffix = `
+                            <p class="mt-2 text-base">
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> ("SPIO"), within the meaning of ${criminalCodeLink}, or a <b>Schedule 1 offence</b>.
+                            </p>
+
+                            <div class="mt-3 space-y-2 text-base ml-4">
+                                <p class="flex items-start">
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
+                                    <span>If the conviction was NOT a Schedule 1 offence AND NOT a SPIO: Your waiting period is <b>5 years</b>.</span>
+                                </p>
+                                <p class="flex items-start">
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
+                                    <span>If the conviction was a SPIO or a Schedule 1 offence: Your waiting period is <b>10 years</b>.</span>
+                                </p>
+                            </div>
+                        `;
+                    } else {
+                        // Completion Date is KNOWN
+                        const date5yr = addYears(sentenceCompletionDate, 5);
+                        const date10yr = addYears(sentenceCompletionDate, 10);
+
+                        const date5yrStr = formatEligibleDate(date5yr);
+                        const date10yrStr = formatEligibleDate(date10yr);
+
+                        // Custom 3-point message for unknown SPIO and unknown Schedule 1
+                        ambiguityMessageSuffix = `
+                            <p class="mt-2 text-base">
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (SPIO, within the meaning of ${criminalCodeLink}), or a <b>Schedule 1 offence</b>.
+                            </p>
+
+                            <div class="mt-3 space-y-2 text-base ml-4">
+                                <p class="flex items-start">
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
+                                    <span>If the conviction was NOT a Schedule 1 offence AND NOT a SPIO: Your eligibility date is <b>${date5yrStr}</b>.</span>
+                                </p>
+                                <p class="flex items-start">
+                                    <span class="mr-2 font-bold leading-relaxed">-</span>
+                                    <span>If the conviction was a SPIO or a Schedule 1 offence: Your eligibility date is <b>${date10yrStr}</b>.</span>
+                                </p>
+                            </div>
+                        `;
+                    }
+                    
+                    // Filter out the unknowns that are already answered
+                    let missingAnswersFiltered = Array.from(new Set(missingInfo));
+                    if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
+                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were sentenced to a prison term of 2 years or more?"); }
+                    
+                    return {
+                        status: "likely_eligible", 
+                        message: UNCLARITY_MESSAGE, 
+                        eligibleDate: null, 
+                        missingAnswers: missingAnswersFiltered,
+                        timelineRange: "5–10 years", 
+                        referenceId: newReferenceId 
+                    };
+                }
+                
+                // --- Existing SPIO/2YR Imprisonment ambiguity check (only triggers if schedule1Offence === "No") ---
+                // SPIO ambiguity for transitional period D1-D2, Indictment, Sch 1 = No
+                if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
+                    
+                    let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))", "Were sentenced to a prison term of 2 years or more?"];
                     ambiguityMessageSuffix = ''; 
                     
                     if (isCompletionDateUnknown) {
                          // Case 1: Completion Date is UNKNOWN
                          missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
                          
+                         // The Indictment/SPIO ambiguity forces the range to 5-10 years
                          ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), or if you received a sentence of <b>2 years or more</b>.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your waiting period is <b>10 years</b>.</span>
+                                    <span>If the offence was SPIO or resulted in a sentence of 2 years or more: Your waiting period is <b>10 years</b>.</span>
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT convicted of a serious personal injury offence: Your waiting period is <b>5 years</b>.</span>
+                                    <span>Otherwise: Your waiting period is <b>5 years</b>.</span>
                                 </p>
                             </div>
                         `;
@@ -476,32 +631,37 @@
                         // Use requested exact wording and formatting
                         ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
-                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), for which you were sentenced to a prison term of 2 years or more.
+                                The eligibility date depends on whether the conviction was for a <b>'serious personal injury offence'</b> (within the meaning of ${criminalCodeLink}), or if you received a sentence of <b>2 years or more</b>.
                             </p>
 
                             <div class="mt-3 space-y-2 text-base ml-4">
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were convicted of a serious personal injury offence: Your eligibility date is <b>${date10yrStr}</b>.</span>
+                                    <span>If the offence was SPIO or resulted in a sentence of 2 years or more: Your eligibility date is <b>${date10yrStr}</b>.</span>
                                 </p>
                                 <p class="flex items-start">
                                     <span class="mr-2 font-bold leading-relaxed">-</span>
-                                    <span>If you were NOT convicted of a serious personal injury offence: Your eligibility date is <b>${date5yrStr}</b>.</span>
+                                    <span>Otherwise: Your eligibility date is <b>${date5yrStr}</b>.</span>
                                 </p>
                             </div>
                         `;
                     }
                     
+                    let missingAnswersFiltered = Array.from(new Set(missingInfo));
+                    if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
+                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were sentenced to a prison term of 2 years or more?"); }
+
+
                     return {
-                        status: "eligible_unclear", 
-                        // Standardized message applied + specific legal ambiguity as message content
-                        message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
+                        status: "likely_eligible", 
+                        message: UNCLARITY_MESSAGE, 
                         eligibleDate: null,
-                        missingAnswers: missingInfo,
-                        timelineRange: "5–10 years", // Applicable range for Transitional SPIO ambiguity (5 or 10 years)
+                        missingAnswers: missingAnswersFiltered,
+                        timelineRange: "5–10 years", 
                         referenceId: newReferenceId 
                     };
                 }
+
 
                 // Collect other unknowns for Pre-D3 
                 essentialUnknowns = [];
@@ -529,12 +689,24 @@
                     
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     
-                    // NEW CHECK: Schedule 1 is now flagged as essential for D1-D3 if unknown
+                    // Schedule 1 is now flagged as essential for D1-D3 if unknown
                     if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
 
+                    // --- SPIO/2YR Imprisonment REQUIREMENT CHECK FOR TRANSITIONAL PERIOD (D1-D2) ---
+                    // Rule: Transitional (D1-D2) AND Prosecution Type is NOT Summary (i.e., Indictment OR Unknown Type)
+                    const isTransitional = convictionDate >= D1 && convictionDate <= D2;
+                    const isProsecutionNotSummary = prosecutionType !== "Summary";
+
+                    if (isTransitional && isProsecutionNotSummary) {
+                        if (isSPIOUnknown) essentialUnknowns.push("Offence status (Serious Personal Injury Offence (SPIO))");
+                        // NEW: Add the 2yr Imprisonment question to unknowns if applicable
+                        if (isImprisonmentTwoYearsUnknown) essentialUnknowns.push("Were sentenced to a prison term of 2 years or more?");
+                    }
+                    // --- END SPIO/2YR CHECK ---
+                    
                     // --- APPLY RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
                     
-                    // IMPLEMENTING USER REQUEST: Summary + Sch 1 = No (Fixed 3 years) 
+                    // Rule: Summary + Sch 1 = No (Fixed 3 years) 
                     if (prosecutionType === "Summary" && schedule1Offence === "No" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "3 years";
                     } 
@@ -547,30 +719,87 @@
                         range = "10 years";
                     }
                     // Ambiguous Scenarios (Involving SPIO or unknown Schedule 1 status)
-                    // Rule: Indictable (Non-Sch1 or Sch1 Unknown) -> 5-10 years (SPIO ambiguity)
-                    else if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
+                    // Rule: Indictment + Sch1 Unknown -> 5-10 years 
+                    else if (prosecutionType === "Indictment" && isSchedule1Unknown && !isProsecutionTypeUnknown) {
                         range = "5–10 years";
-                    } 
+                    }
                     // Rule: Summary + Sch 1 = Unknown -> 3-5 years
                     else if (prosecutionType === "Summary" && isSchedule1Unknown && !isProsecutionTypeUnknown) {
                         range = "3–5 years";
                     }
-                    // Original Rule 3: Unknown Prosecution & (Schedule 1 = No or Unknown) -> 3-10 years
+                    
+                    // Rule: Unknown Prosecution & Schedule 1 = No -> 3-10 years 
                     else if (isProsecutionTypeUnknown && (schedule1Offence === "No" || isSchedule1Unknown)) {
                         range = "3–10 years";
                     }
-                    // Original Rule 4: Unknown Prosecution & (Schedule 1 = Yes) -> 5-10 years
+                    // Rule: Unknown Prosecution & Schedule 1 = Yes -> 5-10 years
                     else if (isProsecutionTypeUnknown && schedule1Offence === "Yes") {
                         range = "5–10 years";
                     }
+
+                    // ** LOGIC: Override Unknown Prosecution Type if SPIO or 2YR Imprisonment is known YES and we are D1-D2 **
+                    if (isTransitional && (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") && isProsecutionTypeUnknown) {
+                        // SPIO='Yes' or 2Yr Imprisonment='Yes' forces 10 years, making prosecution type irrelevant for the wait period.
+                        // Filter out Prosecution type from unknowns if it was added.
+                        essentialUnknowns = essentialUnknowns.filter(item => item !== "Prosecution type");
+                        
+                        // If only completion date is left as unknown, this is now a fixed 10-year period ambiguity
+                        // 🟢 Updated ambiguity logic: remove redundant questions when SPIO or 2-year term = Yes
+if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
+    essentialUnknowns = essentialUnknowns.filter(q =>
+        q !== "Is it a Schedule 1 offence?" &&
+        q !== "Offence status (Serious Personal Injury Offence (SPIO))" &&
+        q !== "Were sentenced to a prison term of 2 years or more?"
+    );
+}
+
+                        
+                        if (essentialUnknowns.length > 0) {
+                            range = "10 years";
+                            ambiguityMessageSuffix = '<p class="mt-2 text-base">Since the conviction is a Serious Personal Injury Offence (SPIO) or resulted in a sentence of 2 years or more, the eligibility waiting period is fixed at <b>10 years</b> from your sentence completion date.</p>';
+                        } else {
+                            // If completion date is known, and SPIO/2YR is Yes, we can skip to Step 4 with a known 10-year wait.
+                            prosecutionType = "Indictment"; 
+                            schedule1Offence = "No"; 
+                            // Fall through to Step 4
+                        }
+                    }
                 }
                 
-                // If there are unknowns, return the 'eligible_unclear' status with the determined range
+                // If there are unknowns, return the 'likely_eligible' status with the determined range
                 if (essentialUnknowns.length > 0) {
+                    
+                    // --- LOGIC: Resolve if fixed single year timeline and completion date is known (PRE-D3) ---
+                    const singleYearMatch = range.match(/^(\d+) years$/); 
+
+                    if (singleYearMatch && !isCompletionDateUnknown) {
+                        const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
+                        
+                        // Calculate the final date.
+                        const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
+                        const dateString = formatEligibleDate(finalEligibleDate);
+                        
+                        // Resolution message:
+                        const resolutionMessage = finalEligibleDate <= TODAY 
+                            ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
+                            : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
+                        
+                        // Note is needed if conviction date is still unknown.
+                        let note = (isConvictionDateUnknown) ? " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)" : "";
+
+                        return {
+                            status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
+                            message: resolutionMessage + note,
+                            eligibleDate: finalEligibleDate,
+                            missingAnswers: essentialUnknowns, // Still include the unknowns for transparency
+                            referenceId: newReferenceId 
+                        };
+                    }
+                    // --- END LOGIC ---
+
                      return { 
-                        status: "eligible_unclear", 
-                        // Standardized message applied + contextual postscript
-                        message: UNCLARITY_MESSAGE + ambiguityMessageSuffix,
+                        status: "likely_eligible", 
+                        message: UNCLARITY_MESSAGE, 
                         eligibleDate: null, 
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
                         timelineRange: range,
@@ -584,15 +813,15 @@
             // 3. Fallback if Conviction Date is UNKNOWN (Conviction Date is 'I'm not sure' or empty)
             else if (isConvictionDateUnknown) {
 
-                // A. Check for known ineligibility (Sch 1 is Yes) - MODIFIED LOGIC
+                // A. Check for known ineligibility (Sch 1 is Yes) 
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
                     
-                    // --- APPLYING USER'S NEW RULE HERE: Sch 1 = Yes AND Conviction Date is Unknown -> UNCLEAR ---
                     essentialUnknowns = [];
                     essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                    if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
+                    // Only add the 3+ convictions question as an unknown if the user saw it (i.e., if Conviction Date was NOT 'I'm not sure' before)
+                    if (threePlusTwoYearImprisonment === "I'm not sure") essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     
                     return {
                         status: "unclear",
@@ -605,7 +834,7 @@
                     
                 }
 
-                // B. **MODIFIED** Check for conditional ineligibility (3+ Convictions)
+                // B. Check for conditional ineligibility (3+ Convictions)
                 if (threePlusTwoYearImprisonment === "Yes" && !isTwoYearImprisonmentUnknown) {
                     // If 3+ is YES, but Conviction Date is UNKNOWN, we must return UNCLEAR, not INELIGIBLE.
                     essentialUnknowns = [];
@@ -644,6 +873,37 @@
                         range = "3–5 years";
                     }
 
+                    // --- LOGIC: Resolve if fixed single year timeline and completion date is known (UNKNOWN CONVICTION DATE) ---
+                    const singleYearMatch = range.match(/^(\d+) years$/); 
+                    
+                    // Check if: 1. Range is fixed (e.g., '5 years'), 2. Completion Date is known (not unknown)
+                    if (singleYearMatch && !isCompletionDateUnknown) {
+                        const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
+                        
+                        // Calculate the final date.
+                        const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
+                        const dateString = formatEligibleDate(finalEligibleDate);
+                        
+                        // Resolution message:
+                        const resolutionMessage = finalEligibleDate <= TODAY 
+                            ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
+                            : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
+                        
+                        // Note is mandatory here since conviction date is definitely unknown.
+                        let note = " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)";
+
+                        return {
+                            status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
+                            message: resolutionMessage + note,
+                            eligibleDate: finalEligibleDate,
+                            // The only true unknown remaining is Conviction Date, but we don't need it for calculation
+                            missingAnswers: [], 
+                            referenceId: newReferenceId 
+                        };
+                    }
+                    // --- END LOGIC ---
+                    
+                    // Uses 'eligible_unclear' here because the Conviction Date is unknown and could be post-D3.
                     return {
                         status: "eligible_unclear",
                         // Standardized message applied + contextual postscript
@@ -682,25 +942,31 @@
                 // Before June 29, 2010 (Old Rules) - Fixed 3 or 5 years.
                 waitPeriodYears = (prosecutionType === "Indictment") ? 5 : 3;
             } else if (convictionDate >= D1 && convictionDate <= D2) {
-                // Between June 29, 2010 and March 12, 2012 (Transitional Rules)
-                
-                if (schedule1Offence === "Yes") {
-                    // Indictment/Summary with Schedule 1 conviction (10 years if Indictment, 5 years if Summary)
-                    waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5; 
-                } else if (prosecutionType === "Summary") { 
-                    // Summary and Not Schedule 1 (3 years - using old rule)
-                    waitPeriodYears = 3;
-                } else {
-                    // Indictment and Not Schedule 1 (SPIO check was avoided in the ambiguity section, so we assume 5 years as the non-SPIO Indictable time)
-                    waitPeriodYears = 5;
-                }
-            } else if (convictionDate >= D3) {
-                // On or after March 13, 2012 (Current Rules) - CONFIRMED LOGIC
-                waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5;
-            } else {
-                // Fallback for unhandled date
-                return { status: "unclear", message: UNCLARITY_MESSAGE, eligibleDate: null, missingAnswers: ["Conviction Date"], referenceId: newReferenceId };
-            }
+
+    // 🟢 Updated logic (June 29 2010 → Mar 12 2012):
+    // If SPIO = Yes or 2-year term = Yes → skip Schedule 1 + the other check → wait 10 years
+    if (spioOffence === "Yes") {
+        waitPeriodYears = 10;
+        schedule1Offence = "No";
+        imprisonmentTwoYearsOrMore = "No";
+    } else if (imprisonmentTwoYearsOrMore === "Yes") {
+        waitPeriodYears = 10;
+        schedule1Offence = "No";
+        spioOffence = "No";
+    } else if (schedule1Offence === "Yes") {
+        waitPeriodYears = (prosecutionType === "Indictment") ? 10 : 5;
+    } else if (prosecutionType === "Summary") {
+        waitPeriodYears = 3;
+    } else {
+        // unchanged fallback logic
+        waitPeriodYears =
+          (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") ? 10 : 5;
+    }
+
+        // unchanged fallback logic
+        waitPeriodYears =
+          (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") ? 10 : 5;
+    }
 
             // 5. Final Status Determination
             eligibleDate = addYears(sentenceCompletionDate, waitPeriodYears);
@@ -753,8 +1019,21 @@
             // Schedule 1 Offence
             schedule1Offence: document.getElementById('schedule1-offence'),
             dontKnowSchedule1: document.getElementById('dont-know-schedule1'),
+
+            // SPIO Offence Elements
+            spioInputGroup: document.getElementById('spio-input-group'),
+            spioOffence: document.getElementById('spio-offence'),
+            dontKnowSPIO: document.getElementById('dont-know-spio'),
+            spioInfoToggle: document.getElementById('spio-info-toggle'), 
+            spioInfo: document.getElementById('spio-info'),           
             
+            // NEW: 2-Year Imprisonment Elements
+            twoYearImprisonmentGroup: document.getElementById('two-year-imprisonment-group'),
+            prisonTerm2yr: document.getElementById('prison-term-2yr'),
+            dontKnowPrisonTerm2yr: document.getElementById('dont-know-prison-term-2yr'),
+
             // 3+ Convictions
+            imprisonmentConvictionsGroup: document.getElementById('imprisonment-convictions-group'), 
             imprisonmentConvictions: document.getElementById('imprisonment-convictions'),
             dontKnowImprisonment: document.getElementById('dont-know-imprisonment'),
             
@@ -783,6 +1062,10 @@
          * @returns {string} - 'I'm not sure', the selected dropdown value, or empty string.
          */
         function getSelectCheckboxValue(selectElement, notSureCheckboxElement) {
+            // If disabled, its value is being controlled by the app based on other inputs.
+            if (selectElement.disabled) {
+                return selectElement.value;
+            }
             if (notSureCheckboxElement.checked) return "I'm not sure";
             return selectElement.value;
         }
@@ -802,8 +1085,66 @@
             // Schedule 1 Offence
             handleUnknownSelect(elements.dontKnowSchedule1, elements.schedule1Offence);
             
-            // 3+ Convictions
-            handleUnknownSelect(elements.dontKnowImprisonment, elements.imprisonmentConvictions);
+            
+            // Get current conviction date for conditional checks
+            const convDateStr = elements.convictionDate.value;
+            const convictionDate = parseDate(convDateStr);
+            const prosecutionTypeVal = getSelectCheckboxValue(elements.prosecutionType, elements.dontKnowProsecution);
+
+            
+            // --- SPIO and 2-Year Imprisonment Conditional Display Logic ---
+            const isTransitional = convictionDate && convictionDate >= D1 && convictionDate <= D2;
+            const isProsecutionNotSummary = prosecutionTypeVal !== "Summary";
+            const isConditionalSectionVisible = isTransitional && isProsecutionNotSummary;
+
+
+            if (isConditionalSectionVisible) {
+                // SPIO Group
+                elements.spioInputGroup.classList.remove('hidden');
+                handleUnknownSelect(elements.dontKnowSPIO, elements.spioOffence); 
+                
+                // NEW: 2-Year Imprisonment Group (Same logic as SPIO)
+                elements.twoYearImprisonmentGroup.classList.remove('hidden');
+                handleUnknownSelect(elements.dontKnowPrisonTerm2yr, elements.prisonTerm2yr); 
+
+            } else {
+                // SPIO Group
+                elements.spioInputGroup.classList.add('hidden');
+                elements.spioOffence.value = '';
+                elements.spioOffence.disabled = false;
+                elements.dontKnowSPIO.checked = false;
+                
+                // NEW: 2-Year Imprisonment Group
+                elements.twoYearImprisonmentGroup.classList.add('hidden');
+                elements.prisonTerm2yr.value = '';
+                elements.prisonTerm2yr.disabled = false;
+                elements.dontKnowPrisonTerm2yr.checked = false;
+            }
+
+            // --- Imprisonment Convictions Conditional Display Logic ---
+            // Only visible if the conviction date is on or after March 13, 2012 (D3)
+            const isPostD3 = convictionDate && convictionDate >= D3;
+
+            if (isPostD3) {
+                elements.imprisonmentConvictionsGroup.classList.remove('hidden');
+                
+                // If the element was hidden (disabled=true) or had the system-forced 'No' value, reset it.
+                if (elements.imprisonmentConvictions.disabled || elements.imprisonmentConvictions.value === 'No') {
+                    elements.imprisonmentConvictions.value = ''; // Force "Select an Option"
+                    elements.dontKnowImprisonment.checked = false; // Ensure 'I'm not sure' is off for a fresh choice
+                }
+
+                // If it becomes visible, re-enable and handle based on its specific checkbox
+                elements.imprisonmentConvictions.disabled = false;
+                handleUnknownSelect(elements.dontKnowImprisonment, elements.imprisonmentConvictions); 
+            } else {
+                // If not post-D3, hide the group
+                elements.imprisonmentConvictionsGroup.classList.add('hidden');
+                // Crucially, reset the app-controlled values to ensure calculation logic is correct for pre-D3 (rule does not apply)
+                elements.imprisonmentConvictions.value = 'No';
+                elements.imprisonmentConvictions.disabled = true; // Disable to signal it's system-controlled
+                elements.dontKnowImprisonment.checked = false; // Reset checkbox
+            }
         }
 
         // Event listener setup
@@ -811,24 +1152,57 @@
         elements.dontKnowSentCompDate.addEventListener('change', updateConditionalInputs);
         elements.dontKnowProsecution.addEventListener('change', updateConditionalInputs);
         elements.dontKnowSchedule1.addEventListener('change', updateConditionalInputs);
-        elements.dontKnowImprisonment.addEventListener('change', updateConditionalInputs);
         
-        // Add change listeners to the select elements themselves to clear "I'm not sure" if user selects an option
-        elements.prosecutionType.addEventListener('change', () => { if (elements.prosecutionType.value) elements.dontKnowProsecution.checked = false; updateConditionalInputs(); });
-        elements.schedule1Offence.addEventListener('change', () => { if (elements.schedule1Offence.value) elements.dontKnowSchedule1.checked = false; updateConditionalInputs(); });
-        elements.imprisonmentConvictions.addEventListener('change', () => { if (elements.imprisonmentConvictions.value) elements.dontKnowImprisonment.checked = false; updateConditionalInputs(); });
-        elements.convictionDate.addEventListener('change', () => { if (elements.convictionDate.value) elements.dontKnowConvDate.checked = false; updateConditionalInputs(); });
+        // Listen to the date picker itself for the main conditional logic
+        elements.convictionDate.addEventListener('change', () => { 
+            if (elements.convictionDate.value) elements.dontKnowConvDate.checked = false; 
+            updateConditionalInputs(); 
+        });
+
+        // NEW: 2-Year Imprisonment Listeners
+        elements.prisonTerm2yr.addEventListener('change', () => { if (elements.prisonTerm2yr.value) elements.dontKnowPrisonTerm2yr.checked = false; updateConditionalInputs(); });
+        elements.dontKnowPrisonTerm2yr.addEventListener('change', updateConditionalInputs);
+
+        // 3+ Convictions Listeners 
+        elements.imprisonmentConvictions.addEventListener('change', () => { 
+             if (elements.imprisonmentConvictions.value) elements.dontKnowImprisonment.checked = false; 
+             updateConditionalInputs(); 
+        });
+        elements.dontKnowImprisonment.addEventListener('change', updateConditionalInputs);
+
+
+        // Other listeners
+        elements.dontKnowSPIO.addEventListener('change', updateConditionalInputs);
+        elements.spioOffence.addEventListener('change', () => { if (elements.spioOffence.value) elements.dontKnowSPIO.checked = false; updateConditionalInputs(); });
         elements.sentenceCompletionDate.addEventListener('change', () => { if (elements.sentenceCompletionDate.value) elements.dontKnowSentCompDate.checked = false; updateConditionalInputs(); });
-
-
-        window.addEventListener('load', updateConditionalInputs); 
+        elements.prosecutionType.addEventListener('change', () => { 
+            if (elements.prosecutionType.value) elements.dontKnowProsecution.checked = false; 
+            updateConditionalInputs(); 
+        });
+        elements.schedule1Offence.addEventListener('change', () => { if (elements.schedule1Offence.value) elements.dontKnowSchedule1.checked = false; updateConditionalInputs(); });
+        
 
         // Toggle Schedule 1 Info
         elements.schedule1InfoToggle.addEventListener('click', () => {
             elements.schedule1Info.classList.toggle('hidden');
             elements.schedule1InfoToggle.innerHTML = elements.schedule1Info.classList.contains('hidden') ? '<u>What are Schedule 1 Offences?</u>' : '[x] Close';
         });
-        elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>'; // Initial setup
+        
+        // Toggle SPIO Info
+        if (elements.spioInfoToggle) {
+             elements.spioInfoToggle.addEventListener('click', () => {
+                elements.spioInfo.classList.toggle('hidden');
+                elements.spioInfoToggle.innerHTML = elements.spioInfo.classList.contains('hidden') ? '<u>What is a Serious Personal Injury Offence?</u>' : '[x] Close';
+             });
+             // Initial setup for the link text
+             elements.spioInfoToggle.innerHTML = '<u>What is a Serious Personal Injury Offence?</u>'; 
+        }
+
+        window.addEventListener('load', () => {
+             updateConditionalInputs();
+             // Initial setup for link texts
+             elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>'; 
+        }); 
 
         // Event listener for disclaimer
         elements.disclaimerCheckbox.addEventListener('change', () => {
@@ -855,15 +1229,21 @@
             // Get values from the new select/checkbox groups
             const prosecutionTypeVal = getSelectCheckboxValue(elements.prosecutionType, elements.dontKnowProsecution);
             const schedule1OffenceVal = getSelectCheckboxValue(elements.schedule1Offence, elements.dontKnowSchedule1);
+            // Retrieve SPIO value
+            const spioOffenceVal = getSelectCheckboxValue(elements.spioOffence, elements.dontKnowSPIO);
+            // NEW: Retrieve 2-Year Imprisonment value
+            const imprisonmentTwoYearsOrMoreVal = getSelectCheckboxValue(elements.prisonTerm2yr, elements.dontKnowPrisonTerm2yr);
             const threePlusTwoYearImprisonmentVal = getSelectCheckboxValue(elements.imprisonmentConvictions, elements.dontKnowImprisonment);
             
-            // Call calculateEligibility with the updated argument list
+            // Call calculateEligibility with the updated argument list (7 arguments now)
             const result = calculateEligibility(
                 convictionDateInputStr,
                 prosecutionTypeVal,
                 schedule1OffenceVal,
                 sentenceCompletionDateInputStr,
-                threePlusTwoYearImprisonmentVal
+                threePlusTwoYearImprisonmentVal,
+                spioOffenceVal,
+                imprisonmentTwoYearsOrMoreVal // NEW ARGUMENT
             );
 
             displayResult(result);
@@ -942,12 +1322,15 @@
                         ${result.referenceId}
                     </p>`;
                     break;
-
-                case 'eligible_unclear':
+                
+                case 'likely_eligible':
+                    // UPDATED TO GREEN THEME
                     styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800'; 
-                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#10004;</span><h3 class="font-bold text-xl"><b>Likely Eligible (Timeline Ambiguous)</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    // CRITICAL: The result.message will now be UNCLARITY_MESSAGE only.
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#9989;</span><h3 class="font-bold text-xl"><b>Likely Eligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
                     
                     if (result.timelineRange) {
+                        // Updated bg-color for the timeline box
                         htmlContent += `<p class="mt-3 text-sm font-bold bg-green-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
@@ -956,8 +1339,28 @@
                     
                     elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
                     
-                    // Reference ID color scheme
+                    // Reference ID color scheme (Updated to green)
                     refIdFooter = `<p class="mt-4 pt-2 border-t border-green-300 text-right text-xs font-mono tracking-widest text-green-600">
+                        ${result.referenceId}
+                    </p>`;
+                    break;
+
+                case 'eligible_unclear':
+                    styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800'; 
+                    // UPDATED TEXT HERE
+                    htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
+                    
+                    if (result.timelineRange) {
+                        htmlContent += `<p class="mt-3 text-sm font-bold bg-blue-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
+                    }
+
+                    elements.missingInfoDetails.classList.remove('hidden');
+                    missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
+                    
+                    elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
+                    
+                    // Reference ID color scheme
+                    refIdFooter = `<p class="mt-4 pt-2 border-t border-blue-300 text-right text-xs font-mono tracking-widest text-blue-600">
                         ${result.referenceId}
                     </p>`;
                     break;
@@ -1016,9 +1419,13 @@
                     statusTitle = "Schedule 1 Offence - Possible Exception";
                     statusDisplay = "Status: Schedule 1 Offence — Possible Exception";
                     break;
+                case 'likely_eligible':
+                    statusTitle = "Likely Eligible for Record Suspension (Pre-March 2012 Conviction)";
+                    statusDisplay = "Status: Likely Eligible";
+                    break;
                 case 'eligible_unclear':
-                    statusTitle = "Likely Eligible (Timeline Ambiguous)";
-                    statusDisplay = "Status: Likely Eligible (Timeline Ambiguous)";
+                    statusTitle = "Eligibility Unclear (Post-March 2012 Ambiguity)";
+                    statusDisplay = "Status: Eligibility Unclear";
                     break;
                 case 'unclear':
                 default:
@@ -1040,7 +1447,7 @@
             let bodyMessage = rawContent.textContent.replace(/\n\s*\n/g, '\n\n').trim();
             bodyMessage = bodyMessage.replace(/([.?!])\s*([A-Z])/g, '$1\n\n$2');
 
-            // --- START: NEW/UPDATED LOGIC TO INCLUDE MISSING INFORMATION ---
+            // --- START: LOGIC TO INCLUDE MISSING INFORMATION ---
             let missingInfoText = '';
             const missingInfoDiv = document.getElementById('missing-info-details');
             
@@ -1066,7 +1473,7 @@ ${listItems}${contactInfo}
 Please try to locate this information before proceeding with an application.
 `;
             }
-            // --- END: NEW/UPDATED LOGIC ---
+            // --- END: LOGIC ---
 
             // Construct the final email body
             let finalBody = `
