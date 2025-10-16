@@ -505,7 +505,7 @@
                     
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
                     return {
-                        status: "eligible_unclear", // Retained for Post-D3 ambiguity
+                        status: "likely_eligible", // Retained for Post-D3 ambiguity
                         // Standardized message applied + contextual postscript
                         message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
                         eligibleDate: null,
@@ -1166,29 +1166,43 @@ if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
             }
 
             // --- Imprisonment Convictions Conditional Display Logic ---
-            // Only visible if the conviction date is on or after March 13, 2012 (D3)
-            const isPostD3 = convictionDate && convictionDate >= D3;
+let convictionDateValue = elements.convictionDate.value;
+let convictionDateParsed = parseDate(convictionDateValue);
 
-            if (isPostD3) {
-                elements.imprisonmentConvictionsGroup.classList.remove('hidden');
-                
-                // If the element was hidden (disabled=true) or had the system-forced 'No' value, reset it.
-                if (elements.imprisonmentConvictions.disabled || elements.imprisonmentConvictions.value === 'No') {
-                    elements.imprisonmentConvictions.value = ''; // Force "Select an Option"
-                    elements.dontKnowImprisonment.checked = false; // Ensure 'I'm not sure' is off for a fresh choice
-                }
+// Determine if conviction date is after March 13, 2012
+let isPostD3 = convictionDateParsed && convictionDateParsed >= D3;
 
-                // If it becomes visible, re-enable and handle based on its specific checkbox
-                elements.imprisonmentConvictions.disabled = false;
-                handleUnknownSelect(elements.dontKnowImprisonment, elements.imprisonmentConvictions); 
-            } else {
-                // If not post-D3, hide the group
-                elements.imprisonmentConvictionsGroup.classList.add('hidden');
-                // Crucially, reset the app-controlled values to ensure calculation logic is correct for pre-D3 (rule does not apply)
-                elements.imprisonmentConvictions.value = 'No';
-                elements.imprisonmentConvictions.disabled = true; // Disable to signal it's system-controlled
-                elements.dontKnowImprisonment.checked = false; // Reset checkbox
-            }
+// Always show if "I'm not sure" for conviction date is checked
+if (elements.dontKnowConvDate.checked) {
+    isPostD3 = true;
+}
+
+if (isPostD3) {
+    // Show and enable section
+    elements.imprisonmentConvictionsGroup.classList.remove('hidden');
+    elements.imprisonmentConvictionsGroup.style.display = 'block'; // fallback in case inline style hides it
+    elements.imprisonmentConvictions.disabled = false;
+    elements.dontKnowImprisonment.disabled = false;
+
+    // Reset state if needed
+    if (!['Yes', 'No'].includes(elements.imprisonmentConvictions.value)) {
+        elements.imprisonmentConvictions.value = '';
+        elements.dontKnowImprisonment.checked = false;
+    }
+
+    // Link "I'm not sure" behavior
+    handleUnknownSelect(elements.dontKnowImprisonment, elements.imprisonmentConvictions);
+
+} else {
+    // Hide for pre-2012 cases
+    elements.imprisonmentConvictionsGroup.classList.add('hidden');
+    elements.imprisonmentConvictionsGroup.style.display = 'none';
+    elements.imprisonmentConvictions.value = 'No';
+    elements.imprisonmentConvictions.disabled = true;
+    elements.dontKnowImprisonment.checked = false;
+    elements.dontKnowImprisonment.disabled = false;
+}
+
         }
 
         // Event listener setup
