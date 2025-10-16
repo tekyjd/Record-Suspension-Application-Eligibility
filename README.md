@@ -1,4 +1,3 @@
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -524,7 +523,52 @@
                 
                 // --- SPECIAL AMBIGUITY CHECK (2010-2012 Transitional Period for Indictments with UNKNOWN Schedule 1) ---
                 if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && isSchedule1Unknown) {
-                    
+                    // --- START OF NEW USER RULE: Fixed 10-Year Period (D1-D2, Indictment, Serious Offence) ---
+    // Rule: Conviction Date (D1-D2) AND Indictment AND (Schedule 1=Yes OR SPIO=Yes OR 2yr=Yes) -> 10 years
+    const isTransitionalPeriod = convictionDate >= D1 && convictionDate <= D2;
+
+    if (
+        isTransitionalPeriod &&
+        prosecutionType === "Indictment" &&
+        (schedule1Offence === "Yes" || spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes")
+    ) {
+        // Essential check: We need the sentence completion date to calculate the fixed period.
+        if (isCompletionDateUnknown) {
+            essentialUnknowns.push("Sentence Completion Date");
+            return {
+                status: "likely_eligible",
+                message: UNCLARITY_MESSAGE,
+                eligibleDate: null,
+                missingAnswers: essentialUnknowns,
+                timelineRange: "10 years",
+                referenceId: newReferenceId
+            };
+        } else {
+            // All required information is known: Fixed 10 years.
+            const fixedWaitPeriodYears = 10;
+            const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
+            const dateString = formatEligibleDate(finalEligibleDate);
+            const ruleDescription = [];
+            
+            const resolutionMessage = finalEligibleDate <= TODAY 
+                ? `You are eligible to apply for a record suspension now.
+The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b> ${ruleDescription}`
+                : `You will be eligible on ${dateString}.
+The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date, ${ruleDescription}`;
+
+            return {
+                status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
+                message: resolutionMessage,
+                eligibleDate: finalEligibleDate,
+                missingAnswers: [],
+                referenceId: newReferenceId
+            };
+        }
+    }
+    // --- END OF NEW USER RULE ---
+
+
+
                     // NOTE: If Sch 1 is unknown, we need SPIO status, and now 2yr imprisonment status to determine the 5-10 year split.
                     let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were sentenced to a prison term of 2 years or more?"];
                     ambiguityMessageSuffix = ''; 
