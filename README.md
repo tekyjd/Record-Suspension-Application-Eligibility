@@ -233,7 +233,7 @@
             <!-- NEW: Prison Term of 2 Years or More (Conditionally Visible) -->
             <div id="two-year-imprisonment-group" class="space-y-2 hidden">
                 <label class="block text-sm font-medium text-gray-700">
-                    Were sentenced to a prison term of 2 years or more?
+                    Were you sentenced to a prison term of 2 years or more?
                 </label>
                 <div class="select-input-group space-x-4 flex items-center">
                     <div class="w-40 md:w-52 flex-shrink-0">
@@ -570,7 +570,7 @@ The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your se
 
 
                     // NOTE: If Sch 1 is unknown, we need SPIO status, and now 2yr imprisonment status to determine the 5-10 year split.
-                    let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were sentenced to a prison term of 2 years or more?"];
+                    let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
                     ambiguityMessageSuffix = ''; 
                     
                     if (isCompletionDateUnknown) {
@@ -623,7 +623,7 @@ The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your se
                     // Filter out the unknowns that are already answered
                     let missingAnswersFiltered = Array.from(new Set(missingInfo));
                     if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
-                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were sentenced to a prison term of 2 years or more?"); }
+                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were you sentenced to a prison term of 2 years or more?"); }
                     
                     return {
                         status: "likely_eligible", 
@@ -639,7 +639,7 @@ The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your se
                 // SPIO ambiguity for transitional period D1-D2, Indictment, Sch 1 = No
                 if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
                     
-                    let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))", "Were sentenced to a prison term of 2 years or more?"];
+                    let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
                     ambiguityMessageSuffix = ''; 
                     
                     if (isCompletionDateUnknown) {
@@ -693,7 +693,7 @@ The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your se
                     
                     let missingAnswersFiltered = Array.from(new Set(missingInfo));
                     if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
-                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were sentenced to a prison term of 2 years or more?"); }
+                    if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were you sentenced to a prison term of 2 years or more?"); }
 
 
                     return {
@@ -744,7 +744,7 @@ The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your se
                     if (isTransitional && isProsecutionNotSummary) {
                         if (isSPIOUnknown) essentialUnknowns.push("Offence status (Serious Personal Injury Offence (SPIO))");
                         // NEW: Add the 2yr Imprisonment question to unknowns if applicable
-                        if (isImprisonmentTwoYearsUnknown) essentialUnknowns.push("Were sentenced to a prison term of 2 years or more?");
+                        if (isImprisonmentTwoYearsUnknown) essentialUnknowns.push("Were you sentenced to a prison term of 2 years or more?");
                     }
                     // --- END SPIO/2YR CHECK ---
                     
@@ -793,7 +793,7 @@ if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
     essentialUnknowns = essentialUnknowns.filter(q =>
         q !== "Is it a Schedule 1 offence?" &&
         q !== "Offence status (Serious Personal Injury Offence (SPIO))" &&
-        q !== "Were sentenced to a prison term of 2 years or more?"
+        q !== "Were you sentenced to a prison term of 2 years or more?"
     );
 }
 
