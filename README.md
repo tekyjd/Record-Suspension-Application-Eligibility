@@ -788,9 +788,9 @@ return {
                         </p>
                         <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
                         <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
-                            <li>was <b>not in a position of trust</b> or authority toward the victim;</li>
-                            <li>did <b>not use, threaten to use or attempt to use violence, intimidation or coerciont</b> in relation to the victim; and</li>
-                            <li>was <b>less than five years older</b> than the victim.</li>
+                            <li>was **not in a position of trust** or authority toward the victim;</li>
+                            <li>did **not use, threaten to use or attempt to use violence, intimidation or coercion** in relation to the victim; and</li>
+                            <li>was less than five years older than the victim.</li>
                         </ul>
                         <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
                     `;
@@ -819,6 +819,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -856,6 +864,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1033,6 +1049,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -1092,6 +1116,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1177,6 +1209,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -1225,6 +1265,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1297,6 +1345,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -1355,6 +1411,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1459,6 +1523,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1566,6 +1638,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1816,6 +1896,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -1863,6 +1951,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -1928,6 +2024,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -1984,6 +2088,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -2072,6 +2184,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -2121,6 +2241,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -2178,6 +2306,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
@@ -2264,6 +2400,14 @@ if (threePlusTwoYearImprisonment === "No") {
   );
 }
 
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
+
 }
 
 return {
@@ -2310,6 +2454,14 @@ if (threePlusTwoYearImprisonment === "No") {
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
   );
 }
+
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "Yes"
+if (threePlusTwoYearImprisonment === "Yes") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 
 }
 
