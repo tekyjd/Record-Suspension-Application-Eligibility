@@ -164,7 +164,7 @@
 <!-- Schedule 1 Offence (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-700 flex justify-between items-center">
-                    <span>Was it a Schedule 1 offence?</span>
+                    <span>Is it a Schedule 1 offence?</span>
                     <span id="schedule1-info-toggle" class="text-blue-500 hover:text-blue-700 text-xs cursor-pointer underline">What are Schedule 1 Offences?</span>
                 </label>
                 <div class="select-input-group space-x-4 flex items-center">
@@ -393,428 +393,236 @@ function calculateEligibility(
         // If Sentence Completion Date is known, eligibleDate = finalEligibleDate.
 
         
-// --- BEGIN: Transitional Rules (June 29, 2010 – March 12, 2012) — Spreadsheet-Driven ---
+
+
+
+
+
+
+// --- BEGIN: Transitional Rules (June 29, 2010 – March 12, 2012) — D2 OVERRIDE (full mapping) ---
 if (convictionDate && convictionDate >= D1 && convictionDate <= D2) {
-  const isCompletionDateUnknown = UNKNOWN_SENTINELS.includes(sentenceCompletionDateStr) || !sentenceCompletionDate;
+  try {
+    (function D2SpreadsheetOverride() {
+      const PT = (prosecutionType || "").trim() || "Unknown";
+      const S1 = (schedule1Offence || "").trim() || "Unknown";
+      const SP = (spioOffence || "").trim() || "Unknown";
+      const Y2 = (imprisonmentTwoYearsOrMore || "").trim() || "Unknown";
+      const key = [PT, S1, SP, Y2].join("|");
 
-  // Normalize input values
-  const PT = (prosecutionType || "").trim() || "Unknown";
-  const S1 = (schedule1Offence || "").trim() || "Unknown";
-  const SP = (spioOffence || "").trim() || "Unknown";
-  const Y2 = (imprisonmentTwoYearsOrMore || "").trim() || "Unknown";
+      const completionKnown =
+  sentenceCompletionDate instanceof Date &&
+  !isNaN(sentenceCompletionDate) &&
+  sentenceCompletionDateStr &&
+  sentenceCompletionDateStr.trim() !== "" &&
+  sentenceCompletionDateStr !== "I'm not sure";
 
-  const key = [PT, S1, SP, Y2].join("|");
+      const RULES_D2 = {
+        "Summary|Yes|Yes|Yes":"10 Years","Summary|Yes|Yes|No":"10 Years","Summary|Yes|Yes|Unknown":"10 Years",
+        "Summary|Yes|No|Yes":"10 Years","Summary|Yes|No|No":"5 Years","Summary|Yes|No|Unknown":"5-10 Years",
+        "Summary|Yes|Unknown|Yes":"10 Years","Summary|Yes|Unknown|No":"5-10 Years","Summary|Yes|Unknown|Unknown":"5-10 Years",
+        "Summary|No|Yes|Yes":"10 Years","Summary|No|Yes|No":"10 Years","Summary|No|Yes|Unknown":"10 Years",
+        "Summary|No|No|Yes":"10 Years","Summary|No|No|No":"3 Years","Summary|No|No|Unknown":"3-10 Years",
+        "Summary|No|Unknown|Yes":"10 Years","Summary|No|Unknown|No":"3-10 Years","Summary|No|Unknown|Unknown":"3-10 Years",
+        "Summary|Unknown|Yes|Yes":"10 Years","Summary|Unknown|Yes|No":"10 Years","Summary|Unknown|Yes|Unknown":"10 Years",
+        "Summary|Unknown|No|Yes":"10 Years","Summary|Unknown|No|No":"3-5 Years","Summary|Unknown|No|Unknown":"3-10 Years",
+        "Summary|Unknown|Unknown|Yes":"10 Years","Summary|Unknown|Unknown|No":"3-10 Years","Summary|Unknown|Unknown|Unknown":"3-10 Years",
+        "Indictment|Yes|Yes|Yes":"10 Years","Indictment|Yes|Yes|No":"10 Years","Indictment|Yes|Yes|Unknown":"10 Years",
+        "Indictment|Yes|No|Yes":"10 Years","Indictment|Yes|No|No":"10 Years","Indictment|Yes|No|Unknown":"10 Years",
+        "Indictment|Yes|Unknown|Yes":"10 Years","Indictment|Yes|Unknown|No":"10 Years","Indictment|Yes|Unknown|Unknown":"10 Years",
+        "Indictment|No|Yes|Yes":"10 Years","Indictment|No|Yes|No":"10 Years","Indictment|No|Yes|Unknown":"10 Years",
+        "Indictment|No|No|Yes":"10 Years","Indictment|No|No|No":"5 Years","Indictment|No|No|Unknown":"5-10 Years",
+        "Indictment|No|Unknown|Yes":"10 Years","Indictment|No|Unknown|No":"5-10 Years","Indictment|No|Unknown|Unknown":"5-10 Years",
+        "Indictment|Unknown|Yes|Yes":"10 Years","Indictment|Unknown|Yes|No":"10 Years","Indictment|Unknown|Yes|Unknown":"10 Years",
+        "Indictment|Unknown|No|Yes":"10 Years","Indictment|Unknown|No|No":"5-10 Years","Indictment|Unknown|No|Unknown":"5-10 Years",
+        "Indictment|Unknown|Unknown|Yes":"10 Years","Indictment|Unknown|Unknown|No":"5-10 Years","Indictment|Unknown|Unknown|Unknown":"5-10 Years",
+        "Unknown|Yes|Yes|Yes":"10 Years","Unknown|Yes|Yes|No":"10 Years","Unknown|Yes|Yes|Unknown":"10 Years",
+        "Unknown|Yes|No|Yes":"10 Years","Unknown|Yes|No|No":"5-10 Years","Unknown|Yes|No|Unknown":"5-10 Years",
+        "Unknown|Yes|Unknown|Yes":"10 Years","Unknown|Yes|Unknown|No":"5-10 Years","Unknown|Yes|Unknown|Unknown":"5-10 Years",
+        "Unknown|No|Yes|Yes":"10 Years","Unknown|No|Yes|No":"10 Years","Unknown|No|Yes|Unknown":"10 Years",
+        "Unknown|No|No|Yes":"10 Years","Unknown|No|No|No":"3-5 Years","Unknown|No|No|Unknown":"3-10 Years",
+        "Unknown|No|Unknown|Yes":"10 Years","Unknown|No|Unknown|No":"3-10 Years","Unknown|No|Unknown|Unknown":"3-10 Years",
+        "Unknown|Unknown|Yes|Yes":"10 Years","Unknown|Unknown|Yes|No":"10 Years","Unknown|Unknown|Yes|Unknown":"10 Years",
+        "Unknown|Unknown|No|Yes":"10 Years","Unknown|Unknown|No|No":"3-10 Years","Unknown|Unknown|No|Unknown":"3-10 Years",
+        "Unknown|Unknown|Unknown|Yes":"10 Years","Unknown|Unknown|Unknown|No":"3-10 Years","Unknown|Unknown|Unknown|Unknown":"3-10 Years"
+      };
 
-  const RULES = {
-  "Summary|Yes|Yes|Yes": "10 Years",
-  "Summary|Yes|Yes|No": "10 Years",
-  "Summary|Yes|Yes|Unknown": "10 Years",
-  "Summary|Yes|No|Yes": "10 Years",
-  "Summary|Yes|No|No": "5 Years",
-  "Summary|Yes|No|Unknown": "5-10 Years",
-  "Summary|Yes|Unknown|Yes": "10 Years",
-  "Summary|Yes|Unknown|No": "5-10 Years",
-  "Summary|Yes|Unknown|Unknown": "5-10 Years",
-  "Summary|No|Yes|Yes": "10 Years",
-  "Summary|No|Yes|No": "10 Years",
-  "Summary|No|Yes|Unknown": "10 Years",
-  "Summary|No|No|Yes": "10 Years",
-  "Summary|No|No|No": "3 Years",
-  "Summary|No|No|Unknown": "3-10 Years",
-  "Summary|No|Unknown|Yes": "10 Years",
-  "Summary|No|Unknown|No": "3-10 Years",
-  "Summary|No|Unknown|Unknown": "3-10 Years",
-  "Summary|Unknown|Yes|Yes": "10 Years",
-  "Summary|Unknown|Yes|No": "10 Years",
-  "Summary|Unknown|Yes|Unknown": "10 Years",
-  "Summary|Unknown|No|Yes": "10 Years",
-  "Summary|Unknown|No|No": "3-5 Years",
-  "Summary|Unknown|No|Unknown": "3-10 Years",
-  "Summary|Unknown|Unknown|Yes": "10 Years",
-  "Summary|Unknown|Unknown|No": "3-10 Years",
-  "Summary|Unknown|Unknown|Unknown": "3-10 Years",
-  "Indictment|Yes|Yes|Yes": "10 Years",
-  "Indictment|Yes|Yes|No": "10 Years",
-  "Indictment|Yes|Yes|Unknown": "10 Years",
-  "Indictment|Yes|No|Yes": "10 Years",
-  "Indictment|Yes|No|No": "10 Years",
-  "Indictment|Yes|No|Unknown": "10 Years",
-  "Indictment|Yes|Unknown|Yes": "10 Years",
-  "Indictment|Yes|Unknown|No": "10 Years",
-  "Indictment|Yes|Unknown|Unknown": "10 Years",
-  "Indictment|No|Yes|Yes": "10 Years",
-  "Indictment|No|Yes|No": "10 Years",
-  "Indictment|No|Yes|Unknown": "10 Years",
-  "Indictment|No|No|Yes": "10 Years",
-  "Indictment|No|No|No": "5 Years",
-  "Indictment|No|No|Unknown": "5-10 Years",
-  "Indictment|No|Unknown|Yes": "10 Years",
-  "Indictment|No|Unknown|No": "5-10 Years",
-  "Indictment|No|Unknown|Unknown": "5-10 Years",
-  "Indictment|Unknown|Yes|Yes": "10 Years",
-  "Indictment|Unknown|Yes|No": "10 Years",
-  "Indictment|Unknown|Yes|Unknown": "10 Years",
-  "Indictment|Unknown|No|Yes": "10 Years",
-  "Indictment|Unknown|No|No": "5-10 Years",
-  "Indictment|Unknown|No|Unknown": "5-10 Years",
-  "Indictment|Unknown|Unknown|Yes": "10 Years",
-  "Indictment|Unknown|Unknown|No": "5-10 Years",
-  "Indictment|Unknown|Unknown|Unknown": "5-10 Years",
-  "Unknown|Yes|Yes|Yes": "10 Years",
-  "Unknown|Yes|Yes|No": "10 Years",
-  "Unknown|Yes|Yes|Unknown": "10 Years",
-  "Unknown|Yes|No|Yes": "10 Years",
-  "Unknown|Yes|No|No": "5-10 Years",
-  "Unknown|Yes|No|Unknown": "5-10 Years",
-  "Unknown|Yes|Unknown|Yes": "10 Years",
-  "Unknown|Yes|Unknown|No": "5-10 Years",
-  "Unknown|Yes|Unknown|Unknown": "5-10 Years",
-  "Unknown|No|Yes|Yes": "10 Years",
-  "Unknown|No|Yes|No": "10 Years",
-  "Unknown|No|Yes|Unknown": "10 Years",
-  "Unknown|No|No|Yes": "10 Years",
-  "Unknown|No|No|No": "3-5 Years",
-  "Unknown|No|No|Unknown": "3-10 Years",
-  "Unknown|No|Unknown|Yes": "10 Years",
-  "Unknown|No|Unknown|No": "3-10 Years",
-  "Unknown|No|Unknown|Unknown": "3-10 Years",
-  "Unknown|Unknown|Yes|Yes": "10 Years",
-  "Unknown|Unknown|Yes|No": "10 Years",
-  "Unknown|Unknown|Yes|Unknown": "10 Years",
-  "Unknown|Unknown|No|Yes": "10 Years",
-  "Unknown|Unknown|No|No": "3-10 Years",
-  "Unknown|Unknown|No|Unknown": "3-10 Years",
-  "Unknown|Unknown|Unknown|Yes": "10 Years",
-  "Unknown|Unknown|Unknown|No": "3-10 Years",
-  "Unknown|Unknown|Unknown|Unknown": "3-10 Years"
-};
-  const ESSENTIALS = {
-  "Summary|Yes|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|No|No": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|No|Unknown": [
-    "Sentence Completion date",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Summary|Yes|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Yes|Unknown|No": [
-    "Sentence Completion date",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Summary|Yes|Unknown|Unknown": [
-    "Sentence Completion date",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Summary|No|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|No|No": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|No|Unknown": [
-    "Sentence Completion date",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Summary|No|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|No|Unknown|No": [
-    "Sentence Completion date",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Summary|No|Unknown|Unknown": [
-    "Sentence Completion Date",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Summary|Unknown|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Unknown|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Unknown|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Unknown|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Unknown|No|No": [
-    "Sentence Completion Date",
-    "Was it a Schedule 1 offence?"
-  ],
-  "Summary|Unknown|No|Unknown": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Summary|Unknown|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Summary|Unknown|Unknown|No": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Summary|Unknown|Unknown|Unknown": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Indictment|Yes|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|No|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|No|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|Unknown|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Yes|Unknown|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|No|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|No|Unknown": [
-    "Sentence Completion date",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Indictment|No|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|No|Unknown|No": [
-    "Sentence Completion date",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Indictment|No|Unknown|Unknown": [
-    "Sentence Completion date",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Indictment|Unknown|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Unknown|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Unknown|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Unknown|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Unknown|No|No": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?"
-  ],
-  "Indictment|Unknown|No|Unknown": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Indictment|Unknown|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Indictment|Unknown|Unknown|No": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Indictment|Unknown|Unknown|Unknown": [
-    "Sentence Completion date",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Yes|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Yes|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Yes|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Yes|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Yes|No|No": [
-    "Sentence Completion Date, Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Yes|No|Unknown": [
-    "Sentence Completion Date, Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Yes|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Yes|Unknown|No": [
-    "Sentence Completion Date, Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Yes|Unknown|Unknown": [
-    "Sentence Completion Date, Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|No|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|No|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|No|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|No|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|No|No|No": [
-    "Sentence Completion Date",
-    "Prosecution Type"
-  ],
-  "Unknown|No|No|Unknown": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|No|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|No|Unknown|No": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Unknown|No|Unknown|Unknown": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Unknown|Yes|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Unknown|Yes|No": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Unknown|Yes|Unknown": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Unknown|No|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Unknown|No|No": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Was it a Schedule 1 offence?"
-  ],
-  "Unknown|Unknown|No|Unknown": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Was it a Schedule 1 offence?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ],
-  "Unknown|Unknown|Unknown|Yes": [
-    "Sentence Completion Date"
-  ],
-  "Unknown|Unknown|Unknown|No": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?"
-  ],
-  "Unknown|Unknown|Unknown|Unknown": [
-    "Sentence Completion Date",
-    "Prosecution Type",
-    "Was it a Schedule 1 offence?",
-    "Is it a Serious Personal Injury Offence (SPIO)?",
-    "Were you sentenced to a prison term of 2 years or more?"
-  ]
-};
+      const ESSENTIALS_D2 = {
+        "Summary|Yes|Yes|Yes":["Sentence Completion Date"],
+        "Summary|Yes|Yes|No":["Sentence Completion Date"],
+        "Summary|Yes|Yes|Unknown":["Sentence Completion Date"],
+        "Summary|Yes|No|Yes":["Sentence Completion Date"],
+        "Summary|Yes|No|No":["Sentence Completion Date"],
+        "Summary|Yes|No|Unknown":["Sentence Completion date","Were you sentenced to a prison term of 2 years or more?"],
+        "Summary|Yes|Unknown|Yes":["Sentence Completion Date"],
+        "Summary|Yes|Unknown|No":["Sentence Completion date","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Summary|Yes|Unknown|Unknown":["Sentence Completion date","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Summary|No|Yes|Yes":["Sentence Completion Date"],
+        "Summary|No|Yes|No":["Sentence Completion Date"],
+        "Summary|No|Yes|Unknown":["Sentence Completion Date"],
+        "Summary|No|No|Yes":["Sentence Completion Date"],
+        "Summary|No|No|No":["Sentence Completion Date"],
+        "Summary|No|No|Unknown":["Sentence Completion date","Were you sentenced to a prison term of 2 years or more?"],
+        "Summary|No|Unknown|Yes":["Sentence Completion Date"],
+        "Summary|No|Unknown|No":["Sentence Completion date","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Summary|No|Unknown|Unknown":["Sentence Completion Date","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Summary|Unknown|Yes|Yes":["Sentence Completion Date"],
+        "Summary|Unknown|Yes|No":["Sentence Completion Date"],
+        "Summary|Unknown|Yes|Unknown":["Sentence Completion Date"],
+        "Summary|Unknown|No|Yes":["Sentence Completion Date"],
+        "Summary|Unknown|No|No":["Sentence Completion Date","Is it a Schedule 1 offence?"],
+        "Summary|Unknown|No|Unknown":["Sentence Completion date","Is it a Schedule 1 offence?","Were you sentenced to a prison term of 2 years or more?"],
+        "Summary|Unknown|Unknown|Yes":["Sentence Completion Date"],
+        "Summary|Unknown|Unknown|No":["Sentence Completion date","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Summary|Unknown|Unknown|Unknown":["Sentence Completion date","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
 
-  let timelineRange = RULES[key] || "3-10 Years";
-  let essentialsList = ESSENTIALS[key] || ["Sentence Completion Date"];
+        "Indictment|Yes|Yes|Yes":["Sentence Completion Date"],
+        "Indictment|Yes|Yes|No":["Sentence Completion Date"],
+        "Indictment|Yes|Yes|Unknown":["Sentence Completion Date"],
+        "Indictment|Yes|No|Yes":["Sentence Completion Date"],
+        "Indictment|Yes|No|No":["Sentence Completion Date"],
+        "Indictment|Yes|No|Unknown":["Sentence Completion Date"],
+        "Indictment|Yes|Unknown|Yes":["Sentence Completion Date"],
+        "Indictment|Yes|Unknown|No":["Sentence Completion Date"],
+        "Indictment|Yes|Unknown|Unknown":["Sentence Completion Date"],
+        "Indictment|No|Yes|Yes":["Sentence Completion Date"],
+        "Indictment|No|Yes|No":["Sentence Completion Date"],
+        "Indictment|No|Yes|Unknown":["Sentence Completion Date"],
+        "Indictment|No|No|Yes":["Sentence Completion Date"],
+        "Indictment|No|No|No":["Sentence Completion Date"],
+        "Indictment|No|No|Unknown":["Sentence Completion date","Were you sentenced to a prison term of 2 years or more?"],
+        "Indictment|No|Unknown|Yes":["Sentence Completion Date"],
+        "Indictment|No|Unknown|No":["Sentence Completion date","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Indictment|No|Unknown|Unknown":["Sentence Completion date","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Indictment|Unknown|Yes|Yes":["Sentence Completion Date"],
+        "Indictment|Unknown|Yes|No":["Sentence Completion Date"],
+        "Indictment|Unknown|Yes|Unknown":["Sentence Completion Date"],
+        "Indictment|Unknown|No|Yes":["Sentence Completion Date"],
+        "Indictment|Unknown|No|No":["Sentence Completion date","Is it a Schedule 1 offence?"],
+        "Indictment|Unknown|No|Unknown":["Sentence Completion date","Is it a Schedule 1 offence?","Were you sentenced to a prison term of 2 years or more?"],
+        "Indictment|Unknown|Unknown|Yes":["Sentence Completion Date"],
+        "Indictment|Unknown|Unknown|No":["Sentence Completion date","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Indictment|Unknown|Unknown|Unknown":["Sentence Completion date","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
 
-  let eligibleDate = null;
-  if (!isCompletionDateUnknown) {
-    if (timelineRange === "3 Years") eligibleDate = addYears(sentenceCompletionDate, 3);
-    else if (timelineRange === "5 Years") eligibleDate = addYears(sentenceCompletionDate, 5);
-    else if (timelineRange === "10 Years") eligibleDate = addYears(sentenceCompletionDate, 10);
+        "Unknown|Yes|Yes|Yes":["Sentence Completion Date"],
+        "Unknown|Yes|Yes|No":["Sentence Completion Date"],
+        "Unknown|Yes|Yes|Unknown":["Sentence Completion Date"],
+        "Unknown|Yes|No|Yes":["Sentence Completion Date"],
+        "Unknown|Yes|No|No":["Sentence Completion Date, Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Unknown|Yes|No|Unknown":["Sentence Completion Date, Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Unknown|Yes|Unknown|Yes":["Sentence Completion Date"],
+        "Unknown|Yes|Unknown|No":["Sentence Completion Date, Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+        "Unknown|Yes|Unknown|Unknown":["Sentence Completion Date, Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+
+        "Unknown|No|Yes|Yes":["Sentence Completion Date"],
+        "Unknown|No|Yes|No":["Sentence Completion Date"],
+        "Unknown|No|Yes|Unknown":["Sentence Completion Date"],
+        "Unknown|No|No|Yes":["Sentence Completion Date"],
+        "Unknown|No|No|No":["Sentence Completion Date","Prosecution Type"],
+        "Unknown|No|No|Unknown":["Sentence Completion Date","Prosecution Type","Were you sentenced to a prison term of 2 years or more?"],
+        "Unknown|No|Unknown|Yes":["Sentence Completion Date"],
+        "Unknown|No|Unknown|No":["Sentence Completion Date","Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Unknown|No|Unknown|Unknown":["Sentence Completion Date","Prosecution Type","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"],
+
+        "Unknown|Unknown|Yes|Yes":["Sentence Completion Date"],
+        "Unknown|Unknown|Yes|No":["Sentence Completion Date"],
+        "Unknown|Unknown|Yes|Unknown":["Sentence Completion Date"],
+        "Unknown|Unknown|No|Yes":["Sentence Completion Date"],
+        "Unknown|Unknown|No|No":["Sentence Completion Date","Prosecution Type","Is it a Schedule 1 offence?"],
+        "Unknown|Unknown|No|Unknown":["Sentence Completion Date","Prosecution Type","Is it a Schedule 1 offence?","Were you sentenced to a prison term of 2 years or more?"],
+        "Unknown|Unknown|Unknown|Yes":["Sentence Completion Date"],
+        "Unknown|Unknown|Unknown|No":["Sentence Completion Date","Prosecution Type","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?"],
+        "Unknown|Unknown|Unknown|Unknown":["Sentence Completion Date","Prosecution Type","Is it a Schedule 1 offence?","Is it a Serious Personal Injury Offence (SPIO)?","Were you sentenced to a prison term of 2 years or more?"]
+      };
+
+      const wait = (RULES_D2[key] || "3-10 Years").replace(/\s+/g, " ").trim();
+      const essentialsList = ESSENTIALS_D2[key] || ["Sentence Completion Date"];
+
+      if (!completionKnown) {
+        const _ref = generateReferenceId();
+        throw {
+          __d2return: {
+            status: "likely_eligible",
+            message: UNCLARITY_MESSAGE,
+            eligibleDate: null,
+            missingAnswers: essentialsList,
+            essentials: "<ul>" + essentialsList.map(e => `<li>${e}</li>`).join("") + "</ul>",
+            timelineRange: wait,
+            referenceId: _ref
+          }
+        };
+      }
+
+      const fixed = wait.match(/^(\d+)\s*Years$/i);
+      if (fixed) {
+        const years = parseInt(fixed[1], 10);
+        const finalEligibleDate = addYears(sentenceCompletionDate, years);
+        const _ref = generateReferenceId();
+        if (finalEligibleDate <= TODAY) {
+          throw {
+            __d2return: {
+              status: "eligible_now",
+              message: `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${years} years</b>.`,
+              eligibleDate: finalEligibleDate,
+              missingAnswers: [],
+              referenceId: _ref
+            }
+          };
+        } else {
+          const dateString = formatEligibleDate(finalEligibleDate);
+          throw {
+            __d2return: {
+              status: "eligible_future",
+              message: `You will be eligible on ${dateString}. The required waiting period is <b>${years} years</b> from your sentence completion date.`,
+              eligibleDate: finalEligibleDate,
+              missingAnswers: [],
+              referenceId: _ref
+            }
+          };
+        }
+      }
+
+      // Range + completion known -> ask only for still-unknown non-date essentials
+      const isUnknown = (val) => !val || val === "Unknown" || val === "I'm not sure";
+      const unknowns = {
+        "prosecution type": isUnknown(prosecutionType),
+        "is it a schedule 1 offence?": isUnknown(schedule1Offence),
+        "is it a serious personal injury offence (spio)?": isUnknown(spioOffence),
+        "were you sentenced to a prison term of 2 years or more?": isUnknown(imprisonmentTwoYearsOrMore),
+      };
+      const filteredEssentials = essentialsList.filter((label) => {
+        const L = (label || "").toLowerCase();
+        if (L.includes("sentence completion")) return false;
+        for (const k in unknowns) {
+          if (L.includes(k) && unknowns[k]) return true;
+        }
+        return false;
+      });
+
+      const _ref = generateReferenceId();
+      throw {
+        __d2return: {
+          status: "likely_eligible",
+          message: UNCLARITY_MESSAGE + AMBIGUITY_POSTSCRIPT,
+          eligibleDate: null,
+          missingAnswers: filteredEssentials,
+          essentials: "<ul>" + filteredEssentials.map(e => `<li>${e}</li>`).join("") + "</ul>",
+          timelineRange: wait,
+          referenceId: _ref
+        }
+      };
+    })();
+  } catch (e) {
+    if (e && e.__d2return) return e.__d2return;
+    else throw e;
   }
-
-  // Build HTML list for display
-  const essentialsFormatted = "<ul>" + essentialsList.map(e => "<li>" + e + "</li>").join("") + "</ul>";
-
-  return {
-    essentialsRaw: essentialsList,
-    essentials: essentialsFormatted,
-    timelineRange,
-    status: "likely_eligible",
-    message: UNCLARITY_MESSAGE,
-    eligibleDate,
-    missingAnswers: essentialsList,
-    referenceId: generateReferenceId()
-  };
 }
-// --- END: Transitional Rules — Spreadsheet-Driven ---
+// --- END: Transitional Rules — D2 OVERRIDE (full mapping) ---
+
+
+
+
+
+
 
         // --- END PERMANENT OVERRIDE ---
         // --- FIX: Ensure "10 Years" mapping for Summary + SPIO = Yes (June 29 2010 – March 12 2012) ---
@@ -826,7 +634,7 @@ if (convictionDate && convictionDate >= D1 && convictionDate <= D2) {
           const essentials = [
             "Sentence Completion Date",
             "Prosecution Type",
-            "Was it a Schedule 1 offence?",
+            "Is it a Schedule 1 offence?",
             "Is it a Serious Personal Injury Offence (SPIO)?",
             "Were you sentenced to a prison term of 2 years or more?"
           ];
@@ -889,7 +697,7 @@ return {
 
                     const RULES_D3 = {
   "Indictment|No|No": "10 Years",
-  "Prosecution Type|Was it a Schedule 1 offence?|Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?": "timelineRange",
+  "Prosecution Type|Is it a Schedule 1 offence?|Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?": "timelineRange",
   "Summary|No|No": "5 Years",
   "Unknown|No|No": "5-10 Years"
 };
@@ -918,10 +726,7 @@ return {
                     if (!sentenceCompletionDate || !sentenceCompletionDateStr || sentenceCompletionDateStr === "" || sentenceCompletionDateStr === "I'm not sure") {
                         // Multi-range: 5-10 Years -> unclear + essentials
                         if (/^5\s*-\s*10\s*Years$/i.test(wait)) {
-                            const essentialsList = ["Sentence Completion Date"]; 
-                                if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                    essentialsList.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                                }
+                            const essentialsList = ["Sentence Completion Date", "Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?"];
                             const _ref = generateReferenceId();
                             throw { __d3return: {
                                 status: "likely_eligible",
@@ -935,10 +740,7 @@ return {
                         }
                         // Fixed waiting period (5 or 10) but completion date unknown
                         if (/^5\s*Years$/i.test(wait) || /^10\s*Years$/i.test(wait)) {
-                            const essentialsList = ["Sentence Completion Date"]; 
-                                if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                    essentialsList.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                                }
+                            const essentialsList = ["Sentence Completion Date", "Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?"];
                             const _ref = generateReferenceId();
                             throw { __d3return: {
                                 status: "likely_eligible",
@@ -1022,12 +824,19 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 label variants
         if (/schedule.?1/i.test(e)) {
-            return "Was it a Schedule 1 offence?";
+            return "Is it a Schedule 1 offence?";
         }
         return e.trim();
     });
     // remove duplicates after normalization
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END PATCH ---
 
@@ -1043,7 +852,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1061,6 +870,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 
@@ -1075,7 +891,7 @@ if (convictionDate >= D1 && convictionDate <= D2 &&
     essentialUnknowns = [
         "Sentence Completion Date",
         "Prosecution Type",
-        "Was it a Schedule 1 offence?",
+        "Is it a Schedule 1 offence?",
         "Is it a Serious Personal Injury Offence (SPIO)?",
         "Were you sentenced to a prison term of 2 years or more?"
     ];
@@ -1104,7 +920,7 @@ if (
   const essentials = [
     "Sentence Completion Date",
     "Prosecution Type",
-    "Was it a Schedule 1 offence?",
+    "Is it a Schedule 1 offence?",
     "Is it a Serious Personal Injury Offence (SPIO)?",
     "Were you sentenced to a prison term of 2 years or more?"
   ];
@@ -1145,7 +961,7 @@ if (
         essentialUnknowns = [
             "Sentence Completion Date",
             "Prosecution Type",
-            "Was it a Schedule 1 offence?",
+            "Is it a Schedule 1 offence?",
             "Is it a Serious Personal Injury Offence (SPIO)?",
             "Were you sentenced to a prison term of 2 years or more?"
         ];
@@ -1162,7 +978,7 @@ if (
     ) {
         essentialUnknowns = [
             "Sentence Completion Date",
-            "Was it a Schedule 1 offence?",
+            "Is it a Schedule 1 offence?",
             "Is it a Serious Personal Injury Offence (SPIO)?",
             "Were you sentenced to a prison term of 2 years or more?"
         ];
@@ -1191,7 +1007,7 @@ if (
     ) {
         essentialUnknowns = [
             "Sentence Completion Date",
-            "Was it a Schedule 1 offence?",
+            "Is it a Schedule 1 offence?",
             "Is it a Serious Personal Injury Offence (SPIO)?",
             "Were you sentenced to a prison term of 2 years or more?"
         ];
@@ -1222,7 +1038,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1240,6 +1056,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1257,12 +1080,10 @@ return {
                 if (missingIneligibilityFactor) {
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
 
-                    if (isSchedule1Unknown) essentialUnknowns.push("Was it a Schedule 1 offence?");
+                    if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                     if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
@@ -1279,7 +1100,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1297,6 +1118,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return { 
@@ -1314,9 +1142,7 @@ missingAnswers: essentialUnknowns,
                 if (isConvictionDateUnknown || isCompletionDateUnknown || isProsecutionTypeUnknown) {
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
 
                     let postD3Range = "5–10 years"; // Default broad range if prosecution type is unknown
@@ -1360,7 +1186,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1378,6 +1204,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1403,7 +1236,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1421,6 +1254,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1455,9 +1295,7 @@ missingAnswers: essentialUnknowns,
         // Essential check: We need the sentence completion date to calculate the fixed period.
         if (isCompletionDateUnknown) {
             essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
             
 // --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
@@ -1470,7 +1308,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1488,6 +1326,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1524,7 +1369,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1542,6 +1387,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1558,7 +1410,7 @@ return {
 
 
                     // NOTE: If Sch 1 is unknown, we need SPIO status, and now 2yr imprisonment status to determine the 5-10 year split.
-                    let missingInfo = ["Was it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
+                    let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
                     ambiguityMessageSuffix = ''; 
                     
                     if (isCompletionDateUnknown) {
@@ -1625,7 +1477,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1643,6 +1495,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1728,7 +1587,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1746,6 +1605,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -1767,9 +1633,7 @@ return {
                 if (convictionDate < D1) {
                     
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
 
                     if (isProsecutionTypeUnknown) {
                          essentialUnknowns.push("Prosecution type");
@@ -1791,9 +1655,7 @@ return {
                 // Automatically include Sentence Completion Date if unknown
                 if (isCompletionDateUnknown) {
                     essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                 }
 
                 // Mapping based on spreadsheet (rows 1–12)
@@ -1801,12 +1663,12 @@ return {
                 if (prosecutionType === "Summary") {
                     if (isSchedule1Unknown && isSPIOUnknown && isImprisonmentTwoYearsUnknown) {
                         essentialUnknowns.push(
-                            "Was it a Schedule 1 offence?",
+                            "Is it a Schedule 1 offence?",
                             "Is it a Serious Personal Injury Offence (SPIO)?",
                             "Were you sentenced to a prison term of 2 years or more?"
                         );
                     } else if (isSchedule1Unknown && !isSPIOUnknown && !isImprisonmentTwoYearsUnknown) {
-                        essentialUnknowns.push("Was it a Schedule 1 offence?");
+                        essentialUnknowns.push("Is it a Schedule 1 offence?");
                     } else if (schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
                         essentialUnknowns.push(
                             "Is it a Serious Personal Injury Offence (SPIO)?",
@@ -1829,7 +1691,7 @@ return {
                 } else if (prosecutionType === "Indictment" || isProsecutionTypeUnknown) {
                     if (isSchedule1Unknown && isSPIOUnknown && isImprisonmentTwoYearsUnknown) {
                         essentialUnknowns.push(
-                            "Was it a Schedule 1 offence?",
+                            "Is it a Schedule 1 offence?",
                             "Is it a Serious Personal Injury Offence (SPIO)?",
                             "Were you sentenced to a prison term of 2 years or more?"
                         );
@@ -1839,7 +1701,7 @@ return {
                             "Sentence Completion date"
                         );
                     } else if (isSchedule1Unknown && !isSPIOUnknown && !isImprisonmentTwoYearsUnknown) {
-                        essentialUnknowns.push("Was it a Schedule 1 offence?");
+                        essentialUnknowns.push("Is it a Schedule 1 offence?");
                         
                     } else if (schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
                         essentialUnknowns.push(
@@ -1856,14 +1718,12 @@ return {
 
                     
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     
                     // Schedule 1 is now flagged as essential for D1-D3 if unknown
-                    if (isSchedule1Unknown) essentialUnknowns.push("Was it a Schedule 1 offence?");
+                    if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
 
                     // --- SPIO/2YR Imprisonment REQUIREMENT CHECK FOR TRANSITIONAL PERIOD (D1-D2) ---
                     // Rule: Transitional (D1-D2) AND Prosecution Type is NOT Summary (i.e., Indictment OR Unknown Type)
@@ -1927,7 +1787,7 @@ return {
                         // 🟢 Updated ambiguity logic: remove redundant questions when SPIO or 2-year term = Yes
 if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
     essentialUnknowns = essentialUnknowns.filter(q =>
-        q !== "Was it a Schedule 1 offence?" &&
+        q !== "Is it a Schedule 1 offence?" &&
         q !== "Offence status (Serious Personal Injury Offence (SPIO))" &&
         q !== "Were you sentenced to a prison term of 2 years or more?"
     );
@@ -1979,7 +1839,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -1997,6 +1857,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2022,7 +1889,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2040,6 +1907,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return { 
@@ -2064,9 +1938,7 @@ return {
                     essentialUnknowns = [];
                     essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     // Only add the 3+ convictions question as an unknown if the user saw it (i.e., if Conviction Date was NOT 'I'm not sure' before)
                     if (threePlusTwoYearImprisonment === "I'm not sure") essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
@@ -2083,7 +1955,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2101,6 +1973,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2120,9 +1999,7 @@ return {
                     essentialUnknowns = [];
                     essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     
                     
@@ -2137,7 +2014,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2155,6 +2032,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2175,9 +2059,7 @@ return {
                     
                     // Collect remaining unknowns
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     // Conviction Date is the main reason we are here, so add it
                     essentialUnknowns.push("Conviction Date");
@@ -2222,7 +2104,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2240,6 +2122,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2266,7 +2155,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2284,6 +2173,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2301,11 +2197,9 @@ return {
                 essentialUnknowns = [];
                 if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
                 if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
-                            if (threePlusTwoYearImprisonment === "I'm not sure" || isTwoYearImprisonmentUnknown) {
-                                essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                            };
+                            essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                 if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                if (isSchedule1Unknown) essentialUnknowns.push("Was it a Schedule 1 offence?");
+                if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                 if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
 
 
@@ -2321,7 +2215,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2339,6 +2233,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return { 
@@ -2401,7 +2302,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2419,6 +2320,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -2442,7 +2350,7 @@ if (Array.isArray(essentialUnknowns)) {
         }
         // unify all Schedule 1 variants
         else if (/schedule.?1/i.test(label)) {
-            label = "Was it a Schedule 1 offence?";
+            label = "Is it a Schedule 1 offence?";
         }
         // ✅ D3: unify all 3+ conviction variants (must come before 2-year rule)
         else if (/3\s*\+?.*conviction.*2.?year/i.test(label) || /three.*conviction/i.test(label)) {
@@ -2460,6 +2368,13 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
+// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+if (threePlusTwoYearImprisonment === "No") {
+  essentialUnknowns = essentialUnknowns.filter(
+    e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
+  );
+}
+
 }
 // --- END FINAL PATCH ---
 return {
@@ -3020,5 +2935,21 @@ Disclaimer: This tool does not constitute legal advice and is provided for infor
         // Add event listener for the new button
         elements.emailResultBtn.addEventListener('click', emailResults);
 
-    </script>
+    
+// ✅ Ensure default selection for D3 conviction dropdown on load
+document.addEventListener("DOMContentLoaded", () => {
+  const imprisonConvictionsSelect = document.getElementById("imprisonment-convictions");
+  if (imprisonConvictionsSelect) imprisonConvictionsSelect.value = "";
+});
+
+
+// ✅ Force default selection for D3 conviction dropdown, overriding other scripts
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    const imprisonConvictionsSelect = document.getElementById("imprisonment-convictions");
+    if (imprisonConvictionsSelect) imprisonConvictionsSelect.value = "";
+  }, 200); // delay ensures we override any other initialization
+});
+
+</script>
 </body>
