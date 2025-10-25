@@ -8,24 +8,24 @@
         body {
             font-family: 'Inter', sans-serif;
             background: #ffffff; /* Light gray/blue background */
-            margin: 0; 
-            padding: 0; 
-            min-height: 100vh; 
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
         .container-card {
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-width: 90%;
-            margin: 2rem auto; 
+            margin: 2rem auto;
             background-color: #ffffff;
-            border-radius: 0.75rem; 
+            border-radius: 0.75rem;
         }
         /* Mobile adjustment: Remove margin and make card full width on small screens */
         @media (max-width: 640px) {
             .container-card {
                 max-width: 100%;
-                margin: 0; 
-                border-radius: 0; 
-                box-shadow: none; 
+                margin: 0;
+                border-radius: 0;
+                box-shadow: none;
             }
         }
         .section-header {
@@ -35,32 +35,32 @@
             margin-bottom: 1.5rem;
             font-weight: 600;
         }
-        
+
         /* ---------------------------------------------------------------------- */
         /* INPUT STYLING (Applies to date and select/dropdowns) */
         /* ---------------------------------------------------------------------- */
-        
+
         input[type="date"], select {
             border: 1px solid #d1d5db;
-            padding: 0.6rem 1rem; 
+            padding: 0.6rem 1rem;
             border-radius: 0.5rem;
-            width: 100%; 
+            width: 100%;
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
             background-color: #f9fafb;
-            cursor: pointer; 
+            cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
         }
-        
+
         input[type="date"]:focus, select:focus {
-            border-color: #4f46e5; 
+            border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
             outline: none;
         }
-        
+
         /* Style for disabled inputs */
         input:disabled, select:disabled {
-            background-color: #e5e7eb; 
+            background-color: #e5e7eb;
             color: #9ca3af;
             cursor: not-allowed;
             opacity: 0.7;
@@ -68,14 +68,14 @@
 
         /* Custom brown color for the Schedule 1 exception text */
         .color-brown {
-            color: #6D4C41; 
+            color: #6D4C41;
         }
     </style>
 </head>
 <body>
 
     <div id="app" class="container-card p-6 md:p-10">
-        
+
         <!-- Header: Mobile Optimized Layout -->
         <div class="flex flex-col sm:flex-row items-center sm:justify-between pb-4 mb-6 text-center sm:text-left">
             <!-- Title (Larger on mobile and takes up the top space) -->
@@ -83,15 +83,15 @@
                 Pardon Eligibility Checker
             </h1>
             <!-- Logo (Smaller on mobile, centered below title) -->
-            <img 
-                src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg" 
-                alt="Toronto Metropolitan University Law Logo" 
+            <img
+                src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg"
+                alt="Toronto Metropolitan University Law Logo"
                 class="h-10 sm:h-14 md:h-16 sm:ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
             >
         </div>
 
-        
+
         <!-- Disclaimer -->
         <section class="mb-8 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
             <h2 class="text-xl section-header text-blue-700">Disclaimer</h2>
@@ -102,18 +102,18 @@
             </label>
         </section>
 
-        
+
         <!-- Input Form -->
         <section id="input-form" class="space-y-6" style="display: none;">
             <h2 class="text-xl section-header">Conviction Details</h2>
 
-            
+
             <!-- Conviction Date (Date Input + Checkbox) -->
             <div class="space-y-2">
                 <label for="conviction-date" class="block text-sm font-medium text-gray-700 clickable-label">Conviction Date</label>
                 <div class="date-input-group space-x-4 flex items-center">
                     <!-- Standard width for dates and selects/dropdowns for alignment -->
-                    <div class="w-40 md:w-52 flex-shrink-0"> 
+                    <div class="w-40 md:w-52 flex-shrink-0">
                         <input type="date" id="conviction-date" class="w-full">
                     </div>
                     <label class="flex items-center space-x-2 text-sm flex-shrink-0">
@@ -123,7 +123,7 @@
                 </div>
             </div>
 
-            
+
             <!-- Sentence Completion Date (Date Input + Checkbox) -->
             <div class="space-y-2">
                 <label for="sentence-completion-date" class="block text-sm font-medium text-gray-700 clickable-label">Sentence Completion Date</label>
@@ -140,7 +140,6 @@
             </div>
 
 
-            
             <!-- Prosecution Type (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-700">Prosecution type</label>
@@ -159,7 +158,7 @@
                 </div>
             </div>
 
-            
+
             <div id="schedule1-input-group" class="space-y-2">
 <!-- Schedule 1 Offence (Select/Dropdown + Checkbox) -->
             <div class="space-y-2">
@@ -180,10 +179,10 @@
                         <span class="font-medium">I'm not sure</span>
                     </label>
                 </div>
-                
+
                 <div id="schedule1-info" class="hidden mt-2 p-3 text-xs bg-blue-50 border-l-4 border-blue-500 text-blue-800 rounded">
                     <p class="mb-1">Schedule 1 generally refers to sexual offences involving children.</p>
-                    
+
                     <p class="pt-3 mb-1 font-bold">Common Schedule 1 Offences</p>
                     <ul class="list-disc list-inside space-y-0.5 ml-4">
                         <li>Sexual interference (s. 151)</li>
@@ -251,7 +250,7 @@
                     </label>
                 </div>
             </div>
-            
+
             <!-- 3+ Convictions of 2+ Years Imprisonment (Select/Dropdown + Checkbox) -->
             <!-- This group is now conditionally displayed based on conviction date >= D3 -->
             <div id="imprisonment-convictions-group" class="space-y-2 hidden">
@@ -277,13 +276,13 @@
             </button>
         </section>
 
-        
+
         <!-- Result Section -->
         <section id="result-section" class="mt-8">
             <h2 class="text-xl section-header hidden" id="result-header">Your Eligibility Status</h2>
             <div id="result-message" class="rounded-xl p-5 text-lg font-semibold">
             </div>
-            
+
             <!-- Missing Info Details (Now placed before the email button) -->
             <div id="missing-info-details" class="mt-4 hidden p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded text-sm text-yellow-800">
             </div>
@@ -307,7 +306,7 @@
         TODAY.setHours(0, 0, 0, 0); // Normalize today to start of the local day
 
         // ** Store the last calculated result for emailing **
-        let latestResult = null; 
+        let latestResult = null;
 
         /**
          * Generates a short, random alphanumeric reference ID.
@@ -328,7 +327,7 @@
             if (!dateStr) return null;
             const parts = dateStr.split('-');
             if (parts.length !== 3) return null;
-            
+
             const year = parseInt(parts[0], 10);
             const month = parseInt(parts[1], 10) - 1; // 0-indexed month
             const day = parseInt(parts[2], 10);
@@ -359,43 +358,36 @@
         function formatEligibleDate(date) {
             return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
         }
-        
-        const UNKNOWN_SENTINELS = ["I'm not sure", ""]; 
+
+        const UNKNOWN_SENTINELS = ["I'm not sure", ""];
         const UNCLARITY_MESSAGE = "The required information to determine your eligibility date is missing. Please review the missing details below.";
         const AMBIGUITY_POSTSCRIPT = " (Your estimated timeline is provided below.)";
-
 
         /**
          * Calculates eligibility based on conviction details following the Criminal Records Act (Canada) rules.
          */
-        
 
 
 function calculateEligibility(
             convictionDateStr, prosecutionType, schedule1Offence,
-            sentenceCompletionDateStr, 
-            threePlusTwoYearImprisonment, 
+            sentenceCompletionDateStr,
+            threePlusTwoYearImprisonment,
             spioOffence,
             imprisonmentTwoYearsOrMore // NEW ARGUMENT
         ) {
 
-        
+
 
             let essentialUnknowns = [];
             let eligibleDate = null;
             let convictionDate = parseDate(convictionDateStr);
-        
 
-        
+
+
             let sentenceCompletionDate = parseDate(sentenceCompletionDateStr);
 // --- UPDATED LOGIC: June 29, 2010 – March 12, 2012 (Spreadsheet Rules) ---
         // Each condition below matches a spreadsheet row exactly.
         // If Sentence Completion Date is known, eligibleDate = finalEligibleDate.
-
-        
-
-
-
 
 
 
@@ -618,14 +610,8 @@ if (convictionDate && convictionDate >= D1 && convictionDate <= D2) {
 }
 // --- END: Transitional Rules — D2 OVERRIDE (full mapping) ---
 
-
-
-
-
-
-
         // --- END PERMANENT OVERRIDE ---
-        // --- FIX: Ensure "10 Years" mapping for Summary + SPIO = Yes (June 29 2010 – March 12 2012) ---
+
         if (
           convictionDate >= D1 && convictionDate <= D2 &&
           prosecutionType.match(/^Summary$/i) &&
@@ -639,7 +625,7 @@ if (convictionDate && convictionDate >= D1 && convictionDate <= D2) {
             "Were you sentenced to a prison term of 2 years or more?"
           ];
 
-          
+
 const essentialsFormatted = "<ul>" + essentials.map(e => "<li>" + e + "</li>").join("") + "</ul>";
 
 return {
@@ -654,10 +640,8 @@ return {
           };
 
         }
-        // --- END FIX ---
 
 
-            
             let ambiguityMessageSuffix = ''; // Initialized here for function scope
 
             // ** NEW: Generate Reference ID **
@@ -677,14 +661,14 @@ return {
             const isCompletionDateUnknown = isUnknown(sentenceCompletionDateStr) || !sentenceCompletionDate;
             const isProsecutionTypeUnknown = isUnknown(prosecutionType);
             const isSchedule1Unknown = isUnknown(schedule1Offence);
-            const isSPIOUnknown = isUnknown(spioOffence); 
+            const isSPIOUnknown = isUnknown(spioOffence);
             // NEW: Imprisonment 2 years unknown flag
             const isImprisonmentTwoYearsUnknown = isUnknown(imprisonmentTwoYearsOrMore);
-            
+
             // Note: If the 3+ convictions input is hidden, the value is forced to 'No' and is NOT considered 'Unknown' here.
             const isTwoYearImprisonmentUnknown = isUnknown(threePlusTwoYearImprisonment);
 
-            
+
             // 1. Prioritized Check for Convictions on or after March 13, 2012 (D3)
             if (convictionDate && convictionDate >= D3) {
                 // === D3 OVERRIDE (Spreadsheet-driven; variables: Prosecution Type, Schedule 1 Offence, 3+ Convictions 2+ Years) ===
@@ -804,14 +788,13 @@ return {
                         </p>
                         <p class="font-semibold mt-3 mb-2 text-sm">However, exceptions under Section 4(3) of the <i>Criminal Records Act</i> may apply if the convicted person:</p>
                         <ul class="list-disc list-inside space-y-2 ml-4 text-sm">
-                            <li>was **not in a position of trust** or authority toward the victim;</li>
-                            <li>did **not use, threaten to use or attempt to use violence, intimidation or coercion** in relation to the victim; and</li>
-                            <li>was less than five years older than the victim.</li>
+                            <li>was <b>not in a position of trust</b> or authority toward the victim;</li>
+                            <li>did <b>not use, threaten to use or attempt to use violence, intimidation or coerciont</b> in relation to the victim; and</li>
+                            <li>was <b>less than five years older</b> than the victim.</li>
                         </ul>
                         <p class="mt-4 text-sm">For more information, consult the ${pbcWebsiteLink}.</p>
                     `;
-                    
-// --- PATCH: Normalize duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         // unify all SPIO label variants
@@ -830,7 +813,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove duplicates after normalization
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -838,10 +821,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END PATCH ---
 
-
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -870,7 +850,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -878,10 +858,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
 
-
-// --- HOTFIX: Force exact 5 Years mapping for Indictment + No/No/No in D1-D2 ---
 if (convictionDate >= D1 && convictionDate <= D2 &&
     prosecutionType === "Indictment" &&
     schedule1Offence === "No" &&
@@ -906,10 +883,7 @@ if (convictionDate >= D1 && convictionDate <= D2 &&
         referenceId: newReferenceId
     };
 }
-// --- END HOTFIX ---
 
-
-// --- FIX: Ensure "5 Years" mapping for Indictment + No + No + No (D1–D2) ---
 if (
   convictionDate >= D1 && convictionDate <= D2 &&
   prosecutionType === "Indictment" &&
@@ -925,7 +899,7 @@ if (
     "Were you sentenced to a prison term of 2 years or more?"
   ];
 
-  
+
 const essentialsFormatted = "<ul>" + essentials.map(e => "<li>" + e + "</li>").join("") + "</ul>";
 
 return {
@@ -940,8 +914,6 @@ return {
   };
 
 }
-// --- END FIX ---
-
 
 // --- BEGIN: Spreadsheet-Based Essentials Mapping (Updated from Untitled spreadsheet (1).xlsx) ---
 if (
@@ -1020,14 +992,12 @@ if (
 }
 // --- END: Spreadsheet-Based Essentials Mapping ---
 
-
 return { status: "schedule1_exception", message: schedule1Message, eligibleDate: null, missingAnswers: [], referenceId: newReferenceId };
                 }
 
-                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE 
+                // B. Multiple Serious Conviction Check (Known 'Yes') -> INELIGIBLE
                 if (threePlusTwoYearImprisonment === "Yes") {
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1056,7 +1026,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1064,16 +1034,16 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                         status: "ineligible",
                         message: "You are not eligible for a record suspension. This is because you have three or more convictions that resulted in a sentence of imprisonment of two years or more each, and your conviction occurred on or after March 13, 2012.",
                         eligibleDate: null,
                         missingAnswers: [],
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // C. AMBIGUITY CHECK (Post-D3): If any INELIGIBILITY-RELATED factor is UNKNOWN.
                 const missingIneligibilityFactor = isSchedule1Unknown || isTwoYearImprisonmentUnknown;
 
@@ -1085,11 +1055,9 @@ return {
 
                     if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                     if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                    
+
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
 
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1118,7 +1086,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1126,18 +1094,18 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
-return { 
+
+return {
                         status: "unclear",
                         // Standardized message applied
-                        message: UNCLARITY_MESSAGE, 
-                        eligibleDate: null, 
+                        message: UNCLARITY_MESSAGE,
+                        eligibleDate: null,
                         essentials: essentialUnknowns,
 missingAnswers: essentialUnknowns,
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // D. Potentially Eligible (Date Unclear) Check (Only date/prosecution type are missing) - TIMELINE RANGE HERE
                 if (isConvictionDateUnknown || isCompletionDateUnknown || isProsecutionTypeUnknown) {
                     if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
@@ -1157,25 +1125,23 @@ missingAnswers: essentialUnknowns,
                     }
 
                     // --- LOGIC: Resolve if fixed single year timeline and completion date is known (POST-D3) ---
-                    const singleYearMatch = postD3Range.match(/^(\d+) years$/); 
+                    const singleYearMatch = postD3Range.match(/^(\d+) years$/);
 
                     if (singleYearMatch && !isCompletionDateUnknown) {
                         const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
-                        
+
                         // Calculate the final date.
                         const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
                         const dateString = formatEligibleDate(finalEligibleDate);
-                        
+
                         // Resolution message:
-                        const resolutionMessage = finalEligibleDate <= TODAY 
+                        const resolutionMessage = finalEligibleDate <= TODAY
                             ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
                             : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
-                        
+
                         // Note is needed if conviction date is still unknown.
                         let note = (isConvictionDateUnknown) ? " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)" : "";
 
-                        
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1204,7 +1170,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1212,20 +1178,19 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                             status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
                             message: resolutionMessage + note,
                             eligibleDate: finalEligibleDate,
                             missingAnswers: [], // Resolved the date calculation
-                            referenceId: newReferenceId 
+                            referenceId: newReferenceId
                         };
                     }
                     // --- END LOGIC ---
-                    
+
                     essentialUnknowns = Array.from(new Set(essentialUnknowns));
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1254,7 +1219,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1262,7 +1227,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                         status: "likely_eligible", // Retained for Post-D3 ambiguity
                         // Standardized message applied + contextual postscript
@@ -1271,16 +1236,16 @@ return {
                         essentials: essentialUnknowns,
 missingAnswers: essentialUnknowns,
                         timelineRange: postD3Range,
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // If we reach here, all info is known, continue to Step 4
-            } 
-            
+            }
+
             // 2. Prioritized Check for Convictions before March 13, 2012 (Pre-D3)
-            else if (convictionDate && convictionDate < D3) { 
-                
+            else if (convictionDate && convictionDate < D3) {
+
                 // --- SPECIAL AMBIGUITY CHECK (2010-2012 Transitional Period for Indictments with UNKNOWN Schedule 1) ---
                 if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && isSchedule1Unknown) {
                     // --- START OF NEW USER RULE: Fixed 10-Year Period (D1-D2, Indictment, Serious Offence) ---
@@ -1296,8 +1261,7 @@ missingAnswers: essentialUnknowns,
         if (isCompletionDateUnknown) {
             essentialUnknowns.push("Sentence Completion Date");
                             essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-            
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1326,7 +1290,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1334,7 +1298,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                 status: "likely_eligible",
                 message: UNCLARITY_MESSAGE,
@@ -1350,15 +1314,13 @@ missingAnswers: essentialUnknowns,
             const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
             const dateString = formatEligibleDate(finalEligibleDate);
             const ruleDescription = [];
-            
-            const resolutionMessage = finalEligibleDate <= TODAY 
+
+            const resolutionMessage = finalEligibleDate <= TODAY
                 ? `You are eligible to apply for a record suspension now.
 The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b> ${ruleDescription}`
                 : `You will be eligible on ${dateString}.
 The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date, ${ruleDescription}`;
 
-            
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1387,7 +1349,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1395,7 +1357,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                 status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
                 message: resolutionMessage,
@@ -1407,15 +1369,13 @@ return {
     }
     // --- END OF NEW USER RULE ---
 
-
-
                     // NOTE: If Sch 1 is unknown, we need SPIO status, and now 2yr imprisonment status to determine the 5-10 year split.
                     let missingInfo = ["Is it a Schedule 1 offence?", "Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
-                    ambiguityMessageSuffix = ''; 
-                    
+                    ambiguityMessageSuffix = '';
+
                     if (isCompletionDateUnknown) {
                          missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
-                         
+
                          // Custom 3-point message for unknown SPIO and unknown Schedule 1
                          ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
@@ -1459,14 +1419,12 @@ return {
                             </div>
                         `;
                     }
-                    
+
                     // Filter out the unknowns that are already answered
                     let missingAnswersFiltered = Array.from(new Set(missingInfo));
                     if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
                     if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were you sentenced to a prison term of 2 years or more?"); }
-                    
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1495,7 +1453,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1503,28 +1461,28 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
-                        status: "likely_eligible", 
-                        message: UNCLARITY_MESSAGE, 
-                        eligibleDate: null, 
+                        status: "likely_eligible",
+                        message: UNCLARITY_MESSAGE,
+                        eligibleDate: null,
                         missingAnswers: missingAnswersFiltered,
-                        timelineRange: "5–10 years", 
-                        referenceId: newReferenceId 
+                        timelineRange: "5–10 years",
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // --- Existing SPIO/2YR Imprisonment ambiguity check (only triggers if schedule1Offence === "No") ---
                 // SPIO ambiguity for transitional period D1-D2, Indictment, Sch 1 = No
                 if (convictionDate >= D1 && convictionDate <= D2 && prosecutionType === "Indictment" && schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
-                    
+
                     let missingInfo = ["Offence status (Serious Personal Injury Offence (SPIO))", "Were you sentenced to a prison term of 2 years or more?"];
-                    ambiguityMessageSuffix = ''; 
-                    
+                    ambiguityMessageSuffix = '';
+
                     if (isCompletionDateUnknown) {
                          // Case 1: Completion Date is UNKNOWN
                          missingInfo.push("Sentence Completion Date (to calculate the start of the waiting period)");
-                         
+
                          // The Indictment/SPIO ambiguity forces the range to 5-10 years
                          ambiguityMessageSuffix = `
                             <p class="mt-2 text-base">
@@ -1569,14 +1527,11 @@ return {
                             </div>
                         `;
                     }
-                    
+
                     let missingAnswersFiltered = Array.from(new Set(missingInfo));
                     if (!isSPIOUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Offence status (Serious Personal Injury Offence (SPIO))"); }
                     if (!isImprisonmentTwoYearsUnknown) { missingAnswersFiltered = missingAnswersFiltered.filter(i => i !== "Were you sentenced to a prison term of 2 years or more?"); }
 
-
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1605,7 +1560,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1613,25 +1568,24 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
-                        status: "likely_eligible", 
-                        message: UNCLARITY_MESSAGE, 
+                        status: "likely_eligible",
+                        message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
                         missingAnswers: missingAnswersFiltered,
-                        timelineRange: "5–10 years", 
-                        referenceId: newReferenceId 
+                        timelineRange: "5–10 years",
+                        referenceId: newReferenceId
                     };
                 }
 
-
-                // Collect other unknowns for Pre-D3 
+                // Collect other unknowns for Pre-D3
                 essentialUnknowns = [];
                 let range = "3–10 years"; // Default to broadest range
 
                 // Case: Conviction Date is before D1 (Pre-June 29, 2010)
                 if (convictionDate < D1) {
-                    
+
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                             essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
 
@@ -1643,8 +1597,8 @@ return {
                     } else if (prosecutionType === "Summary") {
                          range = "3 years";
                     }
-                } 
-                
+                }
+
                 // Case: Conviction Date is between D1 and D3 (June 29, 2010 – March 12, 2012)
                 else if (convictionDate >= D1 && convictionDate < D3) {
 
@@ -1680,13 +1634,13 @@ return {
                             "Sentence Completion date",
                             "Is it a Serious Personal Injury Offence (SPIO)?",
                             "Were you sentenced to a prison term of 2 years or more?");
-                    
+
                     //MY EDIT
                         } else if ((spioOffence === "Yes"|| imprisonmentTwoYears === "Yes") && (isschedule1Offenceunknown || !isschedule1Offenceunknown)) {
                         essentialUnknowns.push(
                             "Sentence Completion date",
                             );
-                    
+
                     }
                 } else if (prosecutionType === "Indictment" || isProsecutionTypeUnknown) {
                     if (isSchedule1Unknown && isSPIOUnknown && isImprisonmentTwoYearsUnknown) {
@@ -1702,7 +1656,7 @@ return {
                         );
                     } else if (isSchedule1Unknown && !isSPIOUnknown && !isImprisonmentTwoYearsUnknown) {
                         essentialUnknowns.push("Is it a Schedule 1 offence?");
-                        
+
                     } else if (schedule1Offence === "No" && (isSPIOUnknown || isImprisonmentTwoYearsUnknown)) {
                         essentialUnknowns.push(
                             "Is it a Serious Personal Injury Offence (SPIO)?",
@@ -1716,12 +1670,12 @@ return {
 
                 // --- END: Visibility Rule for SPIO and 2YR (June 29 2010–March 12 2012) ---
 
-                    
+
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                             essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                    
+
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                    
+
                     // Schedule 1 is now flagged as essential for D1-D3 if unknown
                     if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
 
@@ -1736,13 +1690,13 @@ return {
                         if (isImprisonmentTwoYearsUnknown) essentialUnknowns.push("Were you sentenced to a prison term of 2 years or more?");
                     }
                     // --- END SPIO/2YR CHECK ---
-                    
+
                     // --- APPLY RANGES FOR UNKNOWNS IN D1-D3 PERIOD ---
-                    
+
                     // Rule: Summary + Sch 1 = No (Fixed 3 years) //MY EDIT//
                     if (prosecutionType === "Summary" && schedule1Offence === "No" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "3-10 years";
-                    } 
+                    }
                     // Rule: Summary + Sch 1 = Yes (5-10years)//MY EDIT//
                     else if (prosecutionType === "Summary" && schedule1Offence === "Yes" && !isProsecutionTypeUnknown && !isSchedule1Unknown) {
                         range = "5-10 years";
@@ -1752,7 +1706,7 @@ return {
                         range = "10 years";
                     }
                     // Ambiguous Scenarios (Involving SPIO or unknown Schedule 1 status)
-                    // Rule: Indictment + Sch1 Unknown -> 5-10 years 
+                    // Rule: Indictment + Sch1 Unknown -> 5-10 years
                     else if (prosecutionType === "Indictment" && isSchedule1Unknown && !isProsecutionTypeUnknown) {
                         range = "5–10 years";
                     }
@@ -1767,8 +1721,8 @@ return {
                     } else if (prosecutionType === "Summary" && isSchedule1Unknown && !isProsecutionTypeUnknown) {
                         range = "3–5 years";
                     }
-                    
-                    // Rule: Unknown Prosecution & Schedule 1 = No -> 3-10 years 
+
+                    // Rule: Unknown Prosecution & Schedule 1 = No -> 3-10 years
                     else if (isProsecutionTypeUnknown && (schedule1Offence === "No" || isSchedule1Unknown)) {
                         range = "3–10 years";
                     }
@@ -1782,7 +1736,7 @@ return {
                         // SPIO='Yes' or 2Yr Imprisonment='Yes' forces 10 years, making prosecution type irrelevant for the wait period.
                         // Filter out Prosecution type from unknowns if it was added.
                         essentialUnknowns = essentialUnknowns.filter(item => item !== "Prosecution type");
-                        
+
                         // If only completion date is left as unknown, this is now a fixed 10-year period ambiguity
                         // 🟢 Updated ambiguity logic: remove redundant questions when SPIO or 2-year term = Yes
 if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
@@ -1793,42 +1747,40 @@ if (spioOffence === "Yes" || imprisonmentTwoYearsOrMore === "Yes") {
     );
 }
 
-                        
+
                         if (essentialUnknowns.length > 0) {
                             range = "10 years";
                             ambiguityMessageSuffix = '<p class="mt-2 text-base">Since the conviction is a Serious Personal Injury Offence (SPIO) or resulted in a sentence of 2 years or more, the eligibility waiting period is fixed at <b>10 years</b> from your sentence completion date.</p>';
                         } else {
                             // If completion date is known, and SPIO/2YR is Yes, we can skip to Step 4 with a known 10-year wait.
-                            prosecutionType = "Indictment"; 
-                            schedule1Offence = "No"; 
+                            prosecutionType = "Indictment";
+                            schedule1Offence = "No";
                             // Fall through to Step 4
                         }
                     }
                 }
-                
+
                 // If there are unknowns, return the 'likely_eligible' status with the determined range
                 if (essentialUnknowns.length > 0) {
-                    
+
                     // --- LOGIC: Resolve if fixed single year timeline and completion date is known (PRE-D3) ---
-                    const singleYearMatch = range.match(/^(\d+) years$/); 
+                    const singleYearMatch = range.match(/^(\d+) years$/);
 
                     if (singleYearMatch && !isCompletionDateUnknown) {
                         const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
-                        
+
                         // Calculate the final date.
                         const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
                         const dateString = formatEligibleDate(finalEligibleDate);
-                        
+
                         // Resolution message:
-                        const resolutionMessage = finalEligibleDate <= TODAY 
+                        const resolutionMessage = finalEligibleDate <= TODAY
                             ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
                             : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
-                        
+
                         // Note is needed if conviction date is still unknown.
                         let note = (isConvictionDateUnknown) ? " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)" : "";
 
-                        
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1857,7 +1809,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1865,20 +1817,18 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                             status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
                             message: resolutionMessage + note,
                             eligibleDate: finalEligibleDate,
                             essentials: essentialUnknowns,
 missingAnswers: essentialUnknowns, // Still include the unknowns for transparency
-                            referenceId: newReferenceId 
+                            referenceId: newReferenceId
                         };
                     }
                     // --- END LOGIC ---
 
-                     
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1907,7 +1857,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1915,26 +1865,26 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
-return { 
-                        status: "likely_eligible", 
-                        message: UNCLARITY_MESSAGE, 
-                        eligibleDate: null, 
+
+return {
+                        status: "likely_eligible",
+                        message: UNCLARITY_MESSAGE,
+                        eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
                         timelineRange: range,
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // If we reach here, all info is known and we continue to Step 4
-            } 
-            
+            }
+
             // 3. Fallback if Conviction Date is UNKNOWN (Conviction Date is 'I'm not sure' or empty)
             else if (isConvictionDateUnknown) {
 
-                // A. Check for known ineligibility (Sch 1 is Yes) 
+                // A. Check for known ineligibility (Sch 1 is Yes)
                 if (schedule1Offence === "Yes" && !isSchedule1Unknown) {
-                    
+
                     essentialUnknowns = [];
                     essentialUnknowns.push("Conviction Date");
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
@@ -1942,9 +1892,7 @@ return {
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     // Only add the 3+ convictions question as an unknown if the user saw it (i.e., if Conviction Date was NOT 'I'm not sure' before)
                     if (threePlusTwoYearImprisonment === "I'm not sure") essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
-                    
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -1973,7 +1921,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -1981,16 +1929,16 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                         status: "unclear",
                         // Standardized message applied
                         message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
-                    
+
                 }
 
                 // B. Check for conditional ineligibility (3+ Convictions)
@@ -2001,9 +1949,7 @@ return {
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                             essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
-                    
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2032,7 +1978,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2040,30 +1986,29 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                         status: "unclear",
                         // Standardized message applied
                         message: UNCLARITY_MESSAGE,
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
 
-
                 // C. If we reach here: Conviction Date is Unknown, Sch 1='No', and 3+ Conv='No'. Likely Eligible but Timeline Unknown.
                 if (schedule1Offence === "No" && threePlusTwoYearImprisonment === "No") {
-                    
+
                     let range = "3–10 years"; // Default to broadest range (Conviction Date is unknown, so 3-10 years is possible)
-                    
+
                     // Collect remaining unknowns
                     if (isCompletionDateUnknown) essentialUnknowns.push("Sentence Completion Date");
                             essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
                     if (isProsecutionTypeUnknown) essentialUnknowns.push("Prosecution type");
                     // Conviction Date is the main reason we are here, so add it
                     essentialUnknowns.push("Conviction Date");
-                    
+
                     // Customize range based on known non-date factors:
                     if (prosecutionType === "Indictment" && !isProsecutionTypeUnknown) {
                         // If Indictment is KNOWN, the min wait time is 5, max is 10 (pre-D1 vs post-D3)
@@ -2074,26 +2019,24 @@ return {
                     }
 
                     // --- LOGIC: Resolve if fixed single year timeline and completion date is known (UNKNOWN CONVICTION DATE) ---
-                    const singleYearMatch = range.match(/^(\d+) years$/); 
-                    
+                    const singleYearMatch = range.match(/^(\d+) years$/);
+
                     // Check if: 1. Range is fixed (e.g., '5 years'), 2. Completion Date is known (not unknown)
                     if (singleYearMatch && !isCompletionDateUnknown) {
                         const fixedWaitPeriodYears = parseInt(singleYearMatch[1], 10);
-                        
+
                         // Calculate the final date.
                         const finalEligibleDate = addYears(sentenceCompletionDate, fixedWaitPeriodYears);
                         const dateString = formatEligibleDate(finalEligibleDate);
-                        
+
                         // Resolution message:
-                        const resolutionMessage = finalEligibleDate <= TODAY 
+                        const resolutionMessage = finalEligibleDate <= TODAY
                             ? `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${fixedWaitPeriodYears} years</b>.`
                             : `You will be eligible on ${dateString}. The required waiting period is <b>${fixedWaitPeriodYears} years</b> from your sentence completion date.`;
-                        
+
                         // Note is mandatory here since conviction date is definitely unknown.
                         let note = " (Note: The conviction date remains unknown, but the fixed nature of your timeline allows for date calculation.)";
 
-                        
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2122,7 +2065,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2130,21 +2073,20 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                             status: finalEligibleDate <= TODAY ? "eligible_now" : "eligible_future",
                             message: resolutionMessage + note,
                             eligibleDate: finalEligibleDate,
                             // The only true unknown remaining is Conviction Date, but we don't need it for calculation
-                            missingAnswers: [], 
-                            referenceId: newReferenceId 
+                            missingAnswers: [],
+                            referenceId: newReferenceId
                         };
                     }
                     // --- END LOGIC ---
-                    
+
                     // Uses 'eligible_unclear' here because the Conviction Date is unknown and could be post-D3.
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2173,7 +2115,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2181,7 +2123,7 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                         status: "eligible_unclear",
                         // Standardized message applied + contextual postscript
@@ -2189,10 +2131,10 @@ return {
                         eligibleDate: null,
                         missingAnswers: Array.from(new Set(essentialUnknowns)),
                         timelineRange: range,
-                        referenceId: newReferenceId 
+                        referenceId: newReferenceId
                     };
                 }
-                
+
                 // D. Fallback (If other factors are missing, e.g., Sch1 or 3+ is 'I'm not sure')
                 essentialUnknowns = [];
                 if (isConvictionDateUnknown) essentialUnknowns.push("Conviction Date");
@@ -2202,9 +2144,6 @@ return {
                 if (isSchedule1Unknown) essentialUnknowns.push("Is it a Schedule 1 offence?");
                 if (isTwoYearImprisonmentUnknown) essentialUnknowns.push("Have you had 3 or more convictions resulting in imprisonment of 2 years or more each?");
 
-
-                    
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2233,7 +2172,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2241,17 +2180,16 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
-return { 
-                    status: "unclear", 
+
+return {
+                    status: "unclear",
                     // Standardized message applied
-                    message: UNCLARITY_MESSAGE, 
-                    eligibleDate: null, 
+                    message: UNCLARITY_MESSAGE,
+                    eligibleDate: null,
                     missingAnswers: Array.from(new Set(essentialUnknowns)),
-                    referenceId: newReferenceId 
+                    referenceId: newReferenceId
                 };
             }
-
 
             // 4. Calculate Wait Period (All required info is known and no ambiguity was found)
             let waitPeriodYears = 0;
@@ -2290,8 +2228,7 @@ return {
             eligibleDate = addYears(sentenceCompletionDate, waitPeriodYears);
 
             if (eligibleDate <= TODAY) {
-                
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2320,7 +2257,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2328,18 +2265,17 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                     status: "eligible_now",
                     message: `You are eligible to apply for a record suspension now. The waiting period was determined to be <b>${waitPeriodYears} years</b>.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: [],
-                    referenceId: newReferenceId 
+                    referenceId: newReferenceId
                 };
             } else {
                 const dateString = formatEligibleDate(eligibleDate);
-                
-// --- FINAL PATCH: Strong normalization of duplicate essential field names ---
+
 if (Array.isArray(essentialUnknowns)) {
     essentialUnknowns = essentialUnknowns.map(e => {
         let label = e.trim();
@@ -2368,7 +2304,7 @@ if (Array.isArray(essentialUnknowns)) {
     });
     // remove any duplicates that remain
     essentialUnknowns = [...new Set(essentialUnknowns)];
-// ✅ FIX: Remove "3+ convictions" from missing if value is explicitly "No"
+
 if (threePlusTwoYearImprisonment === "No") {
   essentialUnknowns = essentialUnknowns.filter(
     e => !/3\s*\+?.*conviction.*2.?year/i.test(e) && !/three.*conviction/i.test(e)
@@ -2376,13 +2312,13 @@ if (threePlusTwoYearImprisonment === "No") {
 }
 
 }
-// --- END FINAL PATCH ---
+
 return {
                     status: "eligible_future",
                     message: `You will be eligible on ${dateString}. The required waiting period is <b>${waitPeriodYears} years</b> from your sentence completion date.`,
                     eligibleDate: eligibleDate,
                     missingAnswers: [],
-                    referenceId: newReferenceId 
+                    referenceId: newReferenceId
                 };
             }
         }
@@ -2397,7 +2333,7 @@ return {
             resultHeader: document.getElementById('result-header'),
             resultMessage: document.getElementById('result-message'),
             missingInfoDetails: document.getElementById('missing-info-details'),
-            
+
             // NEW: Email Action Elements
             resultActions: document.getElementById('result-actions'),
             emailResultBtn: document.getElementById('email-result-btn'),
@@ -2407,11 +2343,11 @@ return {
             dontKnowConvDate: document.getElementById('dont-know-conv-date'),
             sentenceCompletionDate: document.getElementById('sentence-completion-date'),
             dontKnowSentCompDate: document.getElementById('dont-know-sent-comp-date'),
-            
+
             // Prosecution Type
             prosecutionType: document.getElementById('prosecution-type'),
             dontKnowProsecution: document.getElementById('dont-know-prosecution'),
-            
+
             // Schedule 1 Offence
             schedule1Offence: document.getElementById('schedule1-offence'),
             dontKnowSchedule1: document.getElementById('dont-know-schedule1'),
@@ -2421,19 +2357,19 @@ return {
             spioInputGroup: document.getElementById('spio-input-group'),
             spioOffence: document.getElementById('spio-offence'),
             dontKnowSPIO: document.getElementById('dont-know-spio'),
-            spioInfoToggle: document.getElementById('spio-info-toggle'), 
-            spioInfo: document.getElementById('spio-info'),           
-            
+            spioInfoToggle: document.getElementById('spio-info-toggle'),
+            spioInfo: document.getElementById('spio-info'),
+
             // NEW: 2-Year Imprisonment Elements
             twoYearImprisonmentGroup: document.getElementById('two-year-imprisonment-group'),
             prisonTerm2yr: document.getElementById('prison-term-2yr'),
             dontKnowPrisonTerm2yr: document.getElementById('dont-know-prison-term-2yr'),
 
             // 3+ Convictions
-            imprisonmentConvictionsGroup: document.getElementById('imprisonment-convictions-group'), 
+            imprisonmentConvictionsGroup: document.getElementById('imprisonment-convictions-group'),
             imprisonmentConvictions: document.getElementById('imprisonment-convictions'),
             dontKnowImprisonment: document.getElementById('dont-know-imprisonment'),
-            
+
             // Info Toggle
             schedule1InfoToggle: document.getElementById('schedule1-info-toggle'),
             schedule1Info: document.getElementById('schedule1-info'),
@@ -2467,7 +2403,6 @@ return {
             return selectElement.value;
         }
 
-
         // Conditional display for "I'm not sure" handling across all inputs
         function updateConditionalInputs() {
             // Conviction Date
@@ -2475,17 +2410,17 @@ return {
 
             // Sentence Completion Date
             handleUnknownSelect(elements.dontKnowSentCompDate, elements.sentenceCompletionDate);
-            
+
             // Prosecution Type
             handleUnknownSelect(elements.dontKnowProsecution, elements.prosecutionType);
-            
+
             // Schedule 1 Offence
             handleUnknownSelect(elements.dontKnowSchedule1, elements.schedule1Offence);
-            
-            
+
+
             // Get current conviction date for conditional checks
             const convDateStr = elements.convictionDate.value;
-            
+
 const convictionDate = parseDate(convDateStr);
 
     // Hide Schedule 1 dropdown for convictions before June 29, 2010
@@ -2505,23 +2440,21 @@ const convictionDate = parseDate(convDateStr);
         elements.schedule1InputGroup.classList.remove('hidden');
     }
 
-
             const prosecutionTypeVal = getSelectCheckboxValue(elements.prosecutionType, elements.dontKnowProsecution);
 
-            
+
             // --- SPIO and 2-Year Imprisonment Conditional Display Logic ---
             // Visible ONLY if conviction date is between June 29, 2010 and March 12, 2012 (inclusive)
             const isConditionalSectionVisible = convictionDate && convictionDate >= D1 && convictionDate <= D2;
 
-
             if (isConditionalSectionVisible) {
                 // SPIO Group
                 elements.spioInputGroup.classList.remove('hidden');
-                handleUnknownSelect(elements.dontKnowSPIO, elements.spioOffence); 
-                
+                handleUnknownSelect(elements.dontKnowSPIO, elements.spioOffence);
+
                 // NEW: 2-Year Imprisonment Group (Same logic as SPIO)
                 elements.twoYearImprisonmentGroup.classList.remove('hidden');
-                handleUnknownSelect(elements.dontKnowPrisonTerm2yr, elements.prisonTerm2yr); 
+                handleUnknownSelect(elements.dontKnowPrisonTerm2yr, elements.prisonTerm2yr);
 
             } else {
                 // SPIO Group
@@ -2529,7 +2462,7 @@ const convictionDate = parseDate(convDateStr);
                 elements.spioOffence.value = '';
                 elements.spioOffence.disabled = false;
                 elements.dontKnowSPIO.checked = false;
-                
+
                 // NEW: 2-Year Imprisonment Group
                 elements.twoYearImprisonmentGroup.classList.add('hidden');
                 elements.prisonTerm2yr.value = '';
@@ -2582,42 +2515,41 @@ if (isPostD3) {
         elements.dontKnowSentCompDate.addEventListener('change', updateConditionalInputs);
         elements.dontKnowProsecution.addEventListener('change', updateConditionalInputs);
         elements.dontKnowSchedule1.addEventListener('change', updateConditionalInputs);
-        
+
         // Listen to the date picker itself for the main conditional logic
-        elements.convictionDate.addEventListener('change', () => { 
-            if (elements.convictionDate.value) elements.dontKnowConvDate.checked = false; 
-            updateConditionalInputs(); 
+        elements.convictionDate.addEventListener('change', () => {
+            if (elements.convictionDate.value) elements.dontKnowConvDate.checked = false;
+            updateConditionalInputs();
         });
 
         // NEW: 2-Year Imprisonment Listeners
         elements.prisonTerm2yr.addEventListener('change', () => { if (elements.prisonTerm2yr.value) elements.dontKnowPrisonTerm2yr.checked = false; updateConditionalInputs(); });
         elements.dontKnowPrisonTerm2yr.addEventListener('change', updateConditionalInputs);
 
-        // 3+ Convictions Listeners 
-        elements.imprisonmentConvictions.addEventListener('change', () => { 
-             if (elements.imprisonmentConvictions.value) elements.dontKnowImprisonment.checked = false; 
-             updateConditionalInputs(); 
+        // 3+ Convictions Listeners
+        elements.imprisonmentConvictions.addEventListener('change', () => {
+             if (elements.imprisonmentConvictions.value) elements.dontKnowImprisonment.checked = false;
+             updateConditionalInputs();
         });
         elements.dontKnowImprisonment.addEventListener('change', updateConditionalInputs);
-
 
         // Other listeners
         elements.dontKnowSPIO.addEventListener('change', updateConditionalInputs);
         elements.spioOffence.addEventListener('change', () => { if (elements.spioOffence.value) elements.dontKnowSPIO.checked = false; updateConditionalInputs(); });
         elements.sentenceCompletionDate.addEventListener('change', () => { if (elements.sentenceCompletionDate.value) elements.dontKnowSentCompDate.checked = false; updateConditionalInputs(); });
-        elements.prosecutionType.addEventListener('change', () => { 
-            if (elements.prosecutionType.value) elements.dontKnowProsecution.checked = false; 
-            updateConditionalInputs(); 
+        elements.prosecutionType.addEventListener('change', () => {
+            if (elements.prosecutionType.value) elements.dontKnowProsecution.checked = false;
+            updateConditionalInputs();
         });
         elements.schedule1Offence.addEventListener('change', () => { if (elements.schedule1Offence.value) elements.dontKnowSchedule1.checked = false; updateConditionalInputs(); });
-        
+
 
         // Toggle Schedule 1 Info
         elements.schedule1InfoToggle.addEventListener('click', () => {
             elements.schedule1Info.classList.toggle('hidden');
             elements.schedule1InfoToggle.innerHTML = elements.schedule1Info.classList.contains('hidden') ? '<u>What are Schedule 1 Offences?</u>' : '[x] Close';
         });
-        
+
         // Toggle SPIO Info
         if (elements.spioInfoToggle) {
              elements.spioInfoToggle.addEventListener('click', () => {
@@ -2625,14 +2557,14 @@ if (isPostD3) {
                 elements.spioInfoToggle.innerHTML = elements.spioInfo.classList.contains('hidden') ? '<u>What is a Serious Personal Injury Offence?</u>' : '[x] Close';
              });
              // Initial setup for the link text
-             elements.spioInfoToggle.innerHTML = '<u>What is a Serious Personal Injury Offence?</u>'; 
+             elements.spioInfoToggle.innerHTML = '<u>What is a Serious Personal Injury Offence?</u>';
         }
 
         window.addEventListener('load', () => {
              updateConditionalInputs();
              // Initial setup for link texts
-             elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>'; 
-        }); 
+             elements.schedule1InfoToggle.innerHTML = '<u>What are Schedule 1 Offences?</u>';
+        });
 
         // Event listener for disclaimer
         elements.disclaimerCheckbox.addEventListener('change', () => {
@@ -2655,7 +2587,7 @@ if (isPostD3) {
             // Get date strings, prioritizing 'I'm not sure' checkbox over the date picker value
             const convictionDateInputStr = getSelectCheckboxValue(elements.convictionDate, elements.dontKnowConvDate);
             const sentenceCompletionDateInputStr = getSelectCheckboxValue(elements.sentenceCompletionDate, elements.dontKnowSentCompDate);
-            
+
             // Get values from the new select/checkbox groups
             const prosecutionTypeVal = getSelectCheckboxValue(elements.prosecutionType, elements.dontKnowProsecution);
             const schedule1OffenceVal = getSelectCheckboxValue(elements.schedule1Offence, elements.dontKnowSchedule1);
@@ -2664,7 +2596,7 @@ if (isPostD3) {
             // NEW: Retrieve 2-Year Imprisonment value
             const imprisonmentTwoYearsOrMoreVal = getSelectCheckboxValue(elements.prisonTerm2yr, elements.dontKnowPrisonTerm2yr);
             const threePlusTwoYearImprisonmentVal = getSelectCheckboxValue(elements.imprisonmentConvictions, elements.dontKnowImprisonment);
-            
+
             // Call calculateEligibility with the updated argument list (7 arguments now)
             const result = calculateEligibility(
                 convictionDateInputStr,
@@ -2690,21 +2622,21 @@ if (isPostD3) {
             elements.resultHeader.classList.remove('hidden');
             elements.missingInfoDetails.classList.add('hidden');
             elements.resultActions.classList.remove('hidden'); // SHOW THE EMAIL BUTTON CONTAINER
-            
+
             // Reset base classes, adding shadow and transition back
             elements.resultMessage.className = 'rounded-xl p-5 text-lg font-semibold mt-4 shadow-lg transition-all duration-300';
             let htmlContent = '';
             let styleClasses = '';
             let missingListHTML = '';
-            
-            // HTML for courthouse contact info 
+
+            // HTML for courthouse contact info
             const courthouseContactHtml = `
                 <p class="mt-4 font-bold">You can obtain this information from the courthouse where you were convicted:</p>
                 <p class="mt-1 text-sm">
                     <a href="https://www.ontario.ca/locations/courts" target="_blank" class="text-blue-600 hover:underline">Ontario Courthouse Contact</a>
                 </p>
             `;
-            
+
             let refIdFooter = ''; // Footer element for the Reference ID
 
             // Determine classes and content based on status
@@ -2737,7 +2669,7 @@ if (isPostD3) {
                     break;
 
                 case 'schedule1_exception':
-                    styleClasses = 'bg-yellow-100 border-l-8 border-amber-600'; 
+                    styleClasses = 'bg-yellow-100 border-l-8 border-amber-600';
                     htmlContent = `
                         <div class="flex items-center space-x-3">
                             <span class="text-3xl text-amber-600">⚠️</span>
@@ -2752,13 +2684,13 @@ if (isPostD3) {
                         ${result.referenceId}
                     </p>`;
                     break;
-                
+
                 case 'likely_eligible':
                     // UPDATED TO GREEN THEME
-                    styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800'; 
+                    styleClasses = 'bg-green-100 border-l-8 border-green-600 text-green-800';
                     // CRITICAL: The result.message will now be UNCLARITY_MESSAGE only.
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-green-600">&#9989;</span><h3 class="font-bold text-xl"><b>Likely Eligible</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
-                    
+
                     if (result.timelineRange) {
                         // Updated bg-color for the timeline box
                         htmlContent += `<p class="mt-3 text-sm font-bold bg-green-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
@@ -2766,9 +2698,9 @@ if (isPostD3) {
 
                     elements.missingInfoDetails.classList.remove('hidden');
                     missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
-                    
+
                     elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
-                    
+
                     // Reference ID color scheme (Updated to green)
                     refIdFooter = `<p class="mt-4 pt-2 border-t border-green-300 text-right text-xs font-mono tracking-widest text-green-600">
                         ${result.referenceId}
@@ -2776,19 +2708,19 @@ if (isPostD3) {
                     break;
 
                 case 'eligible_unclear':
-                    styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800'; 
+                    styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
                     // UPDATED TEXT HERE
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
-                    
+
                     if (result.timelineRange) {
                         htmlContent += `<p class="mt-3 text-sm font-bold bg-blue-200 p-2 rounded-lg inline-block">Potential eligibility timeline: ${result.timelineRange}</p>`;
                     }
 
                     elements.missingInfoDetails.classList.remove('hidden');
                     missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
-                    
+
                     elements.missingInfoDetails.innerHTML = `<p class="font-bold">To determine your exact eligibility date, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">Please try to locate this information before applying, as the date of eligibility depends on it.</p>` + courthouseContactHtml;
-                    
+
                     // Reference ID color scheme
                     refIdFooter = `<p class="mt-4 pt-2 border-t border-blue-300 text-right text-xs font-mono tracking-widest text-blue-600">
                         ${result.referenceId}
@@ -2799,11 +2731,11 @@ if (isPostD3) {
                 default:
                     styleClasses = 'bg-blue-100 border-l-8 border-blue-600 text-blue-800';
                     htmlContent = `<div class="flex items-center space-x-3"><span class="text-3xl text-blue-600">&#63;</span><h3 class="font-bold text-xl"><b>Eligibility Unclear</b></h3></div><p class="mt-2 text-base">${result.message}</p>`;
-                    
+
                     if (result.missingAnswers.length > 0) {
                         elements.missingInfoDetails.classList.remove('hidden');
                         missingListHTML = result.missingAnswers.map(ans => `<li>${ans}</li>`).join('');
-                        
+
                         elements.missingInfoDetails.innerHTML = `<p class="font-bold">To get a clearer assessment, please provide answers for:</p><ul class="list-disc list-inside mt-2 ml-4">${missingListHTML}</ul><p class="mt-2">The timing and definitive status of your eligibility depends on these details.</p>` + courthouseContactHtml;
                     }
 
@@ -2818,7 +2750,6 @@ if (isPostD3) {
             elements.resultMessage.innerHTML = htmlContent + refIdFooter; // ** APPEND Reference ID at the bottom **
         }
 
-
         /**
          * Gathers the eligibility data and triggers a mailto: link to draft an email.
          */
@@ -2827,7 +2758,7 @@ if (isPostD3) {
                 console.error("No results to email. Button should not be visible.");
                 return;
             }
-            
+
             // Determine the status text based on the result status for the subject
             let statusTitle = "Eligibility Check Result";
             let statusDisplay = "";
@@ -2863,12 +2794,12 @@ if (isPostD3) {
                     statusDisplay = "Status: Eligibility Unclear";
                     break;
             }
-            
+
             // Get the final result message text content (stripping HTML)
             const resultMessageDiv = document.getElementById('result-message');
             // Clone and strip HTML for a clean text version
             const rawContent = resultMessageDiv.cloneNode(true);
-            
+
             // Remove the reference ID footer and HTML elements (like links, strong tags) for a clean text body
             const footer = rawContent.querySelector('p:last-child');
             if (footer) footer.remove();
@@ -2880,19 +2811,19 @@ if (isPostD3) {
             // --- START: LOGIC TO INCLUDE MISSING INFORMATION ---
             let missingInfoText = '';
             const missingInfoDiv = document.getElementById('missing-info-details');
-            
+
             // Check if the missing info panel is currently visible
             if (missingInfoDiv && !missingInfoDiv.classList.contains('hidden')) {
-                
+
                 // Extract the list of missing items and format them with bullets
                 const listItems = Array.from(missingInfoDiv.querySelectorAll('li')).map(li => `  - ${li.textContent.trim()}`).join('\n');
-                
+
                 // Include the link/source information if present (to obtain the missing details)
                 let contactInfo = '';
                 if (missingInfoDiv.textContent.includes('courthouse')) {
                      contactInfo = '\n\nSource for missing information: You can obtain this information from the courthouse where you were convicted.';
                 }
-                
+
                 missingInfoText = `
 
 --- Required Information for a Final Assessment ---
@@ -2922,10 +2853,10 @@ ${missingInfoText}
 ---
 Disclaimer: This tool does not constitute legal advice and is provided for informational purposes only.
 `;
-            
+
             const subject = encodeURIComponent(`Pardon Eligibility: ${statusTitle}`);
             const body = encodeURIComponent(finalBody.trim());
-            
+
             // Trigger the mailto link to open the user's email client
             const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
 
@@ -2935,13 +2866,12 @@ Disclaimer: This tool does not constitute legal advice and is provided for infor
         // Add event listener for the new button
         elements.emailResultBtn.addEventListener('click', emailResults);
 
-    
+
 // ✅ Ensure default selection for D3 conviction dropdown on load
 document.addEventListener("DOMContentLoaded", () => {
   const imprisonConvictionsSelect = document.getElementById("imprisonment-convictions");
   if (imprisonConvictionsSelect) imprisonConvictionsSelect.value = "";
 });
-
 
 // ✅ Force default selection for D3 conviction dropdown, overriding other scripts
 document.addEventListener("DOMContentLoaded", () => {
