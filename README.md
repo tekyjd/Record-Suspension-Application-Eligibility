@@ -84,8 +84,8 @@
             </h1>
             <!-- Logo (Smaller on mobile, centered below title) -->
             <img
-                //src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg"
-                alt="Toronto Metropolitan University Law Logo"
+                src=https://images.unsplash.com/photo-1492681290082-e932832941e6?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1171"
+                alt="Pardon App Logo"
                 class="h-10 sm:h-14 md:h-16 sm:ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
             >
