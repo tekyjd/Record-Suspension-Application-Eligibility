@@ -84,7 +84,7 @@
             </h1>
             <!-- Logo (Smaller on mobile, centered below title) -->
             <img
-                src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg"
+                //src="https://www.torontomu.ca/content/dam/law/images/TMU-Law-rgb.svg"
                 alt="Toronto Metropolitan University Law Logo"
                 class="h-10 sm:h-14 md:h-16 sm:ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
