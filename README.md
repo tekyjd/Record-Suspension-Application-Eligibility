@@ -84,7 +84,7 @@
             </h1>
             <!-- Logo (Smaller on mobile, centered below title) -->
             <img
-                src="https://www.clipartmax.com/png/middle/171-1716640_scales-of-justice-logo.png"
+                src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Balanced_scale_of_Justice_%28blue%29.svg"
                 alt="Pardon App Logo"
                 class="h-10 sm:h-14 md:h-16 sm:ml-4 object-contain"
                 onerror="this.onerror=null; this.src='https://placehold.co/150x40/444/FFF?text=Logo';"
